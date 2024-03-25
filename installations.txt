@@ -1,0 +1,11 @@
+pip install fuzzywuzzy
+pip install pydub
+pip install google-cloud-speech
+pip install librosa
+pip install classla
+pip install nltk
+
+
+
+classla.download('sr')
+nltk.download('punkt')

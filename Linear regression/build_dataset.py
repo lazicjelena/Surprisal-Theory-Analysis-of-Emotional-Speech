@@ -121,32 +121,53 @@ surprisal_bertic_list = lookup_features(data, surprisal_bertic, 'Surprisal BERTi
 data['surprisal BERTic'] = surprisal_bertic_list
 
 # ngram models
-ngram2_path = os.path.join('..','podaci', 'word_surprisal_ngram2.csv') 
+ngram2_path = os.path.join('..','podaci', 'word_surprisal_ngram2_alpha4.csv') 
 surprisal_ngram2 = pd.read_csv(ngram2_path)
 surprisal_ngram2_list = lookup_features(data, surprisal_ngram2, 'Surprisal ngram-3')
-data['surprisal ngram2'] = surprisal_ngram2_list
+data['surprisal ngram2 alpha4'] = surprisal_ngram2_list
 
-ngram3_path = os.path.join('..','podaci', 'word_surprisal_ngram3.csv') 
+ngram2_path = os.path.join('..','podaci', 'word_surprisal_ngram2_alpha20.csv') 
+surprisal_ngram2 = pd.read_csv(ngram2_path)
+surprisal_ngram2_list = lookup_features(data, surprisal_ngram2, 'Surprisal ngram-3')
+data['surprisal ngram2 alpha20'] = surprisal_ngram2_list
+
+ngram3_path = os.path.join('..','podaci', 'word_surprisal_ngram3_alpha4.csv') 
 surprisal_ngram3 = pd.read_csv(ngram3_path)
 surprisal_ngram3_list = lookup_features(data, surprisal_ngram3, 'Surprisal ngram-3')
-data['surprisal ngram3'] = surprisal_ngram3_list
+data['surprisal ngram3 alpha4'] = surprisal_ngram3_list
 
-ngram4_path = os.path.join('..','podaci', 'word_surprisal_ngram4.csv') 
+ngram3_path = os.path.join('..','podaci', 'word_surprisal_ngram3_alpha20.csv') 
+surprisal_ngram3 = pd.read_csv(ngram3_path)
+surprisal_ngram3_list = lookup_features(data, surprisal_ngram3, 'Surprisal ngram-3')
+data['surprisal ngram3 alpha20'] = surprisal_ngram3_list
+
+ngram4_path = os.path.join('..','podaci', 'word_surprisal_ngram4_alpha4.csv') 
 surprisal_ngram4 = pd.read_csv(ngram4_path)
 surprisal_ngram4_list = lookup_features(data, surprisal_ngram4, 'Surprisal ngram-3')
-data['surprisal ngram4'] = surprisal_ngram4_list
+data['surprisal ngram4 alpha4'] = surprisal_ngram4_list
 
-ngram5_path = os.path.join('..','podaci', 'word_surprisal_ngram5.csv') 
+ngram4_path = os.path.join('..','podaci', 'word_surprisal_ngram4_alpha20.csv') 
+surprisal_ngram4 = pd.read_csv(ngram4_path)
+surprisal_ngram4_list = lookup_features(data, surprisal_ngram4, 'Surprisal ngram-3')
+data['surprisal ngram4 alpha20'] = surprisal_ngram4_list
+
+ngram5_path = os.path.join('..','podaci', 'word_surprisal_ngram5_alpha4.csv') 
 surprisal_ngram5 = pd.read_csv(ngram5_path)
 surprisal_ngram5_list = lookup_features(data, surprisal_ngram5, 'Surprisal ngram-3')
-data['surprisal ngram5'] = surprisal_ngram5_list
+data['surprisal ngram5 alpha4'] = surprisal_ngram5_list
 
+ngram5_path = os.path.join('..','podaci', 'word_surprisal_ngram5_alpha20.csv') 
+surprisal_ngram5 = pd.read_csv(ngram5_path)
+surprisal_ngram5_list = lookup_features(data, surprisal_ngram5, 'Surprisal ngram-3')
+data['surprisal ngram5 alpha20'] = surprisal_ngram5_list
 
 folds_path =   os.path.join('..','podaci', 'folds.csv') 
 folds_df = pd.read_csv(folds_path)
 
 # Merge the two DataFrames on 'target sentence'
 merged_df = pd.merge(data, folds_df, on='target sentence', how='left')
+merged_df = merged_df[merged_df['time']!=0]
+
 # Save the concatenated data to a CSV file
 output_csv_path = os.path.join('..','podaci', 'training_data.csv') 
 merged_df.to_csv(output_csv_path, index=False)

@@ -88,7 +88,7 @@ def calculate_delta_ll(surprisal, k, emotion_data, std_data):
 
 file_path = output_path =  os.path.join('..','podaci', 'training_data.csv')
 df = pd.read_csv(file_path)
-df = df[df['speaker gender']=='f']
+df = df[df['speaker gender']=='m']
 
 import warnings
 # Filter out SettingWithCopyWarning
@@ -97,10 +97,14 @@ surprisal_gpt_2 = 'surprisal GPT'
 surprisal_gpt_3 = 'surprisal GPT3'
 surprisal_bert = 'surprisal BERT'
 surprisal_bertic = 'surprisal BERTic'
-surprisal_ngram_2 = 'surprisal ngram2'
-surprisal_ngram_3 = 'surprisal ngram3'
-surprisal_ngram_4 = 'surprisal ngram4'
-surprisal_ngram_5 = 'surprisal ngram5'
+surprisal_ngram_2_alpha4 = 'surprisal ngram2 alpha4'
+surprisal_ngram_3_alpha4 = 'surprisal ngram3 alpha4'
+surprisal_ngram_4_alpha4 = 'surprisal ngram4 alpha4'
+surprisal_ngram_5_alpha4 = 'surprisal ngram5 alpha4'
+surprisal_ngram_2_alpha20 = 'surprisal ngram2 alpha20'
+surprisal_ngram_3_alpha20 = 'surprisal ngram3 alpha20'
+surprisal_ngram_4_alpha20 = 'surprisal ngram4 alpha20'
+surprisal_ngram_5_alpha20 = 'surprisal ngram5 alpha20'
 surprisal_yugo = 'surprisal yugo'
 
 x_axis = np.arange(0.25, 3, 0.25)
@@ -111,10 +115,14 @@ for i in x_axis:
   df = inf_k_model(df, k, surprisal_gpt_3)
   df = inf_k_model(df, k, surprisal_bert)
   df = inf_k_model(df, k, surprisal_bertic)
-  df = inf_k_model(df, k, surprisal_ngram_2)
-  df = inf_k_model(df, k, surprisal_ngram_3)
-  df = inf_k_model(df, k, surprisal_ngram_4)
-  df = inf_k_model(df, k, surprisal_ngram_5)
+  df = inf_k_model(df, k, surprisal_ngram_2_alpha4)
+  df = inf_k_model(df, k, surprisal_ngram_3_alpha4)
+  df = inf_k_model(df, k, surprisal_ngram_4_alpha4)
+  df = inf_k_model(df, k, surprisal_ngram_5_alpha4)
+  df = inf_k_model(df, k, surprisal_ngram_2_alpha20)
+  df = inf_k_model(df, k, surprisal_ngram_3_alpha20)
+  df = inf_k_model(df, k, surprisal_ngram_4_alpha20)
+  df = inf_k_model(df, k, surprisal_ngram_5_alpha20)
   df = inf_k_model(df, k, surprisal_yugo)
 
 # Reset warnings to default behavior (optional)
@@ -132,14 +140,23 @@ bertic_std = { 0: [], 1: [], 2: [], 3: [], 4: []}
 emotion_data_yugo = { 0: [], 1: [], 2: [], 3: [], 4: []}
 yugo_std = { 0: [], 1: [], 2: [], 3: [], 4: []}
 
-emotion_data_ngram_2 = { 0: [], 1: [], 2: [], 3: [], 4: []}
-ngram_std_2 = { 0: [], 1: [], 2: [], 3: [], 4: []}
-emotion_data_ngram_3 = { 0: [], 1: [], 2: [], 3: [], 4: []}
-ngram_std_3 = { 0: [], 1: [], 2: [], 3: [], 4: []}
-emotion_data_ngram_4 = { 0: [], 1: [], 2: [], 3: [], 4: []}
-ngram_std_4 = { 0: [], 1: [], 2: [], 3: [], 4: []}
-emotion_data_ngram_5 = { 0: [], 1: [], 2: [], 3: [], 4: []}
-ngram_std_5 = { 0: [], 1: [], 2: [], 3: [], 4: []}
+emotion_data_ngram_2_alpha4 = { 0: [], 1: [], 2: [], 3: [], 4: []}
+ngram_std_2_alpha4 = { 0: [], 1: [], 2: [], 3: [], 4: []}
+emotion_data_ngram_3_alpha4 = { 0: [], 1: [], 2: [], 3: [], 4: []}
+ngram_std_3_alpha4 = { 0: [], 1: [], 2: [], 3: [], 4: []}
+emotion_data_ngram_4_alpha4 = { 0: [], 1: [], 2: [], 3: [], 4: []}
+ngram_std_4_alpha4 = { 0: [], 1: [], 2: [], 3: [], 4: []}
+emotion_data_ngram_5_alpha4 = { 0: [], 1: [], 2: [], 3: [], 4: []}
+ngram_std_5_alpha4 = { 0: [], 1: [], 2: [], 3: [], 4: []}
+
+emotion_data_ngram_2_alpha20 = { 0: [], 1: [], 2: [], 3: [], 4: []}
+ngram_std_2_alpha20 = { 0: [], 1: [], 2: [], 3: [], 4: []}
+emotion_data_ngram_3_alpha20 = { 0: [], 1: [], 2: [], 3: [], 4: []}
+ngram_std_3_alpha20 = { 0: [], 1: [], 2: [], 3: [], 4: []}
+emotion_data_ngram_4_alpha20 = { 0: [], 1: [], 2: [], 3: [], 4: []}
+ngram_std_4_alpha20 = { 0: [], 1: [], 2: [], 3: [], 4: []}
+emotion_data_ngram_5_alpha20 = { 0: [], 1: [], 2: [], 3: [], 4: []}
+ngram_std_5_alpha20 = { 0: [], 1: [], 2: [], 3: [], 4: []}
 
 for i in x_axis:
     k = round(i, 2)
@@ -148,10 +165,14 @@ for i in x_axis:
     calculate_delta_ll(surprisal_bert, k, emotion_data_bert, bert_std)
     calculate_delta_ll(surprisal_bertic, k, emotion_data_bertic, bertic_std)
     calculate_delta_ll(surprisal_yugo, k, emotion_data_yugo, yugo_std)
-    calculate_delta_ll(surprisal_ngram_2, k, emotion_data_ngram_2, ngram_std_2)
-    calculate_delta_ll(surprisal_ngram_3, k, emotion_data_ngram_3, ngram_std_3)
-    calculate_delta_ll(surprisal_ngram_4, k, emotion_data_ngram_4, ngram_std_4)
-    calculate_delta_ll(surprisal_ngram_5, k, emotion_data_ngram_5, ngram_std_5)
+    calculate_delta_ll(surprisal_ngram_2_alpha4, k, emotion_data_ngram_2_alpha4, ngram_std_2_alpha4)
+    calculate_delta_ll(surprisal_ngram_3_alpha4, k, emotion_data_ngram_3_alpha4, ngram_std_3_alpha4)
+    calculate_delta_ll(surprisal_ngram_4_alpha4, k, emotion_data_ngram_4_alpha4, ngram_std_4_alpha4)
+    calculate_delta_ll(surprisal_ngram_5_alpha4, k, emotion_data_ngram_5_alpha4, ngram_std_5_alpha4)
+    calculate_delta_ll(surprisal_ngram_2_alpha4, k, emotion_data_ngram_2_alpha20, ngram_std_2_alpha20)
+    calculate_delta_ll(surprisal_ngram_3_alpha20, k, emotion_data_ngram_3_alpha20, ngram_std_3_alpha20)
+    calculate_delta_ll(surprisal_ngram_4_alpha20, k, emotion_data_ngram_4_alpha20, ngram_std_4_alpha20)
+    calculate_delta_ll(surprisal_ngram_5_alpha20, k, emotion_data_ngram_5_alpha20, ngram_std_5_alpha20)
 
 
 def plot_data(emotion, emotion_data, std_data, plt_number, c):
@@ -210,25 +231,7 @@ plt.subplots_adjust(wspace=0.5)  # Adjust the spacing as needed
 fig.text(0.5, 0.45, '$k$', ha='center', va='center', fontsize=20)
 # Add a common y-axis label
 fig.text(0.04, 0.70, r'$\Delta$LogLikelihood', ha='center', va='center', rotation='vertical', fontsize=20)
-fig.legend(['gpt 2','gpt 2 std', 'gpt 3', 'gpt 3 std'])
-
-  
-fig = plt.figure(figsize=(15,7))
-
-for emotion in range(0,5):
-  plt.subplot(1, 5, emotion + 1)
-  plot_data(emotion, emotion_data_ngram_2, ngram_std_2, emotion + 1, (0, 0 , 1, 1))
-  plot_data(emotion, emotion_data_ngram_3, ngram_std_3, emotion + 1, (0, 0 , 0, 1))
-  plot_data(emotion, emotion_data_ngram_4, ngram_std_4, emotion + 1, (1, 0, 1, 1))
- # plot_data(emotion, emotion_data_ngram_5, ngram_std_5, emotion + 1, (0, 1, 0, 1))
-
-# Adjust the layout to prevent overlapping labels
-plt.subplots_adjust(wspace=0.5)  # Adjust the spacing as needed
-# Add a common x-axis label
-fig.text(0.5, 0.45, '$k$', ha='center', va='center', fontsize=20)
-# Add a common y-axis label
-fig.text(0.04, 0.70, r'$\Delta$LogLikelihood', ha='center', va='center', rotation='vertical', fontsize=20)
-fig.legend(['ngram 2','ngram 2 std', 'ngram 3', 'ngram 3 std','ngram 4', 'ngram 4 std'])
+fig.legend(['gpt-2','gpt-2 std', 'gpt-neo', 'gpt-neo std'])
 
 
 fig = plt.figure(figsize=(15,7))
@@ -244,13 +247,65 @@ plt.subplots_adjust(wspace=0.5)  # Adjust the spacing as needed
 fig.text(0.5, 0.45, '$k$', ha='center', va='center', fontsize=20)
 # Add a common y-axis label
 fig.text(0.04, 0.70, r'$\Delta$LogLikelihood', ha='center', va='center', rotation='vertical', fontsize=20)
-fig.legend(['gpt 2', 'gpt 2 std', 'yugo', 'yugo std'])
+fig.legend(['gpt-2', 'gpt-2 std', 'yugo', 'yugo std'])
 
 
 
+  
+fig = plt.figure(figsize=(15,7))
+
+for emotion in range(0,5):
+  plt.subplot(1, 5, emotion + 1)
+  plot_data(emotion, emotion_data_ngram_2_alpha4, ngram_std_2_alpha4, emotion + 1, (0, 0 , 1, 1))
+  plot_data(emotion, emotion_data_ngram_3_alpha4, ngram_std_3_alpha4, emotion + 1, (0, 0 , 0, 1))
+  plot_data(emotion, emotion_data_ngram_4_alpha4, ngram_std_4_alpha4, emotion + 1, (1, 0, 1, 1))
+ # plot_data(emotion, emotion_data_ngram_5, ngram_std_5, emotion + 1, (0, 1, 0, 1))
+
+# Adjust the layout to prevent overlapping labels
+plt.subplots_adjust(wspace=0.5)  # Adjust the spacing as needed
+# Add a common x-axis label
+fig.text(0.5, 0.45, '$k$', ha='center', va='center', fontsize=20)
+# Add a common y-axis label
+fig.text(0.04, 0.70, r'$\Delta$LogLikelihood', ha='center', va='center', rotation='vertical', fontsize=20)
+fig.legend(['2-gram','2-gram std', '3-gram', '3-gram std','4-gram', '4-gram std'])
 
 
+  
+fig = plt.figure(figsize=(15,7))
 
+for emotion in range(0,5):
+  plt.subplot(1, 5, emotion + 1)
+  plot_data(emotion, emotion_data_ngram_2_alpha20, ngram_std_2_alpha20, emotion + 1, (0, 0 , 1, 1))
+  plot_data(emotion, emotion_data_ngram_3_alpha20, ngram_std_3_alpha20, emotion + 1, (0, 0 , 0, 1))
+  plot_data(emotion, emotion_data_ngram_4_alpha20, ngram_std_4_alpha20, emotion + 1, (1, 0, 1, 1))
+ # plot_data(emotion, emotion_data_ngram_5, ngram_std_5, emotion + 1, (0, 1, 0, 1))
+
+# Adjust the layout to prevent overlapping labels
+plt.subplots_adjust(wspace=0.5)  # Adjust the spacing as needed
+# Add a common x-axis label
+fig.text(0.5, 0.45, '$k$', ha='center', va='center', fontsize=20)
+# Add a common y-axis label
+fig.text(0.04, 0.70, r'$\Delta$LogLikelihood', ha='center', va='center', rotation='vertical', fontsize=20)
+fig.legend(['2-gram','2-gram std', '3-gram', '3-gram std','4-gram', '4-gram std'])
+
+
+fig = plt.figure(figsize=(15,7))
+
+for emotion in range(0,5):
+  plt.subplot(1, 5, emotion + 1)
+  plot_data(emotion, emotion_data_ngram_4_alpha4, ngram_std_4_alpha4, emotion + 1, (1, 0, 1, 1))
+  plot_data(emotion, emotion_data_gpt_2, gpt_std_2, emotion + 1, (0, 0 , 1, 1))
+  plot_data(emotion, emotion_data_yugo, yugo_std, emotion + 1, (1, 0 , 0, 1))
+  plot_data(emotion, emotion_data_bert, bert_std, emotion + 1, (0, 0 , 0, 1))
+  plot_data(emotion, emotion_data_bertic, bertic_std, emotion + 1, (0.5, 0, 0.5, 1))
+
+# Adjust the layout to prevent overlapping labels
+plt.subplots_adjust(wspace=0.5)  # Adjust the spacing as needed
+# Add a common x-axis label
+fig.text(0.5, 0.45, '$k$', ha='center', va='center', fontsize=20)
+# Add a common y-axis label
+fig.text(0.04, 0.70, r'$\Delta$LogLikelihood', ha='center', va='center', rotation='vertical', fontsize=20)
+fig.legend(['4-gram','4-gram std', 'gpt-2','gpt-2 std', 'yugo', 'yugo std', 'bert', 'bert std', 'bertic', 'berti std'])
 
 
 

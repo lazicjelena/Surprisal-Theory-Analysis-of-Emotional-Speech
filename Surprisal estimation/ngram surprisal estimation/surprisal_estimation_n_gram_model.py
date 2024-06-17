@@ -18,7 +18,7 @@ from nltk.util import pad_sequence
 import os
 import math
 
-num_grams = 2
+num_grams = 3
 alpha = 4 # regularization parameter
 
 def calculate_vocabulary_size(data):
@@ -71,7 +71,7 @@ tokenized_sentences = [list(pad_sequence(nltk.word_tokenize(sentence),pad_left=T
 flat_words = []
 for sentence in tokenized_sentences:
     for word in sentence:
-        if word not in [',', '.', '!', '?']:
+        if word not in [',', '.', '!', '?',':']:
             flat_words.append(word)
 
 # Generate n-grams
@@ -81,6 +81,17 @@ n_grams_1 = list(ngrams(flat_words, num_grams-1))
 # Count the occurrences of each n-gram
 n_gram_counts = Counter(n_grams)
 n_gram_counts_1 = Counter(n_grams_1)
+
+
+# Remove the 5 most common n-grams
+most_common_n_grams = n_gram_counts.most_common(5)
+for n_gram, _ in most_common_n_grams:
+    del n_gram_counts[n_gram]
+
+most_common_n_grams_1 = n_gram_counts_1.most_common(5)
+for n_gram_1, _ in most_common_n_grams_1:
+    del n_gram_counts_1[n_gram_1]
+    
 
 # Print the most common n-grams
 print("Most common n-grams:")
@@ -102,7 +113,7 @@ def flatten_sentence_processing(sentence):
     padded_sentence = list(pad_sequence(nltk.word_tokenize(sentence), pad_left=True, left_pad_symbol="<s>", pad_right=True, right_pad_symbol="</s>", n=num_grams))
     flatten_sentence = []
     for word in padded_sentence:
-        if word not in [',', '.', '!', '?']:
+        if word not in [',', '.', '!', '?',':']:
             flatten_sentence.append(word)
     return flatten_sentence
 
@@ -110,6 +121,7 @@ def flatten_sentence_processing(sentence):
 sentence_list = []
 word_list = []
 surprisal_list = []
+probabilities_list = []
 lema_list = []
 
 for i in range(0,len(test)):
@@ -124,12 +136,13 @@ for i in range(0,len(test)):
         if lema not in ["</s>","<s>"]:
             sentence_list.append(i)
             lema_list.append(lema)
+            probabilities_list.append(probability)
             word_list.append(word_sentence[j].lower())
             surprisal_list.append(-math.log2(probability))
             j+=1
 
 df = pd.DataFrame({'Sentence': sentence_list, 'Word': word_list, 'Surprisal ngram-3': surprisal_list})
-# Save the DataFrame to a CSV file
+# Save the DataFrame to a CSV file 
 define_name = f'word_surprisal_ngram{num_grams}_alpha{alpha}.csv'
 csv_file_path = os.path.join('..', '..', 'podaci', define_name)
 df.to_csv(csv_file_path, index=False)

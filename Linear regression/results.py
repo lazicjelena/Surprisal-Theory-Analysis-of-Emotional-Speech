@@ -199,9 +199,8 @@ def plot_data(emotion, emotion_data, std_data, plt_number, c):
 
   return
 
-
+emotion_names = ['neutral', 'happy', 'sad', 'scared', 'angry']
 fig = plt.figure(figsize=(15,7))
-emotion_names = ['неутрално', 'срећно', 'тужно', 'уплашено', 'љуто']
 
 for emotion in range(0,5):
   plt.subplot(1, 5, emotion + 1)
@@ -218,7 +217,6 @@ fig.legend(['BERT','BERT std', 'BERTic', 'BERTic std'])
 
 
 fig = plt.figure(figsize=(15,7))
-emotion_names = ['неутрално', 'срећно', 'тужно', 'уплашено', 'љуто']
 
 for emotion in range(0,5):
   plt.subplot(1, 5, emotion + 1)
@@ -289,15 +287,14 @@ fig.text(0.04, 0.70, r'$\Delta$LogLikelihood', ha='center', va='center', rotatio
 fig.legend(['2-gram','2-gram std', '3-gram', '3-gram std','4-gram', '4-gram std'])
 
 
+# results for paper
 fig = plt.figure(figsize=(15,7))
 
 for emotion in range(0,5):
   plt.subplot(1, 5, emotion + 1)
-  plot_data(emotion, emotion_data_ngram_4_alpha4, ngram_std_4_alpha4, emotion + 1, (1, 0, 1, 1))
+  plot_data(emotion, emotion_data_ngram_4_alpha4, ngram_std_3_alpha4, emotion + 1, (1, 0, 1, 1))
   plot_data(emotion, emotion_data_gpt_2, gpt_std_2, emotion + 1, (0, 0 , 1, 1))
   plot_data(emotion, emotion_data_yugo, yugo_std, emotion + 1, (1, 0 , 0, 1))
-  plot_data(emotion, emotion_data_bert, bert_std, emotion + 1, (0, 0 , 0, 1))
-  plot_data(emotion, emotion_data_bertic, bertic_std, emotion + 1, (0.5, 0, 0.5, 1))
 
 # Adjust the layout to prevent overlapping labels
 plt.subplots_adjust(wspace=0.5)  # Adjust the spacing as needed
@@ -305,7 +302,23 @@ plt.subplots_adjust(wspace=0.5)  # Adjust the spacing as needed
 fig.text(0.5, 0.45, '$k$', ha='center', va='center', fontsize=20)
 # Add a common y-axis label
 fig.text(0.04, 0.70, r'$\Delta$LogLikelihood', ha='center', va='center', rotation='vertical', fontsize=20)
-fig.legend(['4-gram','4-gram std', 'gpt-2','gpt-2 std', 'yugo', 'yugo std', 'bert', 'bert std', 'bertic', 'berti std'])
+fig.legend(['3-gram','3-gram std', 'gpt-2','gpt-2 std', 'yugo', 'yugo std'])
 
+
+# results for paper
+fig = plt.figure(figsize=(15,7))
+
+for emotion in range(0,5):
+  plt.subplot(1, 5, emotion + 1)
+  plot_data(emotion, emotion_data_bert, bert_std, emotion + 1, (1, 0, 0, 1))
+  plot_data(emotion, emotion_data_bertic, bertic_std, emotion + 1, (0, 0 , 1, 1))
+
+# Adjust the layout to prevent overlapping labels
+plt.subplots_adjust(wspace=0.5)  # Adjust the spacing as needed
+# Add a common x-axis label
+fig.text(0.5, 0.45, '$k$', ha='center', va='center', fontsize=20)
+# Add a common y-axis label
+fig.text(0.04, 0.70, r'$\Delta$LogLikelihood', ha='center', va='center', rotation='vertical', fontsize=20)
+fig.legend(['bert', 'bert std', 'bertic', 'berti std'])
 
 

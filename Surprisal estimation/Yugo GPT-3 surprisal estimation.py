@@ -6,7 +6,7 @@ lazic.jelenaa@gmail.com
 
 Estimaicja vrijednosti surprisala rijeci target recenica upotrebom GPTYugo modela.
 
-"""
+
 
 import os
 from huggingface_hub import hf_hub_download
@@ -15,13 +15,15 @@ HUGGING_FACE_API_KEY = os.environ.get("HUGGING_FACE_API_KEY")
 
 HUGGING_FACE_API_KEY = os.environ.get("HUGGING_FACE_API_KEY")
 
-model_id = 'gordicaleksa/YugoGPT'
+
 
 filenames = [
     '.gitattributes', 'config.json', 'generation_config.json', 'model-00001-of-00003.safetensors',
     'model-00002-of-00003.safetensors', 'model-00003-of-00003.safetensors', 'model.safetensors.index.json',
     'special_tokens_map.json', 'tokenizer.model', 'tokenizer_config.json'
         ]
+
+model_id = 'gordicaleksa/YugoGPT'
 
 for filename in filenames:
         downloaded_model_path = hf_hub_download(
@@ -31,9 +33,14 @@ for filename in filenames:
         )
         print(downloaded_model_path)
 
-
+"""
+import pandas as pd
+import os
+import torch
+import math 
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
+model_id = 'gordicaleksa/YugoGPT'
 tokenizer = AutoTokenizer.from_pretrained(model_id, legacy=False)
 model = AutoModelForCausalLM.from_pretrained(model_id)
 
@@ -99,10 +106,6 @@ def calculate_word_probabilities(sentence, tokenizer = tokenizer, model = model)
 
     return words, probabilities, total_probability
 
-import pandas as pd
-import os
-import torch
-import math 
 
 target_sentence_path = os.path.join('..','podaci', 'target_sentences.csv')
 target_sentences_df = pd.read_csv(target_sentence_path)
@@ -116,7 +119,7 @@ for i in range(0,len(target_sentences_df)):
   words = sentence.split(' ')
   _, probabilities, total = calculate_word_probabilities(sentence)
 
-  for word, prob in zip(words, probabilities):
+  for word, prob in zip(words, probabilities[1:]):
     words_list.append(word)
     try:
         probabilities_list.append(-math.log2(prob.item()))
@@ -127,6 +130,11 @@ for i in range(0,len(target_sentences_df)):
 
 # Create a DataFrame
 df = pd.DataFrame({'Sentence': target_sentence_list, 'Word': words_list, 'Surprisal Yugo': probabilities_list})
+
+# Find the maximum value in the 'Surprisal Yugo' column
+max_value = df['Surprisal Yugo'].max()
+# Replace 0 values with the maximum value
+df['Surprisal Yugo'] = df['Surprisal Yugo'].replace(0, max_value)
 
 # Save the DataFrame to a CSV file
 df = df.dropna()

@@ -25,7 +25,7 @@ print(df.info())
 print(df.describe())
 
 # Count the frequency of values in the 'emotion' column
-emotions = ['срећно', 'тужно', 'љуто', 'неутрално', 'уплашено']
+emotions = ['happy', 'sad', 'angry', 'neutral', 'scared']
 emotion_counts_f = df[df['speaker gender'] == 'f']['emotion'].value_counts()
 emotion_counts_m = df[df['speaker gender'] == 'm']['emotion'].value_counts()
 
@@ -37,17 +37,17 @@ x_f = np.arange(len(emotions))
 x_m = [x + bar_width for x in x_f]
 
 # Plot the histograms
-plt.bar(x_f, emotion_counts_f.values, width=bar_width, label='жене')
-plt.bar(x_m, emotion_counts_m.values, width=bar_width, label='мушкарци')
+plt.bar(x_f, emotion_counts_f.values, width=bar_width, label='female')
+plt.bar(x_m, emotion_counts_m.values, width=bar_width, label='male')
 
 # Set the x-axis labels
-plt.xlabel('емоције', fontsize=15)
+plt.xlabel('emotion', fontsize=15)
 # Set the y-axis label
-plt.ylabel('број ријечи', fontsize=15)
+plt.ylabel('word counts', fontsize=15)
 # Set the title
-plt.title('Хистограм броја ријечи по емоционалним стањима', fontsize=15)
+plt.title('Data emotion distribution', fontsize=15)
 # Set the x-axis tick labels
-plt.xticks([x + bar_width / 2 for x in range(len(emotions))], emotions)
+plt.xticks([x + bar_width / 2 for x in range(len(emotions))], emotions, fontsize=10)
 # Add the legend
 plt.legend()
 # Show the plot

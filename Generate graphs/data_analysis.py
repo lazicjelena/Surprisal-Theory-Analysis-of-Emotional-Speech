@@ -45,7 +45,7 @@ plt.xlabel('emotion', fontsize=15)
 # Set the y-axis label
 plt.ylabel('word counts', fontsize=15)
 # Set the title
-plt.title('Data emotion distribution', fontsize=15)
+plt.title('Distribution of Samples Across Emotions', fontsize=15)
 # Set the x-axis tick labels
 plt.xticks([x + bar_width / 2 for x in range(len(emotions))], emotions, fontsize=10)
 # Add the legend
@@ -132,9 +132,9 @@ folds_df.to_csv(output_folds_path, index=False)
 
 # Plot the histogram
 plt.bar(fold_counts.index, fold_counts.values)
-plt.xlabel('редни број фолда', fontsize=15)
-plt.ylabel('број примјера', fontsize=15)
-plt.title('Број примјера у сваком фолду', fontsize=15)
+plt.xlabel('Ordinal Fold Number', fontsize=15)
+plt.ylabel('Number of Samples in Fold', fontsize=15)
+plt.title('Number of Samples in Each Fold', fontsize=15)
 plt.show()
 
 

@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-"""frequency_over_time_plots.py
-Jelenina skripta
-lazic.jelenaa@gmail.com
-
-U ovoj skripti plotuje se grafik promjene frekvencije tokom vremena,
-za svakog govornika i za svako emocionalno stanje.
 """
+Created on Tue Aug 20 08:25:31 2024
 
+@author: Jelena
+"""
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -26,7 +23,7 @@ def padding_sequence(f0_all_files):
     
     return padded_list
 
-file_path =  os.path.join('..','podaci', 'f0.csv')
+file_path =  os.path.join('..','podaci', 'rms.csv')
 df = pd.read_csv(file_path) 
 df = df[df['user'] != '1052']
 f0_array = [[]]
@@ -50,7 +47,7 @@ df = pd.merge(df, gender_df, left_on='user', right_on='Speaker')
 # make plots
 emotions = ["неутрално", "срећно", "тужно", "уплашено", "љуто"]
 fig = plt.figure(figsize=(12,8))
-fig.suptitle('Промјена основне учестаности говора', fontsize=30)
+fig.suptitle('Промјена RMS Енергије говора', fontsize=30)
 
 
 for gender in ['m', 'f']:
@@ -80,25 +77,26 @@ for gender in ['m', 'f']:
         plt.title(emotions[emotion], fontsize=25)
         plt.tick_params(axis='both', which='major', labelsize=15)
         if gender == 'f':
-            plt.ylim([170,250])
+            plt.ylim([0,0.2])
         else:
-            plt.ylim([80,160])
+            plt.ylim([0,0.2])
         plt.xlim([50,400])
         
         
 # Add a common x-axis label
-fig.text(0.5, 0.001, 'временски прозори [/]', ha='center', va='center', fontsize=25)
+fig.text(0.5, 0.001, 'временски прозори', ha='center', va='center', fontsize=25)
 # Add a common y-axis label
-fig.text(0.0001, 0.5, 'f0 [Hz]', ha='center', va='center', rotation='vertical', fontsize=25)
+fig.text(0.0001, 0.5, 'RMS Енергија', ha='center', va='center', rotation='vertical', fontsize=25)
 # Adjust layout for better spacing
 plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+plt.grid(False)
 plt.show()
 
 # make plots english
 emotions = ["neutral", "happy", "sad", "scared", "angry"]
 
 fig, ax = plt.subplots(2,5, figsize=(12,8))
-fig.suptitle('Fundamental Frequency over Different Emotiononal States', fontsize=30)
+fig.suptitle('RMS Energy over Different Emotiononal States', fontsize=30)
 
 
 for gender in ['m', 'f']:
@@ -129,19 +127,19 @@ for gender in ['m', 'f']:
         plt.title(emotions[emotion], fontsize=25)
         plt.tick_params(axis='both', which='major', labelsize=15)
         if gender == 'f':
-            plt.ylim([170,250])
+            plt.ylim([0,0.2])
         else:
-            plt.ylim([80,160])
+            plt.ylim([0,0.2])
         plt.xlim([50,400])
 
 
-
 # Add a common x-axis label
-fig.text(0.5, 0.001, 'time frames [/]', ha='center', va='center', fontsize=25)
+fig.text(0.5, 0.001, 'time frames', ha='center', va='center', fontsize=25)
 # Add a common y-axis label
-fig.text(0.0001, 0.5, 'f0 [Hz]', ha='center', va='center', rotation='vertical', fontsize=25)
+fig.text(0.0001, 0.5, 'RMS Energy', ha='center', va='center', rotation='vertical', fontsize=25)
 # Adjust layout for better spacing
 plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+plt.grid(False)
 plt.show()
 
 
@@ -154,4 +152,4 @@ for gender in ['m', 'f']:
         data = [i for i in emotion_data['f0 values']]
         average_f0 = np.nanmean(data, axis = 0)
         std_f0 = np.nanstd(data, axis=0)
-        print(f"{np.nanmean(average_f0, axis=0):.2f} ({np.nanstd(average_f0, axis=0):.2f})")
+        print(f"{np.nanmean(average_f0, axis=0):.3f} ({np.nanstd(average_f0, axis=0):.3f})")

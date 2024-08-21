@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
-"""frequency_over_time.py
-Jelenina skripta
-lazic.jelenaa@gmail.com
-
-Ova skripta sluzi izdvajanju promjene frekvencije usrednjene po govorniku i emocijama.
 """
+Created on Tue Aug 20 08:18:29 2024
+
+@author: Jelena
+"""
+
+#import parselmouth
+#import seaborn as sns
 
 import numpy as np
 import librosa
@@ -25,6 +27,7 @@ def padding_sequence(f0_all_files):
     return padded_list
 
 
+#sns.set()
 user_list = []
 emotion_list = []
 f0_av_user_emotion = [[]]
@@ -48,15 +51,10 @@ for user in os.listdir(folder_directory_path):
                 if filename.endswith('.wav'):
                     file_path = os.path.join(directory_path, filename)
                     # Load the audio file
-                    y, sr = librosa.load(file_path, sr=None)
-                    # Calculate F0 (pitch)
-                    if gender_df[gender_df['Speaker'] == int(user)]['Gender'].values == 'm':
-                        f0, voiced_flag, voiced_probs = librosa.pyin(y, fmin=90, fmax=155, sr=44100, frame_length=1024)
-                    else:
-                        f0, voiced_flag, voiced_probs = librosa.pyin(y, fmin=165, fmax=255, sr=44100, frame_length=1024)
-                    # Append F0 values and corresponding times
-                    f0_all_files.append(f0)
-                    
+                    y, sr = librosa.load(file_path, sr=44100)
+                    energy = librosa.feature.rms(y=y, frame_length = 1024)
+                    f0_all_files.append(energy[0])
+                        
             # Calculate average F0 over time, excluding NaN values
             padded_list = padding_sequence(f0_all_files)
             average_f0 = np.nanmean(padded_list, axis=0)
@@ -65,10 +63,9 @@ for user in os.listdir(folder_directory_path):
             user_list.append(user)
             emotion_list.append(emotion)
             f0_av_user_emotion.append(average_f0)
-    
-            #time = np.arange(len(average_f0)) * librosa.samples_to_time(1, sr=sr)
+
     
     # Create DataFrame
     df = pd.DataFrame({'user': user_list, 'emotion': emotion_list, 'f0': f0_av_user_emotion[1:]})
-    output_path = os.path.join('..','podaci', 'f0.csv')
+    output_path = os.path.join('..','podaci', 'rms.csv')
     df.to_csv(output_path, index=False) 

@@ -48,6 +48,43 @@ def lookup_features(data, freq_df, column_name):
 
     return log_prob_list
 
+def add_word_type(data, freq_df, column_name):
+    log_prob_list = []
+    current_sentence = 1000
+    list_of_words = []
+
+    # Loop through rows of the DataFrame and print the 'word' column
+    for index, row in data.iterrows():
+        words = row['word'].split(' ')
+        sentence = row['target sentence']
+        if sentence != current_sentence:
+          current_sentence = sentence
+          list_of_words = []
+        #print(index)
+        log_probability_value = ''
+        for word in words:
+            # Filter freq_df based on the 'Word' column
+            freq_s = freq_df[freq_df['Sentence'] == sentence]
+            freq = freq_s[freq_s['Word'] == word]
+
+            # Extract the 'Log Probability' value for the filtered word
+            if not freq.empty:
+                log_probability_value += ' '
+                log_probability_value += freq[column_name].values[0 + list_of_words.count(word)]
+            else:
+              log_probability_value += ' '
+              print('error')
+              print(word)
+
+            list_of_words.append(word)
+            # avoid situation when two same sentences are one after another
+            if len(list_of_words) == len(freq_s):
+              list_of_words = []
+
+        log_prob_list.append(log_probability_value.strip())
+
+    return log_prob_list
+
 # Define the base directory
 base_path = os.path.join('..','podaci', 'data') 
 
@@ -86,8 +123,8 @@ data = pd.read_csv(file_path)
 f_path = os.path.join('..','podaci', 'wordlist_frequencies.csv') 
 freq_df = pd.read_csv(f_path)
 
-log_probab_list = lookup_features(data, freq_df, 'Log Probability')
-data['log probability'] = log_probab_list
+#log_probab_list = lookup_features(data, freq_df, 'Log Probability')
+#data['log probability'] = log_probab_list
 
 # yugo model
 yugo_path = os.path.join('..','podaci', 'word_surprisals_yugo.csv') 
@@ -160,6 +197,12 @@ ngram5_path = os.path.join('..','podaci', 'word_surprisal_ngram5_alpha20.csv')
 surprisal_ngram5 = pd.read_csv(ngram5_path)
 surprisal_ngram5_list = lookup_features(data, surprisal_ngram5, 'Surprisal ngram-3')
 data['surprisal ngram5 alpha20'] = surprisal_ngram5_list
+
+
+word_type_path = os.path.join('..','podaci', 'word_type.csv') 
+word_type_df = pd.read_csv(word_type_path)
+word_type_list = add_word_type(data, word_type_df, 'Type')
+data['word type'] = word_type_list
 
 folds_path =   os.path.join('..','podaci', 'folds.csv') 
 folds_df = pd.read_csv(folds_path)

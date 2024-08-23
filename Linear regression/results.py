@@ -89,6 +89,8 @@ def calculate_delta_ll(surprisal, k, emotion_data, std_data):
 file_path = output_path =  os.path.join('..','podaci', 'training_data.csv')
 df = pd.read_csv(file_path)
 df = df[df['speaker gender']=='m']
+df = df[df['word type']!='function']
+df = df[df['word type']!='content']
 
 import warnings
 # Filter out SettingWithCopyWarning

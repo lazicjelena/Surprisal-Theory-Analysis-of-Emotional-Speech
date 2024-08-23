@@ -135,10 +135,6 @@ plt.show()
 
 
 
-
-
-
-
 plt.figure(figsize=(14, 8))  # Adjust figure size for better spacing
 ind = 1
 

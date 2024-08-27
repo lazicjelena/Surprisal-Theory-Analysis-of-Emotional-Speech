@@ -10,6 +10,7 @@ surprisala razlicitih model. Rezultati se koriste u radu.
 
 import pandas as pd
 import os
+import numpy as np
 
 data_path = os.path.join('..','podaci', 'prominence_data.csv') 
 data = pd.read_csv(data_path)
@@ -18,7 +19,16 @@ data = pd.read_csv(data_path)
 columns_of_interest = ['surprisal BERT', 'surprisal BERTic', 'surprisal ngram3 alpha4', 'surprisal GPT', 'surprisal yugo']
 emotions = [0, 1, 2, 3, 4]
 
-data = data[data['gender']=='m']
+for gender in ['f', 'm']:
+    print(f"Gender: {gender}")
+    df = data[data['gender']==gender]
+    for emotion in [0,1,2,3,4]:
+        emotion_df = df[df['emotion']==emotion]
+        mean_value = np.mean(emotion_df['prominence'])
+        print(f"Emotion {emotion}: {mean_value}")
+        
+
+data = data[data['gender']=='f']
 for column in columns_of_interest:
     print(f"For model {column} correlation values are following: ")
     for emotion in emotions:

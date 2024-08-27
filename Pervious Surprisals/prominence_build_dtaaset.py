@@ -1,18 +1,16 @@
 # -*- coding: utf-8 -*-
-"""prominence_build_dataset.py
+"""
+Created on Mon Aug 26 05:59:56 2024
 
-Jelenina skripta
-lazic.jelenaa@gmail.com
-
-Ova skripta sluzi da se napravi .csv file u kome su potpuno organizovani podaci
-neophodni za racunanje korelacija i prikaz grafika koji se koriste u radu.
+@author: Jelena
 """
 
 
 import os
 import pandas as pd
 
-prosody_folder_path = os.path.join('..','podaci','prosody 1 0 0')
+prosody_folder_path = os.path.join('..','podaci','prosody 1 0 0') # frequency
+prosody_folder_path = os.path.join('..','podaci','prosody') # energy
 
 target_sentence_path = os.path.join('..','podaci', 'target_sentences.csv') 
 target_sentence_df = pd.read_csv(target_sentence_path)
@@ -110,85 +108,23 @@ for word in data['word']:
         new_word = ' '.join(new_word[::-1])
         print(new_word)
         corrected_words.append(new_word)
-        
-        
+          
 data['word'] = corrected_words
 
-        
-def lookup_features(data, freq_df, column_name):
-    log_prob_list = []
-    current_sentence = 1000
-    list_of_words = []
-
-    # Loop through rows of the DataFrame and print the 'word' column
-    for index, row in data.iterrows():
-        words = row['word'].split(' ')
-        sentence = row['target sentence']
-        if sentence != current_sentence:
-          current_sentence = sentence
-          list_of_words = []
-        print(index)
-        log_probability_value = 0
-        for word in words:
-            # Filter freq_df based on the 'Word' column
-            freq_s = freq_df[freq_df['Sentence'] == sentence]
-            freq = freq_s[freq_s['Word'] == word]
-
-            # Extract the 'Log Probability' value for the filtered word
-            #if not freq.empty:
-            try:
-                log_probability_value += freq[column_name].values[0 + list_of_words.count(word)]
-            #else:
-            except:
-              log_probability_value += 0
-              #print('error')
-              #print(word)
-
-            list_of_words.append(word)
-            # avoid situation when two same sentences are one after another
-            if len(list_of_words) == len(freq_s):
-              list_of_words = []
-
-        log_prob_list.append(log_probability_value)
-
-    return log_prob_list
-
-bert_path = os.path.join('..','podaci', 'word_surprisals_bert.csv') 
-surprisal_bert = pd.read_csv(bert_path)
-surprisal_bert_list = lookup_features(data, surprisal_bert, 'Surprisal BERT')
-data['surprisal BERT'] = surprisal_bert_list
-        
-bertic_path = os.path.join('..','podaci', 'word_surprisals_bertic.csv') 
-surprisal_bertic = pd.read_csv(bertic_path)
-surprisal_bertic_list = lookup_features(data, surprisal_bertic, 'Surprisal BERTic')
-data['surprisal BERTic'] = surprisal_bertic_list       
-        
-ngram3_path = os.path.join('..','podaci', 'word_surprisal_ngram3_alpha4.csv') 
-surprisal_ngram3 = pd.read_csv(ngram3_path)
-surprisal_ngram3_list = lookup_features(data, surprisal_ngram3, 'Surprisal ngram-3')
-data['surprisal ngram3 alpha4'] = surprisal_ngram3_list
-
-gpt_path = os.path.join('..','podaci', 'word_surprisals_gpt2.csv') 
-surprisal_gpt = pd.read_csv(gpt_path)
-surprisal_gpt_list = lookup_features(data, surprisal_gpt, 'Surprisal GPT-2')
-data['surprisal GPT'] = surprisal_gpt_list
-
-yugo_path = os.path.join('..','podaci', 'word_surprisals_yugo.csv') 
-surprisal_yugo = pd.read_csv(yugo_path)
-surprisal_yugo_list = lookup_features(data, surprisal_yugo, 'Surprisal Yugo')
-data['surprisal yugo'] = surprisal_yugo_list
-
-gender_info_path = os.path.join('..','podaci', 'gender_data.csv') 
-gender_df = pd.read_csv(gender_info_path)
-gender_df = gender_df.rename(columns={'Gender': 'gender', 'Speaker': 'speaker'})
-data['speaker'] = data['speaker'].astype(int)
-data = pd.merge(data, gender_df, on='speaker', how='left')
-
-data = data[data['prominence']!=0]
-output_csv_path = os.path.join('..','podaci', 'prominence_data.csv') 
+# save data
+data = data.rename(columns={"prominence": "energy"})
+output_csv_path = os.path.join('..','podaci', 'correlation data','energy_prominence_data.csv') 
 data.to_csv(output_csv_path, index=False)
 
 
+# merge prominence parameters
+f0_csv_path = os.path.join('..','podaci', 'correlation data','f0_prominence_data.csv') 
+energy_csv_path = os.path.join('..','podaci', 'correlation data','energy_prominence_data.csv') 
 
+f0_data = pd.read_csv(f0_csv_path)
+energy_data = pd.read_csv(energy_csv_path)
 
-
+data = pd.merge(f0_data, energy_data, how='left')
+data = data.rename(columns={"duration": "time"})
+output_csv_path = os.path.join('..','podaci', 'correlation data','prominence_data.csv') 
+data.to_csv(output_csv_path, index=False)

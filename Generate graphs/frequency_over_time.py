@@ -31,7 +31,7 @@ f0_av_user_emotion = [[]]
 
 # Define the directory path
 folder_directory_path = os.path.join('..','podaci', 'data_mono')
-
+transcript_directory_path = os.path.join('..','podaci', 'transcript_corrected')
 gender_directory_path = os.path.join('..','podaci', 'gender_data.csv')
 gender_df = pd.read_csv(gender_directory_path)
 

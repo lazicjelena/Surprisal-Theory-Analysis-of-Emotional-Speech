@@ -126,5 +126,12 @@ energy_data = pd.read_csv(energy_csv_path)
 
 data = pd.merge(f0_data, energy_data, how='left')
 data = data.rename(columns={"duration": "time"})
+
+gender_path =   os.path.join('..','podaci', 'gender_data.csv') 
+gender_df = pd.read_csv(gender_path)
+gender_df = gender_df.rename(columns={"Speaker":"speaker", "Gender":"gender"})
+data = pd.merge(data, gender_df, on='speaker', how='left')
+
 output_csv_path = os.path.join('..','podaci', 'correlation data','prominence_data.csv') 
 data.to_csv(output_csv_path, index=False)
+

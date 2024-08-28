@@ -133,9 +133,20 @@ surprisal_name_list = ['Surprisal Yugo',
                        'Surprisal BERTic',
                        'Surprisal ngram-3']
 
+original_columns = ['word',
+                    'speaker',
+                    'emotion',
+                    'time',
+                    'position',
+                    'target sentence',
+                    'speaker gender',
+                    'length',
+                    'log probability',
+                    'fold']
+
 for surprisal_df_path, surprisal_name in zip(surprisal_df_list, surprisal_name_list):
     
-    df = data
+    df = data[original_columns]
     data_path = os.path.join('..','podaci', surprisal_df_path) 
     surprisal_data = pd.read_csv(data_path)
     surprisal_values_list = lookup_features(df, surprisal_data, surprisal_name)

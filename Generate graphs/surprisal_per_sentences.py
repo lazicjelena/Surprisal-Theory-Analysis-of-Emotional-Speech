@@ -12,9 +12,9 @@ import matplotlib.pyplot as plt
 
 # Read surprisal data
 data_paths = []
-data_paths.append(os.path.join('..','podaci','word_surprisal_ngram3_alpha20.csv'))
-data_paths.append(os.path.join('..','podaci','word_surprisals_gpt2.csv'))
-data_paths.append(os.path.join('..','podaci','word_surprisals_yugo.csv'))
+#data_paths.append(os.path.join('..','podaci','word_surprisal_ngram3_alpha20.csv'))
+#data_paths.append(os.path.join('..','podaci','word_surprisals_gpt2.csv'))
+#data_paths.append(os.path.join('..','podaci','word_surprisals_yugo.csv'))
 data_paths.append(os.path.join('..','podaci','word_surprisals_bert.csv'))
 data_paths.append(os.path.join('..','podaci','word_surprisals_bertic.csv'))
 
@@ -45,23 +45,23 @@ for sentence_id in data['Sentence'].unique():
         surprisal_values = []
         for word in sentence:
             #surprisal_value = group[group['Word']==word]['Surprisal ngram-3'].values[0]
-            surprisal_value = group[group['Word']==word]['Surprisal GPT-2'].values[0]
+            #surprisal_value = group[group['Word']==word]['Surprisal GPT-2'].values[0]
             #surprisal_value = group[group['Word']==word]['Surprisal BERT'].values[0]
             surprisal_values.append(surprisal_value)
         plt.plot(sentence, surprisal_values, linewidth = 3)
         
         surprisal_values_1 = []
         for word in sentence:
-            surprisal_value = group[group['Word']==word]['Surprisal Yugo'].values[0]
-            #surprisal_value = group[group['Word']==word]['Surprisal BERTic'].values[0]
+            #surprisal_value = group[group['Word']==word]['Surprisal Yugo'].values[0]
+            surprisal_value = group[group['Word']==word]['Surprisal BERTic'].values[0]
             surprisal_values_1.append(surprisal_value)
         plt.plot(sentence, surprisal_values_1, linewidth = 3)
         
        # plt.scatter(sentence,surprisal_values, label='3-gram' , marker='o', s=80)
-        plt.scatter(sentence, surprisal_values, label='GPT-2' , marker='o', s=120)
-        plt.scatter(sentence, surprisal_values_1, label='Yugo-GPT' , marker='o', s=120)
-       # plt.scatter(sentence, surprisal_values, label='BERT', marker='o', s=80)
-       # plt.scatter(sentence, surprisal_values_1, label='BERTic', marker='o', s=80)
+       # plt.scatter(sentence, surprisal_values, label='GPT-2' , marker='o', s=120)
+       # plt.scatter(sentence, surprisal_values_1, label='Yugo-GPT' , marker='o', s=120)
+        plt.scatter(sentence, surprisal_values, label='BERT', marker='o', s=80)
+        plt.scatter(sentence, surprisal_values_1, label='BERTic', marker='o', s=80)
        
         plt.xlabel('word', fontsize=20)
         plt.ylabel('surprisal', fontsize=20)
@@ -84,25 +84,25 @@ for sentence_id in data['Sentence'].unique():
         sentence = target_sentences_df['Text'][sentence_id].split()
         
         surprisal_values = []
-        for word in sentence:
+        forword in sentence:
             #surprisal_value = group[group['Word']==word]['Surprisal ngram-3'].values[0]
-            surprisal_value = group[group['Word']==word]['Surprisal GPT-2'].values[0]
-            #surprisal_value = group[group['Word']==word]['Surprisal BERT'].values[0]
+            #surprisal_value = group[group['Word']==word]['Surprisal GPT-2'].values[0]
+            surprisal_value = group[group['Word']==word]['Surprisal BERT'].values[0]
             surprisal_values.append(surprisal_value)
         plt.plot(sentence, surprisal_values, linewidth = 3)
         
         surprisal_values_1 = []
         for word in sentence:
-            surprisal_value = group[group['Word']==word]['Surprisal Yugo'].values[0]
-            #surprisal_value = group[group['Word']==word]['Surprisal BERTic'].values[0]
+            #surprisal_value = group[group['Word']==word]['Surprisal Yugo'].values[0]
+            surprisal_value = group[group['Word']==word]['Surprisal BERTic'].values[0]
             surprisal_values_1.append(surprisal_value)
         plt.plot(sentence, surprisal_values_1, linewidth = 3)
         
        # plt.scatter(sentence,surprisal_values, label='3-gram' , marker='o', s=80)
-        plt.scatter(sentence, surprisal_values, label='GPT-2' , marker='o', s=120)
-        plt.scatter(sentence, surprisal_values_1, label='Yugo-GPT' , marker='o', s=120)
-       # plt.scatter(sentence, surprisal_values, label='BERT', marker='o', s=80)
-       # plt.scatter(sentence, surprisal_values_1, label='BERTic', marker='o', s=80)
+       # plt.scatter(sentence, surprisal_values, label='GPT-2' , marker='o', s=120)
+       # plt.scatter(sentence, surprisal_values_1, label='Yugo-GPT' , marker='o', s=120)
+        plt.scatter(sentence, surprisal_values, label='BERT', marker='o', s=80)
+        plt.scatter(sentence, surprisal_values_1, label='BERTic', marker='o', s=80)
     
         plt.xlabel('ријечи', fontsize=20)
         plt.ylabel('сурприсал', fontsize=20)

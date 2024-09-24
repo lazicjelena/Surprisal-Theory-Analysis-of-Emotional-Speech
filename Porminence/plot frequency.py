@@ -126,5 +126,3 @@ fig.text(0.02, 0.5, 'Emotional Speech', ha='center', va='center', rotation='vert
 # Adjust layout for better spacing
 plt.tight_layout(rect=[0, 0.03, 1, 0.95])
 plt.show()
-
-

@@ -175,7 +175,7 @@ surprisal_colour = {'Surprisal GPT-2': (0, 0 , 1, 1),
                     'Surprisal Yugo':(1, 0 , 0, 1),
                     'Surprisal ngram-3':(1, 0, 1, 1)}
 
-pp_title = {'time': 'Вријемена Изговора',
+pp_title = {'time': 'Времена Изговора',
             'energy': 'РМС Енергије',
             'f0': 'F0'}
 

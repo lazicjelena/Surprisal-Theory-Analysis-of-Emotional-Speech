@@ -4,7 +4,7 @@ pip install google-cloud-speech
 pip install librosa
 pip install classla
 pip install nltk
-
+pip install pydub
 
 
 classla.download('sr')

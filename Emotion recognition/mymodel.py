@@ -43,7 +43,7 @@ class MyModel(nn.Module):
         x = self.LFLB_3(x)
         #x = self.LFLB_4(x)
         
-        x = x.reshape(64, 2 * 7, 128) 
+        x = x.reshape(x.shape[0], 2 * 7, 128) 
         x, _ = self.lstm(x)
         x = x[:, -1, :]  # Use the last output of LSTM
         x = self.fc(x)

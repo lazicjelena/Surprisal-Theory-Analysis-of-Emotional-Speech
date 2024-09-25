@@ -5,13 +5,12 @@ Created on Tue Sep 24 08:20:51 2024
 @author: Jelena
 """
 
-from audiodataset import create_dataloader
 from sklearn.model_selection import train_test_split
 import pandas as pd
 import os
 
 # read training data
-root_dir = os.path.join('..','podaci','data_mono')
+root_dir = os.path.join('data_mono')
 
 
 # Initialize lists to store file paths and their corresponding set type and last folder

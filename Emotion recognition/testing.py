@@ -8,15 +8,13 @@ Original file is located at
 """
 
 from audiodataset import create_dataloader
-from sklearn.metrics import confusion_matrix
-import pandas as pd
-import os
-import numpy as np
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
 from mymodel import MyModel
-import torch.optim as optim
-import torch.nn as nn
+import pandas as pd
+import numpy as np
 import torch
-import csv
+import os
 
 test_df = pd.read_csv(os.path.join('data', 'test_dataset.csv'))
 test_loader = create_dataloader(test_df, batch_size = 64)
@@ -47,10 +45,37 @@ with torch.no_grad():
 all_labels = np.array(all_labels)
 all_preds = np.array(all_preds)
 
-conf_matrix = confusion_matrix(all_labels, all_preds)
-print(conf_matrix)
+cm = confusion_matrix(all_labels, all_preds)
+print(np.trace(cm) / np.sum(cm)*100)
 
+""" Plot confusion matrix for paper"""
 
-correct_predictions = np.trace(conf_matrix)
-total_instances = np.sum(conf_matrix)
-print(correct_predictions / total_instances*100)
+# Define class names for better visualization
+class_names = ['neutral', 'happy', 'sad', 'scared', 'angry']
+
+# Display the confusion matrix
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=class_names)
+disp.plot(cmap=plt.cm.Blues, values_format='d', text_kw={'fontsize': 14})
+plt.title('Confusion Matrix Test Dataset', fontsize = 15) 
+plt.xticks(fontsize=12)
+plt.yticks(fontsize=12)
+plt.xlabel('Predicted label', fontsize = 15)
+plt.ylabel('True label', fontsize = 15)
+plt.show()
+
+""" Графици на српском"""
+# Define class names for better visualization
+class_names = ['неутрално', 'срећно', 'тужно', 'уплашено', 'љуто']
+# Display the confusion matrix
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=class_names)
+disp.plot(cmap=plt.cm.Blues, values_format='d', text_kw={'fontsize': 14})
+
+# Add title and axis labels
+plt.title('Конфузиона матрица тест скупа података', fontsize=15)
+plt.xticks(fontsize=12, rotation=45, ha="right")  # Rotate x-axis labels for better readability
+plt.yticks(fontsize=12)
+plt.xlabel('Предикције модела', fontsize=15)
+plt.ylabel('Стварна класа', fontsize=15)
+
+plt.tight_layout()  # Adjust layout to ensure labels fit within the plot
+plt.show()

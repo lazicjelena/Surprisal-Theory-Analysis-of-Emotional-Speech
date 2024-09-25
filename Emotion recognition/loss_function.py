@@ -10,7 +10,7 @@ Original file is located at
 import matplotlib.pyplot as plt
 import pandas as pd
 
-df = pd.read_csv('training_log.csv')
+df = pd.read_csv('model/training_log.csv')
 
 # Assuming df is your dataframe and 'Epoch' is already the index
 plt.figure(figsize=(14, 8))
@@ -20,6 +20,28 @@ plt.plot(df.index, df['Val Loss'], label='Validation Loss', marker='o', markersi
 plt.xlabel('Epoch', fontsize=25)
 plt.ylabel('Loss', fontsize=25)
 plt.title('Training and Validation Loss Over Epochs', fontsize=25)
+
+#plt.axvline(x=7, color='k', linestyle='-', label='Learning rate change')
+# Add shaded region before the vertical line
+plt.axvspan(xmin=min(plt.xlim()[0], 2), xmax=2, color='grey', alpha=0.3)
+# Add shaded region after the vertical line
+plt.axvspan(xmin=2, xmax=max(plt.xlim()[1], 2), color='lightgrey', alpha=0.3)
+
+plt.xticks(fontsize=20)
+plt.yticks(fontsize=20)
+plt.legend(fontsize=20)
+plt.show()
+
+
+""" Grafici na srpskom """
+
+plt.figure(figsize=(14, 8))
+plt.plot(df.index, df['Train Loss'], label='Тренинг скуп података', marker='o', markersize=15, linestyle='-')
+plt.plot(df.index, df['Val Loss'], label='Валидациони скуп података', marker='o', markersize=15, linestyle='-')
+#plt.xticks(df.index)
+plt.xlabel('Епоха', fontsize=25)
+plt.ylabel('Функција губитка', fontsize=25)
+plt.title('Функција губитка на тренинг и валидационом скупу података', fontsize=25)
 
 #plt.axvline(x=7, color='k', linestyle='-', label='Learning rate change')
 # Add shaded region before the vertical line

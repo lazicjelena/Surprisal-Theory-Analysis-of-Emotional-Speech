@@ -16,14 +16,16 @@ import numpy as np
 import torch
 import os
 
-test_df = pd.read_csv(os.path.join('data', 'test_dataset.csv'))
+#test_df = pd.read_csv(os.path.join('data','google_speech_data.csv'))
+test_df = pd.read_csv(os.path.join('data','baseline_data.csv'))
+#test_df = pd.read_csv(os.path.join('data','surprisal_data.csv'))
 test_loader = create_dataloader(test_df, batch_size = 64)
 
 # init model
 num_classes = 5
 model = MyModel(num_classes=num_classes)
 
-model_path = f'model/model_epoch_30.pth'
+model_path = 'model/model_epoch_30.pth'
 # Load the weights
 model.load_state_dict(torch.load(model_path))
 

@@ -323,4 +323,3 @@ fig.text(0.5, 0.45, '$k$', ha='center', va='center', fontsize=20)
 fig.text(0.04, 0.70, r'$\Delta$LogLikelihood', ha='center', va='center', rotation='vertical', fontsize=20)
 fig.legend(['bert', 'bert std', 'bertic', 'berti std'])
 
-

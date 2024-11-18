@@ -17,8 +17,8 @@ import torch
 import os
 
 #test_df = pd.read_csv(os.path.join('data','google_speech_data.csv'))
-test_df = pd.read_csv(os.path.join('data','baseline_data.csv'))
-#test_df = pd.read_csv(os.path.join('data','surprisal_data.csv'))
+#test_df = pd.read_csv(os.path.join('data','baseline_data.csv'))
+test_df = pd.read_csv(os.path.join('data','surprisal_data.csv'))
 test_loader = create_dataloader(test_df, batch_size = 64)
 
 # init model

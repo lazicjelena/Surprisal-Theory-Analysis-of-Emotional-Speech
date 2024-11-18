@@ -9,6 +9,7 @@ from pydub import AudioSegment
 import pandas as pd
 import os
 
+pause = AudioSegment.silent(duration=500)
 
 ts_file_path = os.path.join('..','podaci', 'target_sentences.csv')
 target_sentences = pd.read_csv(ts_file_path)
@@ -28,7 +29,7 @@ for index, row in target_sentences.iterrows():
     word_path = audio_path +  "/" + word + '.wav'
     if os.path.exists(word_path):
         word_audio = AudioSegment.from_wav(word_path)
-        combined_audio += word_audio
+        combined_audio += word_audio + pause
     else:
         print(f"Audio file for word '{word}' not found.")
 
@@ -52,12 +53,12 @@ for emotion in [0, 1, 2, 3, 4]:
       word_path = audio_path + f'/Words{emotion}/{word}_{index}.wav'
       if os.path.exists(word_path):
         word_audio = AudioSegment.from_wav(word_path)
-        combined_audio += word_audio
+        combined_audio += word_audio + pause
       else:
         word_path = f'..\\podaci\\text-to-speech\\Generated Words\\{word}.wav'
         if os.path.exists(word_path):
           word_audio = AudioSegment.from_wav(word_path)
-          combined_audio += word_audio
+          combined_audio += word_audio + pause
         else:
           print(f"Audio file for word '{word}' not found.")
 
@@ -88,12 +89,12 @@ for emotion in [0, 1, 2, 3, 4]:
       word_path = audio_path + f'/Words{emotion}/{word}_{index}.wav'
       if os.path.exists(word_path):
         word_audio = AudioSegment.from_wav(word_path)
-        combined_audio += word_audio
+        combined_audio += word_audio + pause
       else:
         word_path = f'..\\podaci\\text-to-speech\\Generated Words\\{word}.wav'
         if os.path.exists(word_path):
           word_audio = AudioSegment.from_wav(word_path)
-          combined_audio += word_audio
+          combined_audio += word_audio + pause
         else:
           print(f"Audio file for word '{word}' not found.")
 

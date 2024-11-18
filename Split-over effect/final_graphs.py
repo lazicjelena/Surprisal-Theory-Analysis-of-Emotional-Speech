@@ -15,7 +15,7 @@ file_path = os.path.join('..','podaci', 'split-over results')
 # make plots english
 fig = plt.figure(figsize=(12,8))
 emotions = ["neutral", "happy", "sad", "scared", "angry"]
-fig.suptitle('Surprisal Power Impact on Spoken Word Duration Prediction', fontsize=30)
+fig.suptitle('Split-over Effect for Spoken Word Duration Prediction', fontsize=30)
 surprisal_list = ['Surprisal GPT-2', 'Surprisal Yugo', 'Surprisal ngram-3']
 surprisal_colour = {'Surprisal GPT-2': (0, 0 , 1, 1), 
                     'Surprisal Yugo':(1, 0 , 0, 1),
@@ -55,7 +55,7 @@ for surprisal in surprisal_list:
             plt.tick_params(axis='both', which='major', labelsize=15)
 
 # Add a common x-axis label
-fig.text(0.5, 0.001, 'surprisal power', ha='center', va='center', fontsize=25)
+fig.text(0.5, 0.001, 'surprisal order', ha='center', va='center', fontsize=25)
 # Add a common y-axis label
 fig.text(0.0001, 0.5, r'$\Delta$LogLikelihood', ha='center', va='center', rotation='vertical', fontsize=25)
 fig.legend(['gpt-2','gpt-2 std', 'yugo', 'yugo std','3-gram','3-gram std'], fontsize=15, loc="center left", bbox_to_anchor=(1, 0.5))          
@@ -67,7 +67,7 @@ plt.show()
 
 fig = plt.figure(figsize=(12,8))
 emotions = ["neutral", "happy", "sad", "scared", "angry"]
-fig.suptitle('Surprisal Power Impact on Spoken Word Duration Prediction', fontsize=30)
+fig.suptitle('Split-over Effect for Spoken Word Duration Prediction', fontsize=30)
 surprisal_list = ['Surprisal BERT', 'Surprisal BERTic']
 surprisal_colour = {'Surprisal BERT': (0, 0 , 1, 1), 
                     'Surprisal BERTic':(1, 0 , 0, 1)}
@@ -105,7 +105,7 @@ for surprisal in surprisal_list:
             plt.tick_params(axis='both', which='major', labelsize=15)
 
 # Add a common x-axis label
-fig.text(0.5, 0.001, 'surprisal power', ha='center', va='center', fontsize=25)
+fig.text(0.5, 0.001, 'surprisal order', ha='center', va='center', fontsize=25)
 # Add a common y-axis label
 fig.text(0.0001, 0.5, r'$\Delta$LogLikelihood', ha='center', va='center', rotation='vertical', fontsize=25)
 fig.legend(['bert', 'bert std', 'bertic', 'bertic std'], fontsize=15, loc="center left", bbox_to_anchor=(1, 0.5))          
@@ -118,7 +118,7 @@ plt.show()
 # make plots serbian
 fig = plt.figure(figsize=(12,8))
 emotions = ["неутрално", "срећно", "тужно", "уплашено", "љуто"]
-fig.suptitle('Утицај степена сурприсала на предикцију трајања изговора', fontsize=30)
+fig.suptitle('Утицај split-over ефекта на предикцију трајања изговора', fontsize=30)
 surprisal_list = ['Surprisal GPT-2', 'Surprisal Yugo', 'Surprisal ngram-3']
 surprisal_colour = {'Surprisal GPT-2': (0, 0 , 1, 1), 
                     'Surprisal Yugo':(1, 0 , 0, 1),
@@ -158,7 +158,7 @@ for surprisal in surprisal_list:
 
 
 # Add a common x-axis label
-fig.text(0.5, 0.001, 'surprisal power', ha='center', va='center', fontsize=25)
+fig.text(0.5, 0.001, 'ред сурприсала', ha='center', va='center', fontsize=25)
 # Add a common y-axis label
 fig.text(0.0001, 0.5, r'$\Delta$LogLikelihood', ha='center', va='center', rotation='vertical', fontsize=25)
 fig.legend(['gpt-2','gpt-2 std', 'yugo', 'yugo std','3-gram','3-gram std'], fontsize=15, loc="center left", bbox_to_anchor=(1, 0.5))              
@@ -170,7 +170,7 @@ plt.show()
 # plot for bidirectional mdoels in serbian
 fig = plt.figure(figsize=(12,8))
 emotions = ["неутрално", "срећно", "тужно", "уплашено", "љуто"]
-fig.suptitle('Утицај степена сурприсала на предикцију трајања изговора', fontsize=30)
+fig.suptitle('Утицај split-over ефекта на предикцију трајања изговора', fontsize=30)
 surprisal_list = ['Surprisal BERT', 'Surprisal BERTic']
 surprisal_colour = {'Surprisal BERT': (0, 0 , 1, 1), 
                     'Surprisal BERTic':(1, 0 , 0, 1)}
@@ -208,7 +208,7 @@ for surprisal in surprisal_list:
             plt.tick_params(axis='both', which='major', labelsize=15)
 
 # Add a common x-axis label
-fig.text(0.5, 0.001, 'степен сурприсала', ha='center', va='center', fontsize=25)
+fig.text(0.5, 0.001, 'ред сурприсала', ha='center', va='center', fontsize=25)
 # Add a common y-axis label
 fig.text(0.0001, 0.5, r'$\Delta$LogLikelihood', ha='center', va='center', rotation='vertical', fontsize=25)
 fig.legend(['bert', 'bert std', 'bertic', 'bertic std'], fontsize=15, loc="center left", bbox_to_anchor=(1, 0.5))          

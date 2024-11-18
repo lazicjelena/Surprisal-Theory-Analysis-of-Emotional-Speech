@@ -15,7 +15,7 @@ import numpy as np
 import os
 
 
-file_path =  os.path.join('..','podaci', 'concatenated_data.csv') 
+file_path =  os.path.join('..','podaci', 'results - linear regression','baseline_results_data.csv') 
 df = pd.read_csv(file_path)
 
 # Display basic information about the DataFrame

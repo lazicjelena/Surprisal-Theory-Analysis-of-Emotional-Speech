@@ -28,11 +28,7 @@ parameter_colour = {'Surprisal GPT-2': (1, 0 , 1, 1),
 gender_list = {'f':'female', 'm':'male'}
 
 x_axis = [0, 1, 2, 3, 4]
-emotion_list = ['neutral',
-                'happy',
-                'sad',
-                'scared',
-                'angry']
+emotion_list = emotions
 
 for p in parameters:
     df = pd.read_csv(file_path)

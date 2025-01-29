@@ -7,9 +7,11 @@ Created on Fri Nov 22 11:15:20 2024
 
 from my_functions import add_column_with_surprisal, paired_permutation_test, calculate_delta_ll
 import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
 import pandas as pd
 import os
 import warnings
+
 
 context_ind = True # otherwise non-context
 surprisal_ind = False # otherwise information value
@@ -31,10 +33,14 @@ else:
 if serbian_ind:
     emotion_names = ['неутрално', 'срећно', 'тужно', 'уплашено', 'љуто']
     x_axis_name = 'дубина неуралне мреже'
+    p_names = ['p вриједност<0.001', 'p бриједност<0.05']
 else:
     emotion_names = ['neutral', 'happy', 'sad', 'scared', 'angry']
     x_axis_name = 'network layer'
+    p_names = ['p value<0.001', 'p value<0.05']
     
+emotion_colours = {0: 'red', 1: 'blue', 2: 'green', 3: 'orange', 4: 'purple'}
+
 # Ignore all warnings
 warnings.filterwarnings("ignore")
 
@@ -74,6 +80,14 @@ results_df = pd.DataFrame({'y_axis': results_list,
                           'emotion': emotion_list})
 
 ''' plot data '''
+# Define legend handles for each emotion
+legend_elements = []
+for i in [0, 1, 2, 3 ,4]:
+    legend_elements.append(Line2D([0], [0], color=emotion_colours[i], lw=2, label=emotion_names[i]))
+    
+legend_elements.append(Line2D([0], [0], color='grey', marker='*', lw=0, markersize=20, label= p_names[0]))
+legend_elements.append(Line2D([0], [0], color='grey', marker='.', lw=0, markersize=20, label= p_names[1]))
+    
 
 fig = plt.figure(figsize=(12,6))
 
@@ -83,24 +97,53 @@ for emotion in [0,1,2,3,4]:
     y_axis = []
     x_axis = []
     
+    scatter_y_axis = []
+    scatter_x_axis = []
+    
+    large_scatter_y_axis = []
+    large_scatter_x_axis = []
+    
     for i in range(1,13):
-        value = emotion_df.loc[emotion_df['parameter'] == f"Surprisal GPT-2 {parameter_name} {i}", 'y_axis'].values[0]
+        value = emotion_df.loc[emotion_df['parameter'] == f"Surprisal GPT-2 {parameter_name} {i}", 'y_axis'].values[0] 
+        p_value = emotion_df.loc[emotion_df['parameter'] == f"Surprisal GPT-2 {parameter_name} {i}", 'p_value'].values[0]
         
         x_axis.append(i)
         y_axis.append(value)
         
+        if p_value<0.001:
+            large_scatter_y_axis.append(value)
+            large_scatter_x_axis.append(i)
+        else:
+            if p_value<0.05:
+                scatter_y_axis.append(value)
+                scatter_x_axis.append(i)
+        
     
-    plt.plot(x_axis, y_axis, linewidth=3)    
+    plt.plot(x_axis, y_axis, linewidth=3, color = emotion_colours[emotion])  
+    plt.scatter(large_scatter_x_axis, large_scatter_y_axis, marker='*', s=250, color = emotion_colours[emotion])
+    plt.scatter(scatter_x_axis, scatter_y_axis, s=80, color = emotion_colours[emotion])
     plt.tick_params(axis='both', which='major', labelsize=15)
 
-fig.text(0.5, 0.001, x_axis_name, ha='center', va='center', fontsize=25)
+
+fig.text(0.4, 0.001, x_axis_name, ha='center', va='center', fontsize=25)
 fig.text(0.0001, 0.5, r'$\Delta$LogLikelihood', ha='center', va='center', rotation='vertical', fontsize=25)
-fig.legend(emotion_names, fontsize=15, loc="center left", bbox_to_anchor=(0.8, 0.7))          
+plt.legend(handles=legend_elements, fontsize=15, loc="center left", bbox_to_anchor=(1, 0.5))
+
+
 plt.tight_layout(rect=[0, 0.03, 1, 0.95])  
 plt.show()
 
 
+''' print last hidden layer'''
 
-
-
+for emotion in [0,1,2,3,4]:
+    
+    emotion_df = results_df[results_df['emotion'] == emotion]
+    print(emotion)
+    i = 12
+    
+    value = emotion_df.loc[emotion_df['parameter'] == f"Surprisal GPT-2 {parameter_name} {i}", 'y_axis'].values[0] 
+    p_value = emotion_df.loc[emotion_df['parameter'] == f"Surprisal GPT-2 {parameter_name} {i}", 'p_value'].values[0]
+        
+    print(f"{value:.3f} {p_value}")
 

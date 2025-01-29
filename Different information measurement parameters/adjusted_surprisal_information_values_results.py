@@ -21,12 +21,13 @@ emotion_list = []
 std_list = []
 
 surprisal = 'Surprisal GPT-2'
+#surprisal = 'None'
 
 #parameters = ['Contextual Entropy']
               
-#parameters = ['Context Embedding','Non-context Embedding','Pos-Tag','Orthographic']
+parameters = ['Context Embedding','Non-context Embedding','Pos-Tag','Orthographic']
 
-parameters = ['AS Context Embedding','AS Non-context Embedding','AS Pos-Tag','AS Orthographic']
+#parameters = ['AS Context Embedding','AS Non-context Embedding','AS Pos-Tag','AS Orthographic']
 
 # Add surprisal results
 df = data.dropna()

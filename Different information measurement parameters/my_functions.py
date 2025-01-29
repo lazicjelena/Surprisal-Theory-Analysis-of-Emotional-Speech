@@ -118,6 +118,7 @@ def add_column_with_surprisal(df, parameter, surprisal, k=3):
     
     columns = df.columns.tolist()
     training_columns = ['length', 'log probability', parameter]
+    
     if surprisal: 
         training_columns.append(surprisal)
     else:

@@ -18,7 +18,8 @@ import os
 
 #test_df = pd.read_csv(os.path.join('data','google_speech_data.csv'))
 #test_df = pd.read_csv(os.path.join('data','baseline_data.csv'))
-test_df = pd.read_csv(os.path.join('data','surprisal_data.csv'))
+#test_df = pd.read_csv(os.path.join('data','surprisal_data.csv'))
+test_df = pd.read_csv(os.path.join('..', 'Emotion Text to Speech 2','data.csv'))
 test_loader = create_dataloader(test_df, batch_size = 64)
 
 # init model
@@ -56,14 +57,14 @@ print(np.trace(cm) / np.sum(cm)*100)
 class_names = ['neutral', 'happy', 'sad', 'scared', 'angry']
 
 # Display the confusion matrix
-disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=class_names)
-disp.plot(cmap=plt.cm.Blues, values_format='d', text_kw={'fontsize': 14})
-plt.title('Confusion Matrix Test Dataset', fontsize = 15) 
-plt.xticks(fontsize=12)
-plt.yticks(fontsize=12)
-plt.xlabel('Predicted label', fontsize = 15)
-plt.ylabel('True label', fontsize = 15)
-plt.show()
+# disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=class_names)
+# disp.plot(cmap=plt.cm.Blues, values_format='d', text_kw={'fontsize': 14})
+# plt.title('Confusion Matrix Test Dataset', fontsize = 15) 
+# plt.xticks(fontsize=12)
+# plt.yticks(fontsize=12)
+# plt.xlabel('Predicted label', fontsize = 15)
+# plt.ylabel('True label', fontsize = 15)
+# plt.show()
 
 """ Графици на српском"""
 # Define class names for better visualization

@@ -28,7 +28,7 @@ fig = plt.figure(figsize=(12,8))
 emotions = ["neutral", "happy", "sad", "scared", "angry"]
 #fig.suptitle('Surprisal Power Impact on Spoken Word Duration Prediction', fontsize=30)
 
-if 0:
+if 1:
     surprisal_list = ['surprisal BERT', 
                       'surprisal BERTic', 
                       'surprisal RoBERTa', 

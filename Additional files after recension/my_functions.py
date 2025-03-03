@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 import math 
 
-def inf_k_model(df, k, surprisal):
+def inf_k_model(df, k, surprisal, prosody = 'time'):
 
     surprisal_name = surprisal + ' ' + str(k)
     model_name = surprisal_name + ' model'
@@ -23,12 +23,11 @@ def inf_k_model(df, k, surprisal):
         test_data = df[df['fold'] == fold]
 
         train_data = df[df['fold'] != fold][['length', 'log probability', surprisal_name]]
-        y_train = df[df['fold'] != fold][['time']]
-        y_train['time'] = y_train['time'].apply(lambda x: math.log2(x) if x > 0 else float('nan'))
-
+        y_train = df[df['fold'] != fold][[prosody]]
+        y_train[prosody] = y_train[prosody].apply(lambda x: math.log2(x) if x > 0 else float('nan'))
         
         # reduce outliers
-        gaussian_condition = (y_train['time'] - y_train['time'].mean()) / y_train['time'].std() < 3
+        gaussian_condition = (y_train[prosody] - y_train[prosody].mean()) / y_train[prosody].std() < 3
         train_data = train_data[gaussian_condition]
         y_train = y_train[gaussian_condition]
 
@@ -36,7 +35,8 @@ def inf_k_model(df, k, surprisal):
         model.fit(train_data, y_train)
 
         y_pred = model.predict(test_data[['length', 'log probability', surprisal_name]])
-
+        #y_pred = 2**y_pred
+        
         test_data.loc[:, model_name] = y_pred
         # Concatenate the DataFrames along rows (axis=0)
         results_df = pd.concat([results_df, test_data], axis=0)
@@ -56,19 +56,20 @@ def calculate_aic(real_values, results, k):
     aic = 2 * k - 2 * log_likelihood
     return aic, np.mean(log_likelihood), np.std(log_likelihood)
 
-def akaike_for_column(data, model_name, baseline_model = 'baseline'):
+def akaike_for_column(data, prominence, model_name, baseline_model = 'baseline'):
 
-    _, mean_ll_1, std_ll_1 = calculate_aic(data['time'], data[baseline_model], 2)
-    _, mean_ll_2, std_ll_2 = calculate_aic(data['time'], data[model_name], 3)
+    _, mean_ll_1, std_ll_1 = calculate_aic(data[prominence], data[baseline_model], 2)
+    _, mean_ll_2, std_ll_2 = calculate_aic(data[prominence], data[model_name], 3)
     difference = mean_ll_1 - mean_ll_2
     std_difference = std_ll_1 - std_ll_2
 
     return difference, std_difference
 
-def calculate_delta_ll(data, surprisal, k, emotion_data, std_data):
+
+def calculate_delta_ll(data, surprisal, k, emotion_data, std_data, prominence = 'time'):
 
     try:
-      delta_ll, std_list = akaike_for_column(data, 'emotion', surprisal + ' ' + str(k) + ' model', 'baseline')
+      delta_ll, std_list = akaike_for_column(data, prominence, 'emotion', surprisal + ' ' + str(k) + ' model', 'baseline')
     except:
       delta_ll = [0,0,0,0,0]
       std_list = [1,1,1,1,1]
@@ -78,10 +79,10 @@ def calculate_delta_ll(data, surprisal, k, emotion_data, std_data):
 
     return
 
-def calculate_delta_ll_old(data, surprisal_name, k):
+def calculate_delta_ll_old(data, surprisal_name, k, prominence = 'time'):
 
     try:
-      delta_ll, std_element = akaike_for_column(data, surprisal_name + ' ' + str(k) + ' model', 'baseline')
+      delta_ll, std_element = akaike_for_column(data, prominence, surprisal_name + ' ' + str(k) + ' model', 'baseline')
       return delta_ll, std_element
     except:
       print(f"Error accured while processing {surprisal_name} at k = {k}")
@@ -113,13 +114,14 @@ def lookup_features(data, freq_df, column_name):
                 else:
                     log_probability_value += freq[column_name].values[0 + list_of_words.count(word)]
             else:
-              log_probability_value += 0
-              print('error')
-              print(word)
+                break
+                log_probability_value += 0
+                print('error')
+                print(word)
 
             list_of_words.append(word)
             # avoid situation when two same sentences are one after another
-            if len(list_of_words) == len(freq_s):
+            if len(list_of_words) == len(freq_s) or word == freq_s['Word'].iloc[-1]:
               list_of_words = []
 
         log_prob_list.append(log_probability_value)
@@ -162,3 +164,20 @@ def add_word_type(data, freq_df, column_name):
         log_prob_list.append(log_probability_value.strip())
 
     return log_prob_list
+
+def most_similar_sentence_index(sentence, target_sentence_df):
+    # Remove spaces and lowercase the target sentence
+    sentence = sentence.lower().replace(' ', '')
+
+    # Function to count common characters
+    def common_chars(text):
+        text = text.lower().replace(' ', '')
+        return len(set(sentence) & set(text))  # Intersection of character sets
+
+    # Apply the function to compute similarity for each sentence
+    target_sentence_df['Similarity'] = target_sentence_df['Text'].apply(common_chars)
+
+    # Get the index of the most similar sentence
+    most_similar_index = target_sentence_df['Similarity'].idxmax()
+    
+    return most_similar_index

@@ -13,38 +13,52 @@ import os
 file_path =  os.path.join('..','podaci', 'training_data.csv')
 df = pd.read_csv(file_path)
 
+column_list = ['word', 'speaker', 'emotion', 'time', 'position', 'target sentence',
+               'speaker gender', 'length', 'log probability', 
+               'surprisal GPT',  'word type', 'fold', 'baseline']
+     
+df = df[column_list]
+df = df.rename(columns={'position': 'Word Position in Sentence'})
+
 ts_file_path =  os.path.join('..','podaci', 'target_sentences.csv')
 ts_df = pd.read_csv(ts_file_path)
 
 pt_file_path = os.path.join('..','podaci', 'pos_tags.csv')
 pt_df = pd.read_csv(pt_file_path)
 
-columns_to_remove = ['surprisal ngram2 alpha4', 'surprisal ngram3 alpha4', 'surprisal ngram4 alpha4',
-                     'surprisal ngram5 alpha4', 'surprisal ngram2 alpha20', 'surprisal ngram3 alpha20', 
-                     'surprisal ngram4 alpha20', 'surprisal ngram5 alpha20','surprisal BERT', 
-                     'surprisal BERTic', 'surprisal GPT3', 'surprisal yugo']
-
-df = df.drop(columns = columns_to_remove)
-
-
 # Assuming ts_df has columns: 'target sentence' and 'Text'
-df["word count"] = df["target sentence"].apply(lambda idx: len(str(ts_df.iloc[idx]["Text"]).split()) if 0 <= idx < len(ts_df) else 0)
+df["Sentence Word Count"] = df["target sentence"].apply(lambda idx: len(str(ts_df.iloc[idx]["Text"]).split()) if 0 <= idx < len(ts_df) else 0)
 
 ''' Add pos tag '''
+
+df = df[df['word type'].astype(str).isin(['content', 'function'])]
+
+# pos_tag_list = []
+# for _, row in df.iterrows():
+    
+#     words = row['word'].lower().strip()
+    
+#     word_pos_tag = ''
+#     for word in words.split(' '):
+#         pos_tag = pt_df[pt_df['word'] == word]['pos tag'].iloc[0]
+#         word_pos_tag += ' ' + pos_tag
+        
+#     pos_tag_list.append(word_pos_tag.strip())
+
 
 pos_tag_list = []
 for _, row in df.iterrows():
     
-    words = row['word'].lower().strip()
+    word = row['word'].lower().strip()
     
-    word_pos_tag = ''
-    for word in words.split(' '):
+    if row['word type'] == 'function':
+        pos_tag = 'FUNC'
+    else:
         pos_tag = pt_df[pt_df['word'] == word]['pos tag'].iloc[0]
-        word_pos_tag += ' ' + pos_tag
         
-    pos_tag_list.append(word_pos_tag.strip())
+    pos_tag_list.append(pos_tag)
     
-df['pos tag'] = pos_tag_list
+df['PoS tag'] = pos_tag_list
 
 ''' Calulate delta LL '''
 
@@ -60,8 +74,18 @@ for i in x_axis:
 # Reset warnings to default behavior (optional)
 warnings.resetwarnings() 
 
-column_name_1 = 'pos tag'
+column_name_1 = 'PoS tag'
+filtered_list = ['NOUN', 'VERB', 'ADJ', 'ADV', 'PUNCT', 'FUNC']
+
+column_name_1 = "Sentence Word Count"
+filtered_list = df[column_name_1].unique().tolist()
+filtered_list.remove(2)
+
+column_name_1 = 'Word Position in Sentence'
+filtered_list = df[column_name_1].unique().tolist()
+
 column_name_2 = 'emotion'
+#column_name_2 = "Sentence Word Count"
 
 ll_best_improvement = []
 the_best_k = []
@@ -69,10 +93,7 @@ ll_k1_improvement = []
 column_1_list = []
 column_2_list = []
 
-filtered_list = [item for item in df[column_name_1].unique().tolist() if len(item.split(" ")) <= 1]
 
-#for  column_1 in df[column_name_1].unique().tolist():
-#for  column_1 in ['content', 'function', 'content function' or 'function content']:
 for column_1 in filtered_list:
     
     for column_2 in df[column_name_2].unique().tolist():
@@ -88,7 +109,7 @@ for column_1 in filtered_list:
             k = round(i, 2)
             k_list.append(k)
             
-            difference = akaike_for_column(filtered_data,  f"surprisal GPT {str(k)} model", 'baseline')
+            difference, _ = akaike_for_column(filtered_data,  'time', f"surprisal GPT {str(k)} model", 'baseline')
             k_improvements.append(difference)
             
         max_value = max(k_improvements)  # Find the max value
@@ -113,12 +134,17 @@ df_grouped = pd.DataFrame({
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Učitaj podatke
-df = df_grouped
 
-sns.scatterplot(x=df[column_name_1], y=df['LL'], hue=df[column_name_2], palette='viridis')
-#plt.xticks(rotation=45, ha='right')
-plt.xlabel('pos tag')
-plt.ylabel('LL')
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x=df_grouped[column_name_1], y=df_grouped['LL the best'], hue=df_grouped[column_name_2], palette='viridis', s=100)
+# Poboljšanja u čitljivosti
+plt.xlabel(column_name_1, fontsize=20)
+plt.ylabel(r'$\Delta LL_{k=1}$', fontsize=20)
+plt.xticks(fontsize=20)
+plt.yticks(fontsize=20)
+# Poboljšana legenda
+handles, labels = plt.gca().get_legend_handles_labels()
+labels = ['neutral', 'happy', 'sad', 'scared', 'angry']
+plt.legend(handles=handles, labels=labels, 
+           title='Emotion', fontsize=15, title_fontsize=20, loc='best')
 plt.show()
-

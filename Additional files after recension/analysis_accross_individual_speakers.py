@@ -13,12 +13,8 @@ import os
 file_path =  os.path.join('..','podaci', 'training_data.csv')
 df = pd.read_csv(file_path)
 
-columns_to_remove = ['surprisal ngram2 alpha4', 'surprisal ngram3 alpha4', 'surprisal ngram4 alpha4',
-                     'surprisal ngram5 alpha4', 'surprisal ngram2 alpha20', 'surprisal ngram3 alpha20', 
-                     'surprisal ngram4 alpha20', 'surprisal ngram5 alpha20','surprisal BERT', 
-                     'surprisal BERTic', 'surprisal GPT3', 'surprisal yugo']
-
-df = df.drop(columns = columns_to_remove)
+#columns_to_remove = ['surprisal GPT']
+#df = df.drop(columns = columns_to_remove)
 
 import warnings
 # Filter out SettingWithCopyWarning
@@ -54,7 +50,7 @@ for  _,row in df_grouped.iterrows():
         k = round(i, 2)
         k_list.append(k)
         
-        difference = akaike_for_column(filtered_data,  f"surprisal GPT {str(k)} model", 'baseline')
+        difference, _ = akaike_for_column(filtered_data, 'time',  f"surprisal GPT {str(k)} model", 'baseline')
         k_improvements.append(difference)
         
     max_value = max(k_improvements)  # Find the max value
@@ -83,36 +79,62 @@ df['count'] = df.groupby(['emotion', 'optimal k', 'speaker gender'])['speaker ge
 df_f = df[df['speaker gender'] == 'f']
 df_m = df[df['speaker gender'] == 'm']
 
-# Show the plot
+
+fig, axes = plt.subplots(1, 2, figsize=(14, 6), constrained_layout=True)  # Povećana širina i automatsko prilagođavanje rasporeda
+# Prvi subplot
+sns.scatterplot(ax=axes[0], x=df['time mean'], y=df['LL'], hue=df['emotion'], palette='viridis', s=70)  # Povećane tačke
+axes[0].set_xlabel('time mean', fontsize=20)
+axes[0].set_ylabel(r'$\Delta$LogLikelihood', fontsize=20)
+axes[0].tick_params(axis='both', labelsize=15)
+handles, labels = axes[0].get_legend_handles_labels()
+axes[0].legend(handles, ['neutral', 'happy', 'sad', 'scared', 'angry'], title='Emotion', fontsize=15, title_fontsize=20, loc='best')
+
+
+# Drugi subplot
+sns.scatterplot(ax=axes[1], x=df['time mean'], y=df['LL'], hue=df['speaker gender'], palette='viridis', s=70)  # Povećane tačke
+axes[1].set_xlabel('time mean', fontsize=20)
+axes[1].set_ylabel(r'$\Delta$LogLikelihood', fontsize=20)
+axes[1].tick_params(axis='both', labelsize=15)
+handles, labels = axes[1].get_legend_handles_labels()
+axes[1].legend(handles, ['female', 'male'], title='Speaker Gender', fontsize=15, title_fontsize=20, loc='best')
 plt.show()
 
-sns.scatterplot(x=df['time mean'], y=df['LL'], hue=df['emotion'], palette='viridis')
-plt.xlabel('time mean')
-plt.ylabel('LL')
-plt.show()
 
 
-sns.scatterplot(x=df['time mean'], y=df['LL'], hue=df['speaker gender'], palette='viridis')
-plt.xlabel('time mean')
-plt.ylabel('LL')
-plt.show()
-
-
-
-# Add slight random noise to avoid overlap (adjust scale as needed)
+# Dodaj malo šuma kako bi se tačke manje preklapale
 df['emotion_jittered'] = df['emotion'] + np.random.uniform(-0.1, 0.1, size=len(df))
 df['optimal_k_jittered'] = df['optimal k'] + np.random.uniform(-0.05, 0.05, size=len(df))
+# Your original plot
+plt.figure(figsize=(10, 6))
 sns.scatterplot(x=df['emotion_jittered'], y=df['optimal_k_jittered'], hue=df['speaker gender'], 
-                palette='viridis')
-plt.xlabel('Emotion')
-plt.ylabel('Optimal k')
-plt.title('Scatter Plot with Jitter to Reduce Overlaps')
-plt.legend(title='Speaker Gender')
-#plt.legend(title='Speaker Gender', bbox_to_anchor=(1.05, 1), loc='upper left', borderaxespad=0)
+                palette='viridis', s=80)
+
+plt.xticks(ticks=[0, 1, 2, 3, 4], labels=['neutral', 'happy', 'sad', 'scared', 'angry'], fontsize=20)
+plt.xlabel('Emotion', fontsize=20)
+plt.ylabel('Optimal k', fontsize=20)
+plt.xticks(fontsize=20)
+plt.yticks(fontsize=20)
+
+# Get current handles and labels from the plot
+handles, labels = plt.gca().get_legend_handles_labels()
+
+# Add both the custom legend and the original legend to the plot
+plt.legend(handles=handles, labels=['female', 'male'], 
+           title='Speaker Gender', fontsize=15, title_fontsize=20, loc='best')
+
 plt.show()
 
 
-sns.scatterplot(x=df['optimal k'], y=df['the best LL'] - df['LL'], hue=df['speaker gender'], palette='viridis')
-plt.xlabel('optimal k')
-plt.ylabel('the best LL - LL')
+
+plt.figure(figsize=(10, 6))
+sns.scatterplot(x=df['optimal k'], y=df['the best LL'] - df['LL'], hue=df['speaker gender'], palette='viridis', s=100)
+# Poboljšanja u čitljivosti
+plt.xlabel('Optimal k', fontsize=20)
+plt.ylabel(r'$\Delta LL_{optimal\ k} - \Delta LL_{k=1}$', fontsize=20)
+plt.xticks(fontsize=20)
+plt.yticks(fontsize=20)
+# Poboljšana legenda
+handles, labels = plt.gca().get_legend_handles_labels()
+plt.legend(handles=handles, labels=['female', 'male'], 
+           title='Speaker Gender', fontsize=15, title_fontsize=20, loc='best')
 plt.show()

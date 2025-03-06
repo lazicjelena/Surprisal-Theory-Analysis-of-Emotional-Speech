@@ -11,11 +11,24 @@ import numpy as np
 import pandas as pd
 import math 
 
-def inf_k_model(df, k, surprisal, prosody = 'time'):
+def inf_k_model(df, k, surprisal, prosody = 'time', function = 'power'):
 
     surprisal_name = surprisal + ' ' + str(k)
     model_name = surprisal_name + ' model'
-    df[surprisal_name] = df[surprisal] ** k
+    if function != 'power':
+        model_name+= function
+    
+    if function == 'power':
+        df[surprisal_name] = df[surprisal] ** k
+    if function == 'linear':
+        df[surprisal_name] = df[surprisal] * k
+    if function == 'logarithmic':
+        df[surprisal_name] = np.log(df[surprisal]) 
+    if function == 'exponential':
+        df[surprisal_name] = np.exp(df[surprisal])
+
+    
+    
     results_df = pd.DataFrame(columns = df.columns.tolist().append(model_name))
 
     for fold in df['fold'].unique():
@@ -66,10 +79,15 @@ def akaike_for_column(data, prominence, model_name, baseline_model = 'baseline')
     return difference, std_difference
 
 
-def calculate_delta_ll(data, surprisal, k, emotion_data, std_data, prominence = 'time'):
+def calculate_delta_ll(data, surprisal, k, emotion_data, std_data, prominence = 'time', function = 'power'):
 
+        
+    model_name = surprisal + ' ' + str(k) + ' model'
+    if function != 'power':
+        model_name+= function
+        
     try:
-      delta_ll, std_list = akaike_for_column(data, prominence, 'emotion', surprisal + ' ' + str(k) + ' model', 'baseline')
+      delta_ll, std_list = akaike_for_column(data, prominence,  model_name, 'baseline')
     except:
       delta_ll = [0,0,0,0,0]
       std_list = [1,1,1,1,1]
@@ -79,10 +97,14 @@ def calculate_delta_ll(data, surprisal, k, emotion_data, std_data, prominence = 
 
     return
 
-def calculate_delta_ll_old(data, surprisal_name, k, prominence = 'time'):
+def calculate_delta_ll_old(data, surprisal_name, k, prominence = 'time', function = 'power'):
+    
+    model_name = surprisal_name + ' ' + str(k) + ' model'
+    if function != 'power':
+        model_name+= function
 
     try:
-      delta_ll, std_element = akaike_for_column(data, prominence, surprisal_name + ' ' + str(k) + ' model', 'baseline')
+      delta_ll, std_element = akaike_for_column(data, prominence, model_name, 'baseline')
       return delta_ll, std_element
     except:
       print(f"Error accured while processing {surprisal_name} at k = {k}")

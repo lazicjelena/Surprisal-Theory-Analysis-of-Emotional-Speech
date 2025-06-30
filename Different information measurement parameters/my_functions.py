@@ -71,10 +71,10 @@ def akaike_for_column(data, model_name, baseline_model = 'baseline'):
 
     return difference, std_ll_2
 
-def calculate_delta_ll(data, model_name):
+def calculate_delta_ll(data, model_name, baseline = "baseline -3"):
 
     try:
-      delta_ll, std_element = akaike_for_column(data, model_name, "baseline -3")
+      delta_ll, std_element = akaike_for_column(data, model_name, baseline)
       return delta_ll, std_element
     except:
       print(f"Error accured while processing {model_name}")
@@ -114,17 +114,50 @@ def paired_permutation_test(df, col1, col2, num_permutations=1000):
 
     return p_value    
 
-def add_column_with_surprisal(df, parameter, surprisal, k=3):
+def add_column_with_surprisal(df, parameter='', surprisal='', k=3):
+    '''
+    Parameters
+    ----------
+    df : dataframe
+        Training data.
+    parameter : str
+        Column name for additional column to take as input to LR model.
+    surprisal : str
+        Surprisal column name.
+    k : int
+        Split over effect, optional. The default is 3.
+
+    Returns
+    -------
+    results_df:
+        initial data with additional column for LR model results for prediction with parameter.
+
+    '''
     
     columns = df.columns.tolist()
-    training_columns = ['length', 'log probability', parameter]
     
-    if surprisal: 
-        training_columns.append(surprisal)
+    if parameter != '':
+        training_columns = ['length', 'log probability', parameter]
+
     else:
-        columns.remove('Surprisal GPT-2')
-        for i in range(1,k+1):
-            columns.remove(f"Surprisal GPT-2 -{i}")
+        training_columns = ['length', 'log probability']
+    
+    if surprisal != '': 
+        training_columns.append(surprisal)
+    # else:
+    #     columns.remove(surprisal)
+    #     for i in range(1,k+1):
+    #         columns.remove(f"{surprisal} -{i}")
+            
+    # create column names
+    if surprisal != '': 
+        result_column_name = surprisal + ' '
+    else:
+        result_column_name = ''
+    if parameter != '':
+        result_column_name += parameter + ' '
+        
+    result_column_name += 'model'
         
     basic_columns = training_columns.copy()
     for i in range(1,k+1):
@@ -140,7 +173,7 @@ def add_column_with_surprisal(df, parameter, surprisal, k=3):
     for fold in df['fold'].unique():
 
         test_data = df[df['fold'] == fold]
-        y_test = df[df['fold'] == fold][['time']]
+        #y_test = df[df['fold'] == fold][['time']]
         
         train_data = df[df['fold'] != fold]
         y_train = df[df['fold'] != fold][['time']]
@@ -155,7 +188,7 @@ def add_column_with_surprisal(df, parameter, surprisal, k=3):
         model.fit(train_data[training_columns], y_train)
         
         y_pred = model.predict(test_data[training_columns])
-        test_data.loc[:, f"{surprisal} + {parameter} model"] = y_pred
+        test_data.loc[:, result_column_name] = y_pred
             
         # Concatenate the DataFrames along rows (axis=0)
         results_df = pd.concat([results_df, test_data], axis=0)
@@ -181,7 +214,7 @@ def fonetic_model(df, fonem_list):
     for fold in df['fold'].unique():
 
         test_data = df[df['fold'] == fold]
-        y_test = df[df['fold'] == fold][['time']]
+        #y_test = df[df['fold'] == fold][['time']]
         
         train_data = df[df['fold'] != fold]
         y_train = df[df['fold'] != fold][['time']]

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Nov 22 11:15:20 2024
+Created on Sun May 18 17:20:26 2025
 
 @author: Jelena
 """
@@ -12,39 +12,37 @@ import pandas as pd
 import os
 import warnings
 
+# model = 'roberta'
+# surprisal = 'surprisal RoBERTa uni'
 
-context_ind = True # otherwise non-context
-surprisal_ind = False # otherwise information value
-serbian_ind = False # otherwise english
+# model = 'albert'
+# surprisal = 'surprisal ALBERT uni'
 
-if context_ind:
-    parameter_name = 'CE'
-    if surprisal_ind:
-        file_path = os.path.join('..','podaci','information measurements parameters', "context_embedding_data_surprisal.csv")
-    else:
-        file_path = os.path.join('..','podaci','information measurements parameters', "context_embedding_data.csv")   
-else:
-    parameter_name = 'NCE'
-    if surprisal_ind:
-        file_path = os.path.join('..','podaci','information measurements parameters', "non_context_embedding_data_surprisal.csv")
-    else:
-        file_path = os.path.join('..','podaci','information measurements parameters', "non_context_embedding_data.csv")
+model = 'bertic'
+surprisal = 'surprisal BERTic uni'
 
-if serbian_ind:
-    emotion_names = ['неутрално', 'срећно', 'тужно', 'уплашено', 'љуто']
-    x_axis_name = 'дубина неуралне мреже'
-    p_names = ['p вриједност<0.001', 'p бриједност<0.05']
-else:
-    emotion_names = ['neutral', 'happy', 'sad', 'scared', 'angry']
-    x_axis_name = 'network layer'
-    p_names = ['p value<0.001', 'p value<0.05']
+model = 'bert'
+surprisal = 'surprisal BERT uni'
+
+#model = 'gpt'
+#surprisal = 'surprisal GPT'
+
+baseline_model = 'baseline -3'
+# baseline_model = '{} model'.format(surprisal)
+
+file_path = os.path.join('..','podaci','transformer layers parameters', 'datasets', f"{model}.csv")
+
+
+emotion_names = ['neutral', 'happy', 'sad', 'scared', 'angry']
+x_axis_name = 'network layer'
+p_names = ['p value<0.001', 'p value<0.05']
     
 emotion_colours = {0: 'red', 1: 'blue', 2: 'green', 3: 'orange', 4: 'purple'}
 
 # Ignore all warnings
 warnings.filterwarnings("ignore")
 
-parameters = [f'{parameter_name} {j}' for j in range(1, 13)]
+parameters = [f'CE {j}' for j in range(1, 13)]
 
 data = pd.read_csv(file_path)
 data = data[data['time']!=0]
@@ -53,22 +51,22 @@ results_list = []
 parameter_list = []
 emotion_list = []
 std_list = []
-
-surprisal = 'Surprisal GPT-2'
+ 
 
 # Add surprisal results
 df = data.dropna()
 
+
 for parameter in parameters:
     
-    results_df = add_column_with_surprisal(df, parameter, surprisal, 3)
+    results_df = add_column_with_surprisal(df, parameter=parameter, surprisal=surprisal, k=3)
     df = pd.merge(df, results_df, how='left')
             
     for emotion in [0,1,2,3,4]:
         emotion_data = df[df['emotion'] == emotion]
 
-        delta_element, _ = calculate_delta_ll(emotion_data,  f"{surprisal} {parameter} model")
-        std_element = paired_permutation_test(emotion_data, 'baseline -3', f"{surprisal} {parameter} model", 100)
+        delta_element, _ = calculate_delta_ll(emotion_data,  f"{surprisal} {parameter} model", baseline_model)
+        std_element = paired_permutation_test(emotion_data, baseline_model, f"{surprisal} {parameter} model", 100)
         results_list.append(delta_element)
         std_list.append(std_element)
         emotion_list.append(emotion)
@@ -104,8 +102,8 @@ for emotion in [0,1,2,3,4]:
     large_scatter_x_axis = []
     
     for i in range(1,13):
-        value = emotion_df.loc[emotion_df['parameter'] == f"Surprisal GPT-2 {parameter_name} {i}", 'y_axis'].values[0] 
-        p_value = emotion_df.loc[emotion_df['parameter'] == f"Surprisal GPT-2 {parameter_name} {i}", 'p_value'].values[0]
+        value = emotion_df.loc[emotion_df['parameter'] == f"{surprisal} CE {i}", 'y_axis'].values[0] 
+        p_value = emotion_df.loc[emotion_df['parameter'] == f"{surprisal} CE {i}", 'p_value'].values[0]
         
         x_axis.append(i)
         y_axis.append(value)
@@ -134,16 +132,24 @@ plt.tight_layout(rect=[0, 0.03, 1, 0.95])
 plt.show()
 
 
-''' print last hidden layer'''
+# pojedinacni rezultati za rad
 
-for emotion in [0,1,2,3,4]:
-    
-    emotion_df = results_df[results_df['emotion'] == emotion]
-    print(emotion)
-    i = 12
-    
-    value = emotion_df.loc[emotion_df['parameter'] == f"Surprisal GPT-2 {parameter_name} {i}", 'y_axis'].values[0] 
-    p_value = emotion_df.loc[emotion_df['parameter'] == f"Surprisal GPT-2 {parameter_name} {i}", 'p_value'].values[0]
-        
-    print(f"{value:.3f} {p_value}")
+pom = results_df[results_df['emotion'] == 4]
+
+dvanaesti = pom[pom['parameter'] == f"{surprisal} CE 12"]
+dvanaesti = dvanaesti['y_axis']
+print(dvanaesti)
+
+najbolji = max(pom['y_axis'])
+print(pom[pom['y_axis']==najbolji]['parameter'])
+print(najbolji)
+
+
+razlika = najbolji - dvanaesti
+print(razlika)
+
+procenat = razlika/dvanaesti*100
+print(procenat)
+
+
 

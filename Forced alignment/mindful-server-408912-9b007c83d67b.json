@@ -1,13 +1,13 @@
 {
-  "type": "service_account",
-  "project_id": "mindful-server-408912",
-  "private_key_id": "9b007c83d67bacd8f793f39ad81ea533cab21660",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDQTS+Ce/qCJnon\nczGIvRhrydMBsjanDSvozPf6/RiSe8IB6haTpsKIfWLasN2yM1Jt3Aap1Bd7hhnC\ngEvt3j3CGwsXvml2+J2R7TdNJFZujD9NgEqr6vCGC8zjv/3wF4T0BvE40FGQjIuk\nf5lDIMbA40jl2vFOo9VijzCIPH1u62IfrzU+7dyt/l8Dyl7JXAB2rH0mtRc9dSvW\nz4qRVkssSg+15tpFdgrRyGsR887Fj3hI0C5/K49XyB0g9eR4husSlUTsvXLe5E0Z\nvM1Ou7wdMZt2pE/TBe5NCj7o4k2D+O24vYr0+HT9bslqyJV0xlBy0C8Tu8eV/3fg\n0ezN40w5AgMBAAECggEABpKGObvsswzrahw93LPOtfPycZ7Bul1K3I0UaU8cETR7\nchuvO63AJ0CsN6dApNNED2L+XinAK0MXbqYlVIDgek6Sd9zSWhEic6IZo8L469hb\n/6IuePna6KKDA/qg/2GBQ0ExfO/saumsVvPkY5RWARcKy/SFDEyqD8fh1E1ITebB\nKTu0j2y7gZ4Fj7BOUxEQltoFoWmj+KfWSdhXMqDyW/8EaIohkBHSPfrdxoYmXyQd\npLXfFjCEC7GtmyKrLu+/2Zf/U4HmEHNzvT/cZH9FWsdsCCeADvjMqKm3icR+xbcI\njNXikNHmU8DyxWpm/qVgMdtlkLVbTh1dytBziLLCywKBgQDpgTSaKz7gE4JWlRp1\n7NVLmdJemLWeU/MU8EJJeBjF/NHDB+vxkwkl4oxAV0Nnoi0xPr1uRUU9lRPTenZK\noIXl6rE9efGdj41O/VSmiuEy1Kn4BaghqpL/vmXgNUA6ftLj2xrWsc/8tKa3BiCV\nYrA8fBYiW+p/QN8f31hu72vGgwKBgQDkXmhkLPbxv4nwPpYTJ7/CbeRQhDmxnh3L\n/7/8nqjLnVvRBBQxZ78Uij2+pNOoaEKXKQBEipWs1OATfWdbvpeBkx8STRIp/OLi\nik8li2vgXwcDDC+3lKXmrgqAZexUUd4OgP/GBebGchjUDji8HlaD+ZVfd05hwa28\ncq5fn1VFkwKBgAus/0FaOjmgIBtON1WAMyYlmeRLBIHXNsdsQBRGYg68VozG/6BD\ntuhjDJpHAsLS1CmrNnOmGRE8PBKOBA41OpzFgHlPeKplPC6f8jSlqx8MjTcuqTqN\nue35ykRMxVpnbwofsZbcq0a6jb+HGef+WEud9MlhCTe1ubJxS424gQ4bAoGANXXc\nXkcgcCt0sScVntpZS7zKDAdIMkpfk1gFq6/AuBnYWq/nwkEVPEu4dJ7FZdEydYyF\noYYHz/PtmOJshc+yTAUS6wfbzrSCsKHMMW/YCyhzzcTWjtVfmQb5MmGp13tqzl5o\nggTzp1UidtH1eiRoAHE3BKg7Uysx7sGyDHSSU70CgYEAtf/J3AqOKMwjlN5eIZco\n36m2gF3ZyzYPEbdSm6Nil6XYqzXZNp1Xhs79uFTa17wZZBGB8ymaiV+B8FS5iYRF\nQdEUGNQp0BIh+Xep+hX2teRgqX6mftzhVDoWQnSFOKuom6g85qPIq1VtTn4WWUs2\nDu9AvXqkF9/ebiVbHL+WvKg=\n-----END PRIVATE KEY-----\n",
-  "client_email": "word-level-alignment-za-srpski@mindful-server-408912.iam.gserviceaccount.com",
-  "client_id": "104415244432006625718",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/word-level-alignment-za-srpski%40mindful-server-408912.iam.gserviceaccount.com",
-  "universe_domain": "googleapis.com"
+  "type": "",
+  "project_id": "",
+  "private_key_id": "",
+  "private_key": "",
+  "client_email": "",
+  "client_id": "",
+  "auth_uri": "",
+  "token_uri": "",
+  "auth_provider_x509_cert_url": "",
+  "client_x509_cert_url": "",
+  "universe_domain": ""
 }

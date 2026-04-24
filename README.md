@@ -1,190 +1,95 @@
-# \# 🎙️ Serbian Emotional Speech Analysis using Surprisal Theory
+# 🎙️ Serbian Emotional Speech Analysis using Surprisal Theory
 
-# 
+This project investigates **emotional speech in Serbian** through the lens of **surprisal theory**, combining linguistic features, acoustic analysis, and machine learning models to study and predict speech behavior.
 
-# This project investigates \*\*emotional speech in Serbian\*\* through the lens of \*\*surprisal theory\*\*, combining linguistic features, acoustic analysis, and machine learning models to study and predict speech behavior.
+The repository contains code used for:
+- surprisal estimation from language models
+- feature extraction from text and audio
+- dataset construction
+- modeling and statistical analysis
+- visualization of experimental results
 
-# 
+---
 
-# The repository contains code used for:
+## 📚 Publications
 
-# \- surprisal estimation from language models
+This repository accompanies the following publications:
 
-# \- feature extraction from text and audio
+### 📄 Conference Paper
+**Analysis of Emotional Speech in Serbian from Surprisal Theory Perspective**  
+*IcETRAN 2025*  
+DOI: https://doi.org/10.1109/IcETRAN66854.2025.11114098  
 
-# \- dataset construction
+### 📄 Journal Paper
+**Influence of the surprisal power adjustment on spoken word duration in emotional speech in Serbian**  
+*Computer Speech & Language, 2025*  
+DOI: https://doi.org/10.1016/j.csl.2025.101803  
 
-# \- modeling and statistical analysis
+---
 
-# \- visualization of experimental results
+## 🧠 Project Overview
 
-# 
+The project explores how **surprisal (information-theoretic measure)** influences:
 
-# \---
+- word duration in speech  
+- emotional expression  
+- prosodic features  
 
-# 
+It combines:
 
-# \## 📚 Publications
+- **N-gram models**
+- **Transformer models** (BERT, BERTic, GPT-2, GPT-Neo, Yugo-GPT)
+- **Acoustic analysis** (pitch, energy, MFCC)
+- **Machine learning models** for prediction tasks
 
-# 
+---
 
-# This repository accompanies the following publications:
+## 📁 Project Structure
 
-# 
+The repository is organized into several functional modules:
 
-# \### 📄 Conference Paper
+### 🔹 Surprisal Estimation
+`Surprisal estimation/`
+- estimation using N-gram and transformer models
+- contextual probability and entropy computation
 
-# \*\*Analysis of Emotional Speech in Serbian from Surprisal Theory Perspective\*\*  
+### 🔹 Feature Extraction
+`Fetures extraction/`, `Mel coefficients and surprisals/`, `Prominence/`
+- extraction of linguistic and acoustic features
+- MFCC, pitch, energy, prosodic features
 
-# \*IcETRAN 2025\*  
+### 🔹 Dataset Construction
+Multiple `build_dataset.py` scripts across folders
+- merging linguistic, acoustic, and surprisal features
+- preparing data for modeling
 
-# DOI: https://doi.org/10.1109/IcETRAN66854.2025.11114098  
+### 🔹 Modeling
+- `Emotion recognition/` → CNN-based emotion classification
+- `Linear regression/`, `Duration Prediction based on Surprisals/` → duration prediction
 
-# 
+### 🔹 Analysis & Results
+`Additional files after recension/`
+- final analyses and plots used in publications
+- statistical evaluation (AIC, log-likelihood, etc.)
 
-# \### 📄 Journal Paper
+### 🔹 Visualization
+`Generate graphs/`
+- plotting time-series and feature behavior
 
-# \*\*Influence of the surprisal power adjustment on spoken word duration in emotional speech in Serbian\*\*  
+### 🔹 Experimental Variants
+- `Different information measurement parameters/`
+- `Split-over effect/`
+- `Pervious Surprisals/`
 
-# \*Computer Speech \& Language, 2025\*  
+These contain alternative experimental setups and parameter variations.
 
-# DOI: https://doi.org/10.1016/j.csl.2025.101803  
+---
 
-# 
+## ⚙️ Setup
 
-# \---
+### 1. Install dependencies
 
-# 
+Create a virtual environment and install required packages:
 
-# \## 🧠 Project Overview
-
-# 
-
-# The project explores how \*\*surprisal (information-theoretic measure)\*\* influences:
-
-# 
-
-# \- word duration in speech  
-
-# \- emotional expression  
-
-# \- prosodic features  
-
-# 
-
-# It combines:
-
-# 
-
-# \- \*\*N-gram models\*\*
-
-# \- \*\*Transformer models\*\* (BERT, BERTic, GPT-2, GPT-Neo, Yugo-GPT)
-
-# \- \*\*Acoustic analysis\*\* (pitch, energy, MFCC)
-
-# \- \*\*Machine learning models\*\* for prediction tasks
-
-# 
-
-# \---
-
-# 
-
-# \## 📁 Project Structure
-
-# 
-
-# The repository is organized into several functional modules:
-
-# 
-
-# \### 🔹 Surprisal Estimation
-
-# `Surprisal estimation/`
-
-# \- estimation using N-gram and transformer models
-
-# \- contextual probability and entropy computation
-
-# 
-
-# \### 🔹 Feature Extraction
-
-# `Fetures extraction/`, `Mel coefficients and surprisals/`, `Prominence/`
-
-# \- extraction of linguistic and acoustic features
-
-# \- MFCC, pitch, energy, prosodic features
-
-# 
-
-# \### 🔹 Dataset Construction
-
-# Multiple `build\_dataset.py` scripts across folders
-
-# \- merging linguistic, acoustic, and surprisal features
-
-# \- preparing data for modeling
-
-# 
-
-# \### 🔹 Modeling
-
-# \- `Emotion recognition/` → CNN-based emotion classification
-
-# \- `Linear regression/`, `Duration Prediction based on Surprisals/` → duration prediction
-
-# 
-
-# \### 🔹 Analysis \& Results
-
-# `Additional files after recension/`
-
-# \- final analyses and plots used in publications
-
-# \- statistical evaluation (AIC, log-likelihood, etc.)
-
-# 
-
-# \### 🔹 Visualization
-
-# `Generate graphs/`
-
-# \- plotting time-series and feature behavior
-
-# 
-
-# \### 🔹 Experimental Variants
-
-# \- `Different information measurement parameters/`
-
-# \- `Split-over effect/`
-
-# \- `Pervious Surprisals/`
-
-# 
-
-# These contain alternative experimental setups and parameter variations.
-
-# 
-
-# \---
-
-# 
-
-# \## ⚙️ Setup
-
-# 
-
-# \### 1. Install dependencies
-
-# 
-
-# Create a virtual environment and install required packages:
-
-# 
-
-# ```bash
-
-# pip install -r requirements.txt
-
+```bash
+pip install -r requirements.txt

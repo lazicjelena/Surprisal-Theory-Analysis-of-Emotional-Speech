@@ -10,18 +10,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 
-def padding_sequence(f0_all_files):
-    
-    # Finding the maximum length of sublists
-    max_length = max(len(sublist) for sublist in f0_all_files)
-    # Pad each sublist individually
-    padded_list = []
-    for sublist in f0_all_files:
-        padding = [np.nan] * (max_length - len(sublist))
-        padded_sublist = np.concatenate((sublist, padding))
-        padded_list.append(padded_sublist)
-    
-    return padded_list
+from generate_graphs_utils import padding_sequence
 
 file_path =  os.path.join('..','podaci', 'rms.csv')
 df = pd.read_csv(file_path) 

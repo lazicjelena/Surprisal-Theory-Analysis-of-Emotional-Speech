@@ -10,28 +10,10 @@ import numpy as np
 import librosa
 import torch
 
+from audio_utils import get_fixed_length_mel_spectrogram
+
 
 mel_dim = 80
-
-def get_fixed_length_mel_spectrogram(y, sr, n_mels, fixed_length):
-    # Compute the Mel spectrogram
-    S = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=n_mels)
-
-    # Convert to log scale (dB)
-    S_dB = librosa.power_to_db(S, ref=np.max)
-
-    # Determine the current length of the Mel spectrogram
-    current_length = S_dB.shape[1]
-
-    if current_length < fixed_length:
-        # Pad with zeros if the current length is less than the fixed length
-        pad_width = fixed_length - current_length
-        S_dB = np.pad(S_dB, ((0, 0), (0, pad_width)), mode='constant')
-    else:
-        # Truncate if the current length is more than the fixed length
-        S_dB = S_dB[:, :fixed_length]
-
-    return S_dB
 
 class AudioDataset(Dataset):
     def __init__(self, dataframe, max_length=250):

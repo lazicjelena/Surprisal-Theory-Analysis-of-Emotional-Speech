@@ -10,6 +10,8 @@ import librosa
 import pandas as pd
 import os
 
+from text_utils import find_subword
+
 word_list = []
 user_list = []
 gender_list = []
@@ -110,16 +112,7 @@ df = pd.DataFrame({'word': word_list,
 df = df[df['target sentence']!=5347583875]
 
 # Split conjoint words
-def find_subword(word, unique_words):
-    
-    subword = ''
-    for i in range(1,len(word)+1):
-        if word[-i:] in unique_words:
-            subword = word[-i:]
-            
-    return subword
-
-unique_words = ' '.join(target_sentence_df['Text']).split()  
+unique_words = ' '.join(target_sentence_df['Text']).split()
 unique_words = set(word.lower() for word in unique_words)  
 
 corrected_words = []

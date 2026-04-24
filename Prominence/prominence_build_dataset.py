@@ -12,6 +12,8 @@ neophodni za racunanje korelacija i prikaz grafika koji se koriste u radu.
 import os
 import pandas as pd
 
+from text_utils import find_subword
+
 prosody_folder_path = os.path.join('..','podaci','prosody 1 0 0')
 
 target_sentence_path = os.path.join('..','podaci', 'target_sentences.csv') 
@@ -83,16 +85,7 @@ data = pd.DataFrame({
 
 
 # Split conjoint words
-def find_subword(word, unique_words):
-    
-    subword = ''
-    for i in range(1,len(word)+1):
-        if word[-i:] in unique_words:
-            subword = word[-i:]
-            
-    return subword
-
-unique_words = ' '.join(target_sentence_df['Text']).split()  
+unique_words = ' '.join(target_sentence_df['Text']).split()
 unique_words = set(word.lower() for word in unique_words)  
 
 corrected_words = []

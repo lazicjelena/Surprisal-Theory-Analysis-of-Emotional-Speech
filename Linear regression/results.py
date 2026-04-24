@@ -12,7 +12,9 @@ import numpy as np
 import pandas as pd
 from sklearn.linear_model import LinearRegression
 import os
-import math 
+import math
+
+from stats_utils import calculate_log_Likelihood, calculate_aic
 
 def inf_k_model(df, k, surprisal):
 
@@ -45,18 +47,6 @@ def inf_k_model(df, k, surprisal):
         results_df = pd.concat([results_df, test_data], axis=0)
         
     return results_df
-
-def calculate_log_Likelihood(data):
-    mean = np.mean(data)
-    std_dev = np.std(data)
-    return norm.logpdf(data, loc=mean, scale=std_dev)
-
-# Calculate AIC for models with different numbers of parameters
-def calculate_aic(real_values, results, k):
-    residuals = np.array(real_values) - np.array(results)
-    log_likelihood = calculate_log_Likelihood(residuals)
-    aic = 2 * k - 2 * log_likelihood
-    return aic, np.mean(log_likelihood), np.std(log_likelihood)
 
 def akaike_for_column(column_name, model_name, baseline_model = 'baseline'):
     difference = []

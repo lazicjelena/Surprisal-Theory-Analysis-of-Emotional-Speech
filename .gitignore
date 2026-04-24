@@ -1,0 +1,88 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# ---- Virtualna okruženja ----
+venv/
+env/
+.venv/
+.env
+.env.*
+!.env.example
+
+# ---- Build / distribucija ----
+build/
+dist/
+*.egg-info/
+*.egg
+pip-log.txt
+pip-delete-this-directory.txt
+
+# ---- Jupyter ----
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# ---- IDE / editori ----
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+
+# ---- OS ----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Model težine i checkpoint-i (bilo gdje u projektu) ----
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+*.bin
+*.onnx
+*.tflite
+*.h5
+*.hdf5
+*.pkl
+*.joblib
+best_model/
+checkpoints/
+
+# ---- Data formati koji su po pravilu veliki ----
+*.parquet
+*.feather
+*.arrow
+*.npy
+*.npz
+*.mat
+
+# ---- Audio fajlovi (pripadaju u ../podaci/, ne u repo) ----
+*.wav
+*.mp3
+*.flac
+*.ogg
+*.m4a
+
+# ---- Specifično za ovaj projekat: intermediate artefakti ----
+# CSV data-foldere u repou (podaci žive u ../podaci/ sibling folderu)
+Emotion recognition/data/
+Emotion recognition/model/
+
+# Runtime training logovi u radnim folderima
+**/training_log.csv
+**/vocabulary_size.txt
+**/results.txt
+
+# ---- Google Cloud / API credentials ----
+# Nikad ne commit-ovati kredencijale
+*service_account*.json
+*credentials*.json
+mindful-server-*.json
+*.pem
+*.key

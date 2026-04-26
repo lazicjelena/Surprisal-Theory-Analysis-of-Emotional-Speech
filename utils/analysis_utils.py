@@ -1,29 +1,26 @@
 # -*- coding: utf-8 -*-
-"""analysis_utils.py
-Pomocne funkcije za agregaciju/analizu preko emocija izdvojene iz:
-  - Prominence/plot energy.py
-  - Prominence/plot frequency.py
-  - Prominence/plot spe\u0435ch time.py
+"""utils.analysis_utils
 
-P-008 (Faza 2-B): zajednicke IDENTICNO funkcije unutar foldera
-'Prominence/'. Tijelo funkcije NIJE mijenjano.
+Centralizovani helperi za agregaciju/analizu preko emocija.
 
-Napomena: funkcija extraxt_parameter_over_emotion ima typo u imenu
+P-012 (Faza 2-C): cross-folder konsolidacija. Funkcija
+``extraxt_parameter_over_emotion`` je premjestena ovdje iz
+``prominence/analysis_utils.py`` da bi cijela ``utils/`` familija
+bila na jednom mjestu. Tijelo funkcije NIJE mijenjano (zero-change).
+
+Napomena: funkcija ``extraxt_parameter_over_emotion`` ima typo u imenu
 (extraxt -> extract). Zadrzano radi zero-change principa. Preimenovanje
 ide u posebnom proposalu.
 
-Ova IDENTICNO grupa ima samo 3 kopije - sve u folderu 'Prominence/' -
-pa je u potpunosti eliminisana ovim P-008 korakom.
-
 Pipeline role
 -------------
-Shared helper module for the ``Prominence/`` analysis scripts.
-Hosts :func:`extraxt_parameter_over_emotion`, the per-emotion
-neutral-vs-emotional aggregator that the three
-``plot energy.py`` / ``plot frequency.py`` /
-``plot speech time.py`` plotting scripts use to align each
-emotion's prosodic measurement with its neutral counterpart on
-the same ``(speaker, target sentence, word)`` key.
+Project-wide shared helper module imported under the package path
+``utils.analysis_utils``. Hosts :func:`extraxt_parameter_over_emotion`,
+the per-emotion neutral-vs-emotional aggregator that the three
+``prominence/plot_energy.py``, ``prominence/plot_frequency.py`` and
+``prominence/plot_speech_time.py`` plotting scripts use to align each
+emotion's prosodic measurement with its neutral counterpart on the
+same ``(speaker, target sentence, word)`` key.
 """
 
 

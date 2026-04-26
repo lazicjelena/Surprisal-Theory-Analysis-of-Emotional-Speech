@@ -1,29 +1,30 @@
 # -*- coding: utf-8 -*-
-"""audio_utils.py
-Audio feature extraction pomocne funkcije izdvojene iz:
-  - Emotion recognition/audiodataset.py
-  - Emotion recognition/prosody_parameters_and_mfcc.py
+"""utils.audio_utils
 
-P-008 (Faza 2-B): zajednicke IDENTICNO funkcije unutar foldera
-'Emotion recognition/'. Tijelo funkcije NIJE mijenjano.
+Centralizovani audio-feature helperi koje koriste vise foldera projekta.
 
-Napomena: get_fixed_length_mel_spectrogram postoji i u:
-  - Mel coefficients and surprisals/calculate_mel_spectrum.py
-Cross-folder konsolidacija nije dio P-008 - ostaje za P-009.
+P-012 (Faza 2-C): cross-folder konsolidacija. Funkcija
+``get_fixed_length_mel_spectrogram`` je prethodno postojala kao
+byte-identicna kopija u 2 fajla (emotion_recognition/audio_utils,
+mel_surprisal_analysis/calculate_mel_spectrum). Tijelo funkcije NIJE
+mijenjano - samo premjesteno na jedno centralno mjesto (zero-change).
 
-Takodje, extract_mel_spectrogram nije prebacen u ovaj utils jer ima
-dependency na modulne globals (mel_dim, fixed_length) koje se definisu
-u pozivajucem skripti. Njegova konsolidacija zahtijeva posebnu odluku
-o ovim konstantama - ostaje za P-009.
+Napomena: ``extract_mel_spectrogram`` (iz emotion_recognition/) nije
+ukljucen ovdje jer ima dependency na modulne globals (``mel_dim``,
+``fixed_length``) koje se definisu u pozivajucem skripti. Njegova
+konsolidacija zahtijeva posebnu odluku o ovim konstantama.
 
 Pipeline role
 -------------
-Shared audio-feature helper module for the
-``Emotion recognition/`` chain. Hosts
+Project-wide shared audio-feature helper module imported under the
+package path ``utils.audio_utils``. Hosts
 :func:`get_fixed_length_mel_spectrogram`, the pad-or-truncate
-log-Mel spectrogram extractor consumed by both
-``audiodataset.py`` (training/validation feature pipeline) and
-``prosody_parameters_and_mfcc.py`` (illustrative figures).
+log-Mel spectrogram extractor consumed by ``audiodataset.py``
+(training/validation feature pipeline) and
+``prosody_parameters_and_mfcc.py`` (illustrative figures) in the
+``emotion_recognition/`` chain, plus
+``mel_surprisal_analysis/calculate_mel_spectrum.py`` which builds
+mel-feature datasets for the surprisal-vs-mel analysis.
 """
 
 import librosa

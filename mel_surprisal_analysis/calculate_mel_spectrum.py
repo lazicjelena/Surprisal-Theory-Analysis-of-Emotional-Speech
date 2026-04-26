@@ -28,6 +28,7 @@ import os
 import numpy as np
 import librosa
 from tqdm import tqdm  # Import tqdm for progress bar
+from utils.audio_utils import get_fixed_length_mel_spectrogram
 
 df_path = os.path.join('..','podaci','general_data.csv')
 df = pd.read_csv(df_path)
@@ -42,50 +43,6 @@ df.info()
 vocab_size = 276
 mel_dim = 80
 fixed_length = 250
-
-def get_fixed_length_mel_spectrogram(y, sr, n_mels, fixed_length):
-    """Compute a fixed-length log-Mel spectrogram from a waveform.
-
-    The Mel spectrogram is converted to dB scale (``power_to_db``
-    with ``ref=np.max``) and either zero-padded along the time axis
-    (if it is shorter than ``fixed_length``) or right-truncated
-    (if it is longer).
-
-    Parameters
-    ----------
-    y : numpy.ndarray
-        Mono waveform, typically as returned by :func:`librosa.load`.
-    sr : int
-        Sampling rate of ``y`` in Hz.
-    n_mels : int
-        Number of Mel bands.
-    fixed_length : int
-        Target number of time frames.
-
-    Returns
-    -------
-    numpy.ndarray
-        Log-Mel spectrogram of shape ``(n_mels, fixed_length)``.
-    """
-    # Compute the Mel spectrogram
-    S = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=n_mels)
-
-    # Convert to log scale (dB)
-    S_dB = librosa.power_to_db(S, ref=np.max)
-
-    # Determine the current length of the Mel spectrogram
-    current_length = S_dB.shape[1]
-
-    if current_length < fixed_length:
-        # Pad with zeros if the current length is less than the fixed length
-        pad_width = fixed_length - current_length
-        S_dB = np.pad(S_dB, ((0, 0), (0, pad_width)), mode='constant')
-    else:
-        # Truncate if the current length is more than the fixed length
-        S_dB = S_dB[:, :fixed_length]
-
-    return S_dB
-
 
 # Function to extract mel spectrogram from audio file
 def extract_mel_spectrogram(audio_file):

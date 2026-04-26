@@ -32,7 +32,7 @@ import librosa
 import numpy as np
 import os
 
-from emotion_recognition.audio_utils import get_fixed_length_mel_spectrogram
+from utils.audio_utils import get_fixed_length_mel_spectrogram
 
 mel_dim = 80
 fixed_length = 250

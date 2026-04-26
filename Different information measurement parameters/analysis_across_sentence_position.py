@@ -52,7 +52,7 @@ for parameter in parameters:
         
             emotion_data = df[df['position'] == position]
 
-            delta_element, _ = calculate_delta_ll(emotion_data,  f"{surprisal} {parameter} model")
+            delta_element, _ = calculate_delta_ll(mode="flexible", data=emotion_data, model_name=f"{surprisal} {parameter} model")
             
             results_list.append(delta_element)
             position_list.append(position)

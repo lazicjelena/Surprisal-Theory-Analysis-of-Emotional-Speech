@@ -7,7 +7,25 @@ lazic.jelenaa@gmail.com
 Racunanje surprisal rijeci na nivou ngrama, za racunanje n= 2,3,4,5 potrebno
 je promijeniti vrijednost promjenjive u kodu. Ovdje se moze mijenjati i parametar alpha.
 
-
+Pipeline role
+-------------
+Trains an ``n``-gram language model with Laplace (additive)
+smoothing on the lemmatised training corpus
+``../../podaci/ngram_train_data.csv`` (produced by
+``make_train_dataset.py``) and uses it to estimate per-word
+surprisal for the canonical target sentences
+``../../podaci/target_sentences_lemmas.csv``. Tunable knobs are
+the module-level ``num_grams`` (n) and ``alpha``
+(smoothing parameter). The five most-common n-grams and
+(n-1)-grams are dropped from the count tables (a heuristic to
+deweight punctuation-only or boundary-only n-grams). For each
+target sentence the script tokenises and pads with ``<s>`` /
+``</s>``, computes the per-word smoothed probability, and emits
+``-log2(p)`` as the surprisal. Result CSV is written as
+``../../podaci/word_surprisal_ngram<n>_alpha<alpha>.csv`` (e.g.
+``word_surprisal_ngram3_alpha4.csv`` with the defaults), which is
+the input to ``Pervious Surprisals/build_dataset.py`` (column
+``Surprisal ngram-3``).
 """
 
 import pandas as pd
@@ -22,6 +40,26 @@ num_grams = 3
 alpha = 4 # regularization parameter
 
 def calculate_vocabulary_size(data):
+    """Return the size of the unique-token vocabulary across ``data``.
+
+    Iterates over each tokenised sentence in ``data`` and updates a
+    running ``set`` with the tokens, then returns its size. The
+    returned vocabulary size ``V`` is used as the denominator
+    coefficient ``alpha * V`` in the Laplace-smoothed n-gram
+    probability used in
+    :func:`calculate_word_probabilities`.
+
+    Parameters
+    ----------
+    data : iterable of iterable of str
+        One tokenised sentence per element. Tokens are added to
+        the vocabulary as-is (no lower-casing, no stripping).
+
+    Returns
+    -------
+    int
+        Number of unique tokens across all sentences.
+    """
     # Create a set to store unique words
     unique_words = set()
 
@@ -34,8 +72,34 @@ def calculate_vocabulary_size(data):
     return len(unique_words)
 
 def calculate_word_probabilities(sentence, n_gram_counts, vocabulary_size, n=3):
-    
-    
+    """Score every ``n``-gram in ``sentence`` with Laplace smoothing.
+
+    Generates the list of overlapping ``n``-grams of ``sentence``
+    and, for each one, computes the additive-smoothed conditional
+    probability ``(c(n_gram) + alpha) / (c(prefix) + alpha * V)``
+    where ``c(...)`` are the counts in ``n_gram_counts`` and
+    ``n_gram_counts_1`` (module-level), ``alpha`` is the module-level
+    smoothing constant and ``V`` is ``vocabulary_size``.
+
+    Parameters
+    ----------
+    sentence : sequence of str
+        Tokenised, padded sentence (e.g. as produced by
+        :func:`flatten_sentence_processing`).
+    n_gram_counts : collections.Counter
+        Counts of full ``n``-grams over the training corpus.
+    vocabulary_size : int
+        Vocabulary size ``V`` for the smoothing denominator.
+    n : int, optional
+        Order of the model. Defaults to ``3``.
+
+    Returns
+    -------
+    list of tuple
+        One ``(word, probability)`` per ``n``-gram in
+        ``sentence``; ``word`` is the last token of the
+        ``n``-gram (the predicted word).
+    """
     # Generate n-grams from the sentence
     n_grams = list(ngrams(sentence, n))
 
@@ -108,7 +172,25 @@ vocabulary_size = calculate_vocabulary_size(tokenized_sentences)
 print("Vocabulary size:", vocabulary_size)
 
 def flatten_sentence_processing(sentence):
-    
+    """Tokenise, pad, and strip punctuation from ``sentence``.
+
+    Runs ``nltk.word_tokenize(sentence)``, wraps the resulting
+    token list with ``<s>`` left-padding and ``</s>``
+    right-padding (using the module-level ``num_grams`` for the
+    pad width), then drops the punctuation tokens
+    ``,``, ``.``, ``!``, ``?``, ``:``. The stripped, padded list
+    is what gets fed to :func:`calculate_word_probabilities`.
+
+    Parameters
+    ----------
+    sentence : str
+        Raw input sentence (lemmatised or surface form).
+
+    Returns
+    -------
+    list of str
+        Tokens after pad-and-filter, ready for n-gram scoring.
+    """
     # Pad the sentence
     padded_sentence = list(pad_sequence(nltk.word_tokenize(sentence), pad_left=True, left_pad_symbol="<s>", pad_right=True, right_pad_symbol="</s>", n=num_grams))
     flatten_sentence = []

@@ -28,6 +28,24 @@ for filename in filenames:
                     token=HUGGING_FACE_API_KEY
         )
         print(downloaded_model_path)
+
+Pipeline role
+-------------
+Computes a contextual-entropy information measure for every word in
+every target sentence using the Serbian-language causal LM
+``gordicaleksa/YugoGPT``. For each sentence the script substitutes a
+random sample of vocabulary candidates (50 rows from
+``../../podaci/wordlist_classlawiki_sr_cleaned.csv``, fixed
+``random_state=42``) into each word slot, queries the language model
+to obtain the per-subword softmax probability of the candidate in
+context, aggregates subword probabilities back to whole-word level
+via :func:`extract_words_and_probabilities`, and accumulates the
+binary-log entropy contribution per slot. The resulting table
+(``Sentence``, ``Word``, ``Contextual Entropy Yugo``) is written to
+``../podaci/information measurements parameters/yugo_entropy_data.csv``
+and is one of several alternative information measures consumed by
+the surprisal / regression analyses in
+``Different information measurement parameters/``.
 """
 
 import pandas as pd
@@ -42,6 +60,33 @@ model = AutoModelForCausalLM.from_pretrained(model_id)
 
 
 def extract_words_and_probabilities(subwords, subword_probabilities):
+    """Aggregate sub-word probabilities into whole-word probabilities.
+
+    Walks ``subwords`` left to right and treats every token that
+    starts with the SentencePiece word-boundary marker ``▁`` as the
+    beginning of a new word. Sub-word probabilities are multiplied
+    together within the same word, so the returned per-word
+    probability equals ``prod(p_i)`` over the sub-words ``i`` that
+    compose it. The leading ``▁`` is stripped from the surface form
+    of each emitted word.
+
+    Parameters
+    ----------
+    subwords : list of str
+        Decoded SentencePiece sub-word strings, in left-to-right
+        order. Sub-words that start a new word begin with the
+        boundary marker ``▁``.
+    subword_probabilities : sequence of float
+        Probabilities aligned 1:1 with ``subwords``.
+
+    Returns
+    -------
+    tuple
+        ``(words, word_probabilities)`` -- two lists of equal length
+        where ``word_probabilities[k]`` is the product of all
+        sub-word probabilities that were merged to form
+        ``words[k]``.
+    """
     words = []
     word_probabilities = []
 
@@ -74,7 +119,39 @@ def extract_words_and_probabilities(subwords, subword_probabilities):
     return words, word_probabilities
 
 def calculate_contextual_entropy(sentence, tokenizer, model, vocabulary_df):
-    
+    """Estimate per-word contextual entropy with a causal LM.
+
+    For each position in ``sentence``, draws a fixed sample of 50
+    vocabulary candidates (``vocabulary_df.sample(n=50,
+    random_state=42)``), substitutes each candidate into the slot,
+    encodes the modified sentence with ``tokenizer``, queries
+    ``model`` to obtain per-token logits, averages the softmax over
+    sequence positions to get a single probability per sub-word,
+    aggregates sub-word probabilities to the whole-word level via
+    :func:`extract_words_and_probabilities`, and accumulates the
+    binary-log entropy contribution
+    ``-p * log2(p + 1e-40)`` over candidates.
+
+    Parameters
+    ----------
+    sentence : str
+        Whitespace-tokenised sentence whose words will be replaced
+        slot by slot.
+    tokenizer : transformers.PreTrainedTokenizer
+        SentencePiece-compatible tokenizer matching ``model``.
+    model : transformers.PreTrainedModel
+        Causal language model returning ``logits``.
+    vocabulary_df : pandas.DataFrame
+        Reference vocabulary with a ``word`` column. Only a 50-row
+        ``random_state=42`` sample is used per word slot.
+
+    Returns
+    -------
+    tuple
+        ``(words_list, entropy_list)`` -- the original words from
+        ``sentence`` (in order) and their accumulated contextual
+        entropy contribution from the candidate sweep.
+    """
     # calulate information value for one sentence
     words_list = []
     entropy_list = []

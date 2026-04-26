@@ -6,6 +6,17 @@ lazic.jelenaa@gmail.com
 
 Prikaz grafika histograma rijeci, grafik je prikazan u radu.
 
+Pipeline role
+-------------
+Diagnostic visualisation of the unigram frequency distribution of
+the lemmatised training corpus
+``../../podaci/ngram_train_data.csv`` (produced by
+``make_train_dataset.py``). Splits each ``lemma`` field on
+whitespace, accumulates token counts in a
+:class:`collections.Counter`, restricts to lemmas with count
+``< 100`` (the long tail), and plots a histogram of the resulting
+counts. Used to illustrate the long-tailed distribution of word
+frequencies in the thesis; not on the production data path.
 """
 
 import pandas as pd

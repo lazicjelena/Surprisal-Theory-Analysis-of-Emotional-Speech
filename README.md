@@ -1,4 +1,4 @@
-# 🎙️ Serbian Emotional Speech Analysis using Surprisal Theory
+# 🎙️ Emotional Speech Analysis using Surprisal Theory
 
 This project investigates **emotional speech in Serbian** through the lens of **surprisal theory**, combining linguistic features, acoustic analysis, and machine learning models to study and predict speech behavior.
 
@@ -38,8 +38,8 @@ The project explores how **surprisal (information-theoretic measure)** influence
 It combines:
 
 - **N-gram models**
-- **Transformer models** (BERT, BERTic, GPT-2, GPT-Neo, Yugo-GPT)
-- **Acoustic analysis** (pitch, energy, MFCC)
+- **Transformer models** (BERT, BERTic, XLM-R, GPT-2, GPT-Neo, Yugo-GPT)
+- **Acoustic analysis** (duration, pitch, energy, MFCC)
 - **Machine learning models** for prediction tasks
 
 ---

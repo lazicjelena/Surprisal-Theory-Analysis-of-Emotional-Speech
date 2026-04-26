@@ -6,6 +6,19 @@ lazic.jelenaa@gmail.com
 
 Skripta graficki predstavlja sve statisticke podatke prikazane u raud u poglavlju
 analiza podataka.
+
+Pipeline role
+-------------
+Exploratory data-analysis script that reads the merged baseline table
+``../podaci/results - linear regression/baseline_results_data.csv`` and
+draws the descriptive figures that go into the data-analysis chapter
+of the thesis: per-emotion sample counts split by speaker gender,
+word-length histograms split by gender, the gender split of total
+words, a Surprisal-GPT vs. Surprisal-BERT scatter, and a histogram of
+target-sentence frequencies. As a side effect it also draws ``k``
+target-sentence folds at random and writes the assignment to
+``../podaci/folds.csv`` -- this CSV is later consumed by every
+cross-validation script in ``Linear regression/`` and downstream.
 """
 
 import matplotlib.pyplot as plt

@@ -71,7 +71,7 @@ def akaike_for_column(data, model_name, baseline_model = 'baseline'):
 
     return difference, std_ll_2
 
-def calculate_delta_ll(data, model_name, baseline = "baseline -3"):
+def calculate_delta_ll_flexible(data, model_name, baseline = "baseline -3"):
 
     try:
       delta_ll, std_element = akaike_for_column(data, model_name, baseline)
@@ -79,7 +79,25 @@ def calculate_delta_ll(data, model_name, baseline = "baseline -3"):
     except:
       print(f"Error accured while processing {model_name}")
       return 0, 0
-    
+
+
+def calculate_delta_ll(mode, **kwargs):
+    """Dispatcher za calculate_delta_ll varijante u ovom fajlu (P-009).
+
+    Dostupni mode-ovi u Different information measurement parameters/my_functions.py:
+      - "flexible"  → calculate_delta_ll_flexible(data, model_name, baseline="baseline -3")
+    """
+    mapping = {
+        "flexible": calculate_delta_ll_flexible,
+    }
+    if mode not in mapping:
+        raise ValueError(f"Unknown mode: {mode}")
+    try:
+        return mapping[mode](**kwargs)
+    except TypeError as e:
+        raise TypeError(f"Invalid arguments for mode '{mode}': {e}")
+
+
 def paired_permutation_test(df, col1, col2, num_permutations=1000):
 
     # Extract the scores from the two columns

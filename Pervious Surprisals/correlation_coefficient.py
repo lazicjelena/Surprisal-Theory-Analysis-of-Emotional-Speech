@@ -6,6 +6,19 @@ Created on Tue Aug 27 03:42:07 2024
 
 U ovoj skripti proucavamo funkcije koje se mogu koristiti za racunanje koeficijenta
 korelacije izmedju vise promjenjivih.
+
+Pipeline role
+-------------
+Sandbox / methodological helper script that compares several
+correlation estimators (numpy, Pearson, Spearman, multiple
+correlation coefficient via :class:`sklearn.linear_model.LinearRegression`)
+on the GPT-2 surprisal vs. word duration relationship and on its
+extensions with one and two lagged surprisal terms. Reads
+``../podaci/correlation data/former_word_surprisals_gpt2.csv``
+plus ``../podaci/correlation data/prominence_data.csv``, joins them
+via :func:`lookup_features`, and prints the four correlation values
+to stdout. Not on the production path; used during development to
+choose the metric reported in ``plot_results.py``.
 """
 
 # pip install scikit-learn
@@ -16,6 +29,32 @@ import os
 import scipy.stats
 
 def lookup_features(data, surprisal_df, column_name):
+    """Look up per-word surprisal values for each row of ``data``.
+
+    Logically identical to the ``conjoint_data.py`` variant: joins
+    on lower-case ``target sentence`` / ``word`` keys (so the input
+    ``surprisal_df`` is expected to be the merged
+    prominence + surprisal table, not the raw model output).
+    Multi-occurrence handling and per-sentence reset of
+    ``list_of_words`` unchanged.
+
+    Parameters
+    ----------
+    data : pandas.DataFrame
+        Per-word DataFrame with ``word`` and ``target sentence``
+        columns.
+    surprisal_df : pandas.DataFrame
+        Reference table with ``target sentence``, ``word`` and
+        ``column_name`` columns.
+    column_name : str
+        Surprisal column to read.
+
+    Returns
+    -------
+    list of float
+        One per row of ``data``: summed surprisal across the
+        whitespace-split parts of ``row["word"]``.
+    """
     surprisal_list = []
     current_sentence = 1000
     list_of_words = []

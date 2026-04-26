@@ -88,7 +88,7 @@ for speaker in df['speaker'].unique():
         
         for parameter in parameters:
             
-            delta_element, std_element = calculate_delta_ll(emotion_data,  f"{surprisal} {parameter} model", baseline_model)
+            delta_element, std_element = calculate_delta_ll(mode="flexible", data=emotion_data, model_name=f"{surprisal} {parameter} model", baseline=baseline_model)
             y_axis.append(delta_element)
             y_std.append(std_element)
             

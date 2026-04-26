@@ -61,7 +61,7 @@ def akaike_for_column(column_name, model_name, baseline_model = 'baseline'):
 
     return difference, std_ll_2
 
-def calculate_delta_ll(surprisal, k, emotion_data, std_data):
+def calculate_delta_ll_emotion(surprisal, k, emotion_data, std_data):
 
     try:
       delta_ll,std_list = akaike_for_column('emotion', surprisal + ' ' + str(k) + ' model', 'baseline')
@@ -74,6 +74,23 @@ def calculate_delta_ll(surprisal, k, emotion_data, std_data):
       std_data[emotion].append(std_list)
 
     return
+
+
+def calculate_delta_ll(mode, **kwargs):
+    """Dispatcher za calculate_delta_ll varijante u ovom fajlu (P-009).
+
+    Dostupni mode-ovi u Linear regression/results.py:
+      - "emotion"  → calculate_delta_ll_emotion(surprisal, k, emotion_data, std_data)
+    """
+    mapping = {
+        "emotion": calculate_delta_ll_emotion,
+    }
+    if mode not in mapping:
+        raise ValueError(f"Unknown mode: {mode}")
+    try:
+        return mapping[mode](**kwargs)
+    except TypeError as e:
+        raise TypeError(f"Invalid arguments for mode '{mode}': {e}")
 
 
 file_path = output_path =  os.path.join('..','podaci', 'training_data.csv')
@@ -152,19 +169,19 @@ ngram_std_5_alpha20 = { 0: [], 1: [], 2: [], 3: [], 4: []}
 
 for i in x_axis:
     k = round(i, 2)
-    calculate_delta_ll(surprisal_gpt_2, k, emotion_data_gpt_2, gpt_std_2)
-    calculate_delta_ll(surprisal_gpt_3, k, emotion_data_gpt_3, gpt_std_3)
-    calculate_delta_ll(surprisal_bert, k, emotion_data_bert, bert_std)
-    calculate_delta_ll(surprisal_bertic, k, emotion_data_bertic, bertic_std)
-    calculate_delta_ll(surprisal_yugo, k, emotion_data_yugo, yugo_std)
-    calculate_delta_ll(surprisal_ngram_2_alpha4, k, emotion_data_ngram_2_alpha4, ngram_std_2_alpha4)
-    calculate_delta_ll(surprisal_ngram_3_alpha4, k, emotion_data_ngram_3_alpha4, ngram_std_3_alpha4)
-    calculate_delta_ll(surprisal_ngram_4_alpha4, k, emotion_data_ngram_4_alpha4, ngram_std_4_alpha4)
-    calculate_delta_ll(surprisal_ngram_5_alpha4, k, emotion_data_ngram_5_alpha4, ngram_std_5_alpha4)
-    calculate_delta_ll(surprisal_ngram_2_alpha4, k, emotion_data_ngram_2_alpha20, ngram_std_2_alpha20)
-    calculate_delta_ll(surprisal_ngram_3_alpha20, k, emotion_data_ngram_3_alpha20, ngram_std_3_alpha20)
-    calculate_delta_ll(surprisal_ngram_4_alpha20, k, emotion_data_ngram_4_alpha20, ngram_std_4_alpha20)
-    calculate_delta_ll(surprisal_ngram_5_alpha20, k, emotion_data_ngram_5_alpha20, ngram_std_5_alpha20)
+    calculate_delta_ll(mode="emotion", surprisal=surprisal_gpt_2, k=k, emotion_data=emotion_data_gpt_2, std_data=gpt_std_2)
+    calculate_delta_ll(mode="emotion", surprisal=surprisal_gpt_3, k=k, emotion_data=emotion_data_gpt_3, std_data=gpt_std_3)
+    calculate_delta_ll(mode="emotion", surprisal=surprisal_bert, k=k, emotion_data=emotion_data_bert, std_data=bert_std)
+    calculate_delta_ll(mode="emotion", surprisal=surprisal_bertic, k=k, emotion_data=emotion_data_bertic, std_data=bertic_std)
+    calculate_delta_ll(mode="emotion", surprisal=surprisal_yugo, k=k, emotion_data=emotion_data_yugo, std_data=yugo_std)
+    calculate_delta_ll(mode="emotion", surprisal=surprisal_ngram_2_alpha4, k=k, emotion_data=emotion_data_ngram_2_alpha4, std_data=ngram_std_2_alpha4)
+    calculate_delta_ll(mode="emotion", surprisal=surprisal_ngram_3_alpha4, k=k, emotion_data=emotion_data_ngram_3_alpha4, std_data=ngram_std_3_alpha4)
+    calculate_delta_ll(mode="emotion", surprisal=surprisal_ngram_4_alpha4, k=k, emotion_data=emotion_data_ngram_4_alpha4, std_data=ngram_std_4_alpha4)
+    calculate_delta_ll(mode="emotion", surprisal=surprisal_ngram_5_alpha4, k=k, emotion_data=emotion_data_ngram_5_alpha4, std_data=ngram_std_5_alpha4)
+    calculate_delta_ll(mode="emotion", surprisal=surprisal_ngram_2_alpha4, k=k, emotion_data=emotion_data_ngram_2_alpha20, std_data=ngram_std_2_alpha20)
+    calculate_delta_ll(mode="emotion", surprisal=surprisal_ngram_3_alpha20, k=k, emotion_data=emotion_data_ngram_3_alpha20, std_data=ngram_std_3_alpha20)
+    calculate_delta_ll(mode="emotion", surprisal=surprisal_ngram_4_alpha20, k=k, emotion_data=emotion_data_ngram_4_alpha20, std_data=ngram_std_4_alpha20)
+    calculate_delta_ll(mode="emotion", surprisal=surprisal_ngram_5_alpha20, k=k, emotion_data=emotion_data_ngram_5_alpha20, std_data=ngram_std_5_alpha20)
 
 
 def plot_data(emotion, emotion_data, std_data, plt_number, c):

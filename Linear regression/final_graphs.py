@@ -57,7 +57,7 @@ def akaike_for_column(data, model_name, baseline_model = 'baseline'):
 
     return difference, std_ll_2
 
-def calculate_delta_ll(data, surprisal_name, k):
+def calculate_delta_ll_global(data, surprisal_name, k):
 
     try:
       delta_ll, std_element = akaike_for_column(data, surprisal_name + ' ' + str(k) + ' model', 'baseline')
@@ -65,6 +65,23 @@ def calculate_delta_ll(data, surprisal_name, k):
     except:
       print(f"Error accured while processing {surprisal} at k = {k}")
       return 0, 0
+
+
+def calculate_delta_ll(mode, **kwargs):
+    """Dispatcher za calculate_delta_ll varijante u ovom fajlu (P-009).
+
+    Dostupni mode-ovi u Linear regression/final_graphs.py:
+      - "global"  → calculate_delta_ll_global(data, surprisal_name, k)
+    """
+    mapping = {
+        "global": calculate_delta_ll_global,
+    }
+    if mode not in mapping:
+        raise ValueError(f"Unknown mode: {mode}")
+    try:
+        return mapping[mode](**kwargs)
+    except TypeError as e:
+        raise TypeError(f"Invalid arguments for mode '{mode}': {e}")
     
     
     
@@ -111,7 +128,7 @@ for gender in ['f', 'm']:
             
             for i in x_axis:
                 k = round(i, 2)
-                delta_element,  std_element = calculate_delta_ll(emotion_data, surprisal, k)
+                delta_element,  std_element = calculate_delta_ll(mode="global", data=emotion_data, surprisal_name=surprisal, k=k)
                 y_axis.append(delta_element)
                 y_std.append(std_element)
             
@@ -169,7 +186,7 @@ for gender in ['f', 'm']:
             
             for i in x_axis:
                 k = round(i, 2)
-                delta_element,  std_element = calculate_delta_ll(emotion_data, surprisal, k)
+                delta_element,  std_element = calculate_delta_ll(mode="global", data=emotion_data, surprisal_name=surprisal, k=k)
                 y_axis.append(delta_element)
                 y_std.append(std_element)
             
@@ -229,7 +246,7 @@ for gender in ['f', 'm']:
             
             for i in x_axis:
                 k = round(i, 2)
-                delta_element,  std_element = calculate_delta_ll(emotion_data, surprisal, k)
+                delta_element,  std_element = calculate_delta_ll(mode="global", data=emotion_data, surprisal_name=surprisal, k=k)
                 y_axis.append(delta_element)
                 y_std.append(std_element)
             
@@ -287,7 +304,7 @@ for gender in ['f', 'm']:
             
             for i in x_axis:
                 k = round(i, 2)
-                delta_element,  std_element = calculate_delta_ll(emotion_data, surprisal, k)
+                delta_element,  std_element = calculate_delta_ll(mode="global", data=emotion_data, surprisal_name=surprisal, k=k)
                 y_axis.append(delta_element)
                 y_std.append(std_element)
             

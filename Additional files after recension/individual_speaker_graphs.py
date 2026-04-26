@@ -5,7 +5,7 @@ Created on Sat Feb 22 12:31:47 2025
 @author: Jelena
 """
 
-from my_functions import inf_k_model, calculate_delta_ll_old
+from my_functions import inf_k_model, calculate_delta_ll
 import matplotlib.pyplot as plt
 import warnings
 import numpy as np
@@ -68,7 +68,7 @@ for speaker in df['speaker'].unique():
             
             for i in x_axis:
                 k = round(i, 2)
-                delta_element,  std_element = calculate_delta_ll_old(emotion_data, surprisal, k)
+                delta_element,  std_element = calculate_delta_ll(mode="prominence", data=emotion_data, surprisal_name=surprisal, k=k)
                 y_axis.append(delta_element)
                 y_std.append(std_element)
             

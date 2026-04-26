@@ -3,6 +3,21 @@
 Created on Thu Apr 25 14:49:47 2024
 
 @author: Jelena
+
+Pipeline role
+-------------
+Per-sentence surprisal visualisation. Loads the five per-word
+surprisal CSVs produced by the surprisal-estimation stage
+(``../podaci/surprisal values/word_surprisal_ngram3_alpha4.csv``,
+``word_surprisals_gpt2.csv``, ``word_surprisals_yugo.csv``,
+``word_surprisals_bert.csv``, ``word_surprisals_bertic.csv``)
+plus the unigram log-probability table
+``../podaci/wordlist_frequencies.csv``, merges them on
+``Sentence`` / ``Word``, min-max normalises every numeric column,
+and for each unique target sentence draws a line plot showing the
+five surprisal estimators side-by-side along the words of the
+sentence (x = word, y = normalised surprisal). Used to qualitatively
+compare model behaviour at the sentence level.
 """
 
 import pandas as pd
@@ -40,6 +55,25 @@ target_sentences_df = pd.read_csv(target_sentences_path)
 
 # Define a function to normalize the columns
 def normalize_column(column):
+    """Min-max normalise a numeric ``pandas`` column to [0, 1].
+
+    Computes ``(column - column.min()) / (column.max() - column.min())``
+    elementwise. ``NaN`` values are propagated by ``pandas`` arithmetic
+    (any ``NaN`` minus a finite minimum stays ``NaN``). If
+    ``column.max() == column.min()`` the result is all-``NaN`` (division
+    by zero); the caller is responsible for filtering such columns.
+
+    Parameters
+    ----------
+    column : pandas.Series
+        Numeric column to rescale.
+
+    Returns
+    -------
+    pandas.Series
+        Same index as ``column`` with values rescaled into ``[0, 1]``
+        based on the column-wide minimum and maximum.
+    """
     return (column - column.min()) / (column.max() - column.min())
 
 columns = data.columns

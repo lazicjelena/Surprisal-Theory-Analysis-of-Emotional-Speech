@@ -16,7 +16,29 @@ import numpy as np
 
 
 def padding_sequence(f0_all_files):
+    """Pad ragged per-recording sequences to a common length with NaNs.
 
+    Computes the maximum length over all sublists in ``f0_all_files``
+    and right-pads every shorter sublist with ``np.nan`` so that the
+    returned list of arrays is rectangular and can be passed to
+    :func:`numpy.nanmean` / :func:`numpy.nanstd` along the time axis.
+    The original values are preserved as-is; only trailing ``NaN``
+    samples are appended.
+
+    Parameters
+    ----------
+    f0_all_files : list of array-like
+        One sequence per recording. Can mix lists, ``numpy`` arrays
+        and nested lists; each inner sequence must support
+        :func:`len` and :func:`numpy.concatenate`.
+
+    Returns
+    -------
+    list of numpy.ndarray
+        One padded array per input sublist, all of equal length
+        ``max(len(s) for s in f0_all_files)``. Entries beyond the
+        original length of each sublist are ``np.nan``.
+    """
     # Finding the maximum length of sublists
     max_length = max(len(sublist) for sublist in f0_all_files)
     # Pad each sublist individually

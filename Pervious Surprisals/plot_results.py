@@ -3,6 +3,22 @@
 Created on Tue Aug 27 08:47:22 2024
 
 @author: Jelena
+
+Pipeline role
+-------------
+Final plotting stage of the "previous surprisals" analysis. Reads
+the merged prominence + lagged-surprisal table
+``../podaci/correlation data/full_former_surprisal_data.csv``
+(produced by ``conjoint_data.py``), drops rows with missing
+prosodic parameter (``time``, ``energy`` or ``f0`` -- selected by
+the module-level ``prominence_parameter``), and for every surprisal
+model and every ``(gender, emotion)`` cell computes the multiple
+correlation coefficient between ``[<Model>, <Model> k=1, ...,
+<Model> k=K]`` and the prosodic parameter for ``K = 0..10``.
+Renders four 2x5 subplot grids: GPT-2 / Yugo / ngram-3 in English,
+BERT / BERTic in English, and the same two plots in Cyrillic
+Serbian. Used to produce the figures that go into the chapter on
+the "previous surprisal" effect.
 """
 
 import matplotlib.pyplot as plt
@@ -17,6 +33,36 @@ data_csv_path = os.path.join('..','podaci', 'correlation data', "full_former_sur
 prominence_df = pd.read_csv(data_csv_path)
 
 def calculate_corr_coef(x,y):
+    """Compute the multiple correlation coefficient via OLS R-squared.
+
+    Fits :class:`sklearn.linear_model.LinearRegression` on ``x`` vs.
+    ``y``, computes the predicted ``y_pred``, and returns the square
+    root of :func:`sklearn.metrics.r2_score(y, y_pred)`. Handles two
+    input shapes: a 1-D ``x`` is reshaped to ``(-1, 1)`` and treated
+    as a single regressor, while a 2-D ``x`` (DataFrame or array)
+    is used as-is and treated as multiple regressors -- in which
+    case the returned value is the multiple correlation coefficient
+    between the regressors and ``y``. Pandas / sklearn warnings are
+    silenced for the duration of the call.
+
+    Parameters
+    ----------
+    x : numpy.ndarray or pandas.DataFrame
+        Predictor(s). 1-D or 2-D.
+    y : numpy.ndarray
+        Target values, 1-D.
+
+    Returns
+    -------
+    float
+        ``sqrt(R^2)`` of the OLS fit.
+
+    Side effects
+    ------------
+    Calls ``warnings.filterwarnings("ignore")`` at the start and
+    ``warnings.resetwarnings()`` before returning to silence
+    sklearn / pandas chained-assignment chatter.
+    """
     warnings.filterwarnings("ignore")
     
     if len(x.shape)==1:

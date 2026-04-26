@@ -3,6 +3,23 @@
 Created on Tue Aug 20 13:18:14 2024
 
 @author: Jelena
+
+Pipeline role
+-------------
+Speech-rate descriptive-statistics script. For every WAV under
+``../podaci/data_mono/<speaker>/<emotion>/`` it loads the audio with
+:func:`librosa.load` (native sample rate), reads the matching
+transcript first line from
+``../podaci/transcript_corrected/<speaker>/<emotion>/...
+_transcript.txt`` to recover the spoken sentence, and accumulates
+one row per recording with: speaker gender (from
+``../podaci/gender_data.csv``), emotion, total recording duration,
+word count, character count, and average ``time / character``
+speech rate. The accumulated DataFrame is then plotted as average
+speech rate vs. number of words per sentence, one curve per
+emotion, in a 1x2 ``female / male`` subplot grid -- twice: once
+with English labels and once with Cyrillic Serbian labels. Per-
+emotion mean (std) of the speech rate is printed alongside.
 """
 import matplotlib.pyplot as plt
 import numpy as np

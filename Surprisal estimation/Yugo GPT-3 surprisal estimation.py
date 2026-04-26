@@ -33,6 +33,20 @@ for filename in filenames:
         )
         print(downloaded_model_path)
 
+
+Pipeline role
+-------------
+Estimates per-word surprisal for every target sentence using the
+Serbian-language causal LM ``gordicaleksa/YugoGPT``. For each row
+of ``../podaci/target_sentences.csv`` it tokenizes the lower-cased
+sentence, runs the model, averages the per-position softmax to get
+sub-word probabilities, aggregates sub-words back to whole-word
+probabilities via :func:`extract_words_and_probabilities`, and
+emits ``-log2(p)`` as the per-word surprisal. The result table
+(``Sentence``, ``Word``, ``Surprisal Yugo``) is written to
+``../podaci/word_surprisals_yugo.csv``, which is the input to
+``Pervious Surprisals/build_dataset.py`` and to all downstream
+analysis scripts that read ``Surprisal Yugo``.
 """
 import pandas as pd
 import os
@@ -46,6 +60,29 @@ model = AutoModelForCausalLM.from_pretrained(model_id)
 
 
 def extract_words_and_probabilities(subwords, subword_probabilities):
+    """Aggregate sub-word probabilities into whole-word probabilities.
+
+    Walks ``subwords`` left to right and starts a new word every
+    time a token starts with the SentencePiece word-boundary
+    marker ``▁``. Sub-word probabilities are multiplied within
+    the same word, so the per-word probability equals
+    ``prod(p_i)`` over the sub-words ``i`` that compose it. The
+    leading ``▁`` is stripped from the surface form.
+
+    Parameters
+    ----------
+    subwords : list of str
+        SentencePiece sub-word strings, in left-to-right order.
+    subword_probabilities : sequence of float
+        Probabilities aligned 1:1 with ``subwords``.
+
+    Returns
+    -------
+    tuple
+        ``(words, word_probabilities)`` -- two parallel lists where
+        ``word_probabilities[k]`` is the product of sub-word
+        probabilities that compose ``words[k]``.
+    """
     words = []
     word_probabilities = []
 
@@ -78,7 +115,35 @@ def extract_words_and_probabilities(subwords, subword_probabilities):
     return words, word_probabilities
 
 def calculate_word_probabilities(sentence, tokenizer = tokenizer, model = model):
+    """Compute per-word probabilities for ``sentence`` under YugoGPT.
 
+    Tokenizes ``sentence`` with ``tokenizer``, runs ``model`` once
+    in ``torch.no_grad()`` mode to obtain ``logits``, takes the
+    softmax over the vocabulary axis and averages over sequence
+    positions (``mean(dim=1)``) to get a single probability per
+    sub-word. Sub-word probabilities are then aggregated to
+    whole-word probabilities via
+    :func:`extract_words_and_probabilities`.
+
+    Parameters
+    ----------
+    sentence : str
+        Lower-cased sentence to score.
+    tokenizer : transformers.PreTrainedTokenizer, optional
+        Defaults to the module-level YugoGPT tokenizer.
+    model : transformers.PreTrainedModel, optional
+        Defaults to the module-level YugoGPT model.
+
+    Returns
+    -------
+    tuple
+        ``(words, probabilities, total_probability)`` where
+        ``words`` and ``probabilities`` are produced by
+        :func:`extract_words_and_probabilities` and
+        ``total_probability`` is the running sum of sub-word
+        probabilities (kept for diagnostic purposes; not used
+        downstream).
+    """
     # Tokenize the input sentence
     input_ids = tokenizer.encode(sentence, return_tensors='pt')
 

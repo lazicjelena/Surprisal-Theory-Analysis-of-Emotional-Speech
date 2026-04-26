@@ -6,6 +6,22 @@ lazic.jelenaa@gmail.com
 
 Ova skripta sluzi za objedinjavanje podata svih govornika i njihovu raspodjelo u
 foldovima i surprisala od trenutne i prethodnih rijeci.
+
+Pipeline role
+-------------
+Builds the core ``former_<model>.csv`` tables that drive the
+"previous surprisals" analysis. Reads every per-(speaker, emotion)
+CSV under ``../podaci/data/<speaker>/<emotion>/`` produced by
+``Fetures extraction/text_features_extraction.py``, concatenates them
+into a single DataFrame, joins the unigram log probabilities from
+``../podaci/wordlist_frequencies.csv`` and the cross-validation fold
+assignment from ``../podaci/folds.csv``, then for each surprisal
+model in ``{Yugo, GPT-2, BERT, BERTic, ngram-3}`` looks up the
+per-word surprisal from the corresponding ``../podaci/word_surprisals_*.csv``
+and computes lagged surprisal columns ``"<Model> k=1"`` ... ``"<Model> k=10"``
+that capture the surprisal of the 1st through 10th preceding word in
+the same sentence. One CSV is written per model into
+``../podaci/correlation data/former_<model>.csv``.
 """
 
 import os
@@ -14,6 +30,39 @@ import numpy as np
 
 
 def lookup_features(data, surprisal_df, column_name):
+    """Look up per-word surprisal values for each row of ``data``.
+
+    For every row in ``data`` the script splits ``row["word"]`` on
+    spaces (multi-word tokens are joined back with summation) and for
+    each part finds the matching row in ``surprisal_df`` keyed on
+    ``Sentence == row["target sentence"]`` and ``Word == part``. When
+    the same word appears multiple times in a sentence, the
+    occurrence index is tracked via ``list_of_words.count(word)`` so
+    that the k-th occurrence of a duplicate word reads the k-th value
+    from ``surprisal_df``. ``list_of_words`` is reset on every new
+    sentence and also when its length matches the size of the
+    sentence slice (handles the case where the same sentence appears
+    twice in a row in ``data``).
+
+    Parameters
+    ----------
+    data : pandas.DataFrame
+        Per-word DataFrame (must have ``word`` and ``target sentence``
+        columns).
+    surprisal_df : pandas.DataFrame
+        Reference table with ``Sentence``, ``Word`` and
+        ``column_name`` columns.
+    column_name : str
+        Name of the column in ``surprisal_df`` to read (e.g.
+        ``"Surprisal GPT-2"``).
+
+    Returns
+    -------
+    list of float
+        One per row of ``data``: the summed surprisal across the
+        whitespace-split parts of ``row["word"]``. Missing words
+        contribute ``0`` and trigger a printed ``error`` warning.
+    """
     surprisal_list = []
     current_sentence = 1000
     list_of_words = []
@@ -50,6 +99,31 @@ def lookup_features(data, surprisal_df, column_name):
     return surprisal_list
 
 def calculate_former_surprisal(data, surprisal_name):
+    """Shift a surprisal column by one row within each sentence.
+
+    Walks ``data`` row by row in order. For every new ``target
+    sentence`` the previous value is reset to ``np.NaN``; otherwise
+    the value emitted for the current row is the value of
+    ``surprisal_name`` from the preceding row. The result is a list
+    aligned 1:1 with the rows of ``data`` that represents the
+    surprisal of the immediately preceding word in the same sentence
+    (NaN at sentence boundaries).
+
+    Parameters
+    ----------
+    data : pandas.DataFrame
+        Must contain ``target sentence`` and ``surprisal_name`` columns.
+        Rows are assumed to be ordered within each sentence.
+    surprisal_name : str
+        Column name to read the surprisal value from.
+
+    Returns
+    -------
+    list
+        Same length as ``data``; element ``i`` is the surprisal of
+        row ``i-1`` if it shares the same ``target sentence`` as row
+        ``i``, else ``np.NaN``.
+    """
     list_of_former_surprisal = []
     current_sentence = 632785931
     

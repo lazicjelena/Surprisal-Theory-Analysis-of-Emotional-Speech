@@ -5,7 +5,7 @@ Created on Sat Feb 22 12:00:27 2025
 @author: Jelena
 """
 
-from my_functions import inf_k_model, calculate_delta_ll_old
+from my_functions import inf_k_model, calculate_delta_ll
 import matplotlib.pyplot as plt
 import warnings
 import numpy as np
@@ -72,7 +72,7 @@ for gender in ['f', 'm']:
             
             for i in x_axis:
                 k = round(i, 2)
-                delta_element,  std_element = calculate_delta_ll_old(emotion_data, surprisal, k)
+                delta_element,  std_element = calculate_delta_ll(mode="prominence", data=emotion_data, surprisal_name=surprisal, k=k)
                 y_axis.append(delta_element)
                 y_std.append(std_element)
             
@@ -123,7 +123,7 @@ for gender in ['f', 'm']:
             
             for i in x_axis:
                 k = round(i, 2)
-                delta_element,  std_element = calculate_delta_ll_old(emotion_data, surprisal, k)
+                delta_element,  std_element = calculate_delta_ll(mode="prominence", data=emotion_data, surprisal_name=surprisal, k=k)
                 y_axis.append(delta_element)
                 y_std.append(std_element)
             

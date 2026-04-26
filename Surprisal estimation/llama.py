@@ -3,6 +3,18 @@
 Created on Tue Mar 12 12:55:48 2024
 
 @author: Jelena
+
+Pipeline role
+-------------
+Exploratory script that mirrors the YugoGPT surprisal pipeline but
+uses Meta's English-only ``meta-llama/Llama-2-7b`` model. Downloads
+the model files via ``huggingface_hub.hf_hub_download``, then
+processes every row of ``../podaci/target_sentences.csv`` to
+produce per-word ``-log2(p)`` values that are written to
+``../podaci/word_surprisals_yugo.csv`` (the column is named
+``Surprisal Yugo`` for compatibility with downstream code, even
+though the values come from Llama-2). Used during model selection;
+not the source of the production ``word_surprisals_yugo.csv``.
 """
 
 
@@ -38,6 +50,29 @@ model = AutoModelForCausalLM.from_pretrained(model_id)
 
 
 def extract_words_and_probabilities(subwords, subword_probabilities):
+    """Aggregate sub-word probabilities into whole-word probabilities.
+
+    Walks ``subwords`` left to right and starts a new word every
+    time a token starts with the SentencePiece word-boundary
+    marker ``▁``. Sub-word probabilities are multiplied within
+    the same word, so the per-word probability equals
+    ``prod(p_i)`` over the sub-words ``i`` that compose it. The
+    leading ``▁`` is stripped from the surface form.
+
+    Parameters
+    ----------
+    subwords : list of str
+        SentencePiece sub-word strings, in left-to-right order.
+    subword_probabilities : sequence of float
+        Probabilities aligned 1:1 with ``subwords``.
+
+    Returns
+    -------
+    tuple
+        ``(words, word_probabilities)`` -- two parallel lists where
+        ``word_probabilities[k]`` is the product of sub-word
+        probabilities that compose ``words[k]``.
+    """
     words = []
     word_probabilities = []
 
@@ -70,7 +105,34 @@ def extract_words_and_probabilities(subwords, subword_probabilities):
     return words, word_probabilities
 
 def calculate_word_probabilities(sentence, tokenizer = tokenizer, model = model):
+    """Compute per-word probabilities for ``sentence`` under Llama-2.
 
+    Tokenizes ``sentence`` with ``tokenizer``, runs ``model`` once
+    in ``torch.no_grad()`` mode to obtain ``logits``, takes the
+    softmax over the vocabulary axis and averages over sequence
+    positions (``mean(dim=1)``) to get a single probability per
+    sub-word. Sub-word probabilities are then aggregated to
+    whole-word probabilities via
+    :func:`extract_words_and_probabilities`.
+
+    Parameters
+    ----------
+    sentence : str
+        Lower-cased sentence to score.
+    tokenizer : transformers.PreTrainedTokenizer, optional
+        Defaults to the module-level Llama tokenizer.
+    model : transformers.PreTrainedModel, optional
+        Defaults to the module-level Llama model.
+
+    Returns
+    -------
+    tuple
+        ``(words, probabilities, total_probability)`` where
+        ``words`` and ``probabilities`` are produced by
+        :func:`extract_words_and_probabilities` and
+        ``total_probability`` is the diagnostic running sum of
+        sub-word probabilities.
+    """
     # Tokenize the input sentence
     input_ids = tokenizer.encode(sentence, return_tensors='pt')
 

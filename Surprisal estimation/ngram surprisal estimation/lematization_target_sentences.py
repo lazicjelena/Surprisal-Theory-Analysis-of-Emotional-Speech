@@ -7,6 +7,17 @@ lazic.jelenaa@gmail.com
 Ovdje se vrsi lematizacija target recenica za potrebe odredjivanja ngram modela
 pojedinacnih rijeci. Jer je i skup podataka na kome je vrsena procjena ngrama
 lematizovan.
+
+Pipeline role
+-------------
+Test-side companion to ``lematization.py``. Lemmatises every row
+of ``../../podaci/target_sentences.csv`` using the CLASSLA Serbian
+``tokenize, lemma, pos`` pipeline and writes the result to
+``../../podaci/target_sentences_lemmas.csv`` with a new ``lemma``
+column. Lemmatising both training corpus and target sentences with
+the same pipeline keeps the n-gram counts and the test queries on
+a common lemma vocabulary, which is required by
+``surprisal_estimation_n_gram_model.py``.
 """
 
 import pandas as pd

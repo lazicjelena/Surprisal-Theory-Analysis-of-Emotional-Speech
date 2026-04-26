@@ -43,14 +43,14 @@ if parameters[0] == 'Contextual Entropy':
     for emotion in [0,1,2,3,4]:
         emotion_data = df[df['emotion'] == emotion]
                 
-        delta_element, _ = calculate_delta_ll(emotion_data,  f"None + {surprisal} model")
+        delta_element, _ = calculate_delta_ll(mode="flexible", data=emotion_data, model_name=f"None + {surprisal} model")
         std_element = paired_permutation_test(emotion_data, 'baseline -3', f"None + {surprisal} model", 100)
         results_list.append(delta_element)
         std_list.append(std_element)
         emotion_list.append(emotion)
         parameter_list.append(surprisal)
     
-        delta_element, _ = calculate_delta_ll(emotion_data,  "None + Contextual Entropy model")
+        delta_element, _ = calculate_delta_ll(mode="flexible", data=emotion_data, model_name="None + Contextual Entropy model")
         std_element = paired_permutation_test(emotion_data, 'baseline -3', "None + Contextual Entropy model", 100)
         results_list.append(delta_element)
         std_list.append(std_element)
@@ -66,7 +66,7 @@ for parameter in parameters:
     for emotion in [0,1,2,3,4]:
         emotion_data = df[df['emotion'] == emotion]
 
-        delta_element, _ = calculate_delta_ll(emotion_data,  f"{surprisal} + {parameter} model")
+        delta_element, _ = calculate_delta_ll(mode="flexible", data=emotion_data, model_name=f"{surprisal} + {parameter} model")
         std_element = paired_permutation_test(emotion_data, 'baseline -3', f"{surprisal} + {parameter} model", 100)
         results_list.append(delta_element)
         std_list.append(std_element)

@@ -3,6 +3,19 @@
 Created on Tue Aug 20 08:25:31 2024
 
 @author: Jelena
+
+Pipeline role
+-------------
+Plotting companion to ``rms_over_time.py``. Reads the
+per-(speaker, emotion) average RMS-energy trajectories from
+``../podaci/rms.csv``, drops speaker ``1052`` (different recording
+sampling rate), pads all sequences to a common length via
+:func:`generate_graphs_utils.padding_sequence`, joins gender from
+``../podaci/gender_data.csv``, and renders a 2x5 subplot grid
+(rows = gender, columns = emotion neutral/happy/sad/scared/angry)
+of mean RMS energy with one-standard-deviation bands, twice:
+once with Cyrillic Serbian labels and once with English labels.
+Also prints the per-cell mean (std) of average RMS.
 """
 
 import numpy as np

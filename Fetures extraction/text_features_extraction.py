@@ -8,6 +8,21 @@ Skripta prolazi kroz foldere i za svaki corrected transcript formira novi csv
 file na lokaciji data u kome cuva sva izdvojena obiljezja koja ce biit koristena 
 u daljoj analizi i radu.
 
+Pipeline role
+-------------
+Bridge between the raw forced-alignment output and the downstream
+analysis stages. For every corrected transcript ``.txt`` (one per
+recording, organised as ``transcript_corrected/<speaker>/<emotion>/``),
+the script emits one row per spoken word into a per-emotion CSV under
+``../podaci/data/<speaker>/<emotion>/<speaker>_<emotion>.csv`` with the
+columns: ``word``, ``speaker``, ``speaker gender``, ``emotion``,
+``length`` (number of characters), ``time`` (word duration in seconds),
+``position`` (``b`` / ``m`` / ``e``) and ``taget sentence`` (index in
+``target_sentences.csv``, matched fuzzy via FuzzyWuzzy ``fuzz.ratio``).
+Speaker gender is read once from ``../podaci/speaker_gender.txt``.
+The CSVs produced here are the input to virtually every downstream
+``build_dataset.py`` and analysis script.
+
 """
 
 import os
@@ -41,6 +56,29 @@ except Exception as e:
     print(f"An error occurred: {e}")
 
 def find_target_sentence(sentence, df = target_sentences_df):
+    """Find the row in ``df`` whose ``Text`` is most similar to ``sentence``.
+
+    Iterates over every row of ``df`` and computes
+    ``fuzzywuzzy.fuzz.ratio(sentence, row['Text'])``. The row with the
+    highest ratio wins.
+
+    Parameters
+    ----------
+    sentence : str
+        Transcribed sentence (typically the first line of a corrected
+        transcript ``.txt``).
+    df : pandas.DataFrame, optional
+        Reference table of canonical target sentences with a ``Text``
+        column. Defaults to the module-level ``target_sentences_df``
+        loaded from ``../podaci/target_sentences.csv``.
+
+    Returns
+    -------
+    int
+        Row index of the best-matching sentence in ``df``. Returns
+        ``-1`` only if every comparison yields ratio ``0`` (in practice
+        not expected on the corpus but kept as a safety value).
+    """
     max_similarity = 0
     target_index = -1  # Initialize with an invalid index
 
@@ -53,6 +91,23 @@ def find_target_sentence(sentence, df = target_sentences_df):
     return target_index
 
 def get_word_position(word_count):
+    """Map a 1-based word count to a categorical position label.
+
+    Used to label every word in a sentence with where it appears in the
+    sentence. The mapping is fixed: word #1 is the beginning, word #2
+    is the middle, and every later word is treated as the end.
+
+    Parameters
+    ----------
+    word_count : int
+        1-based index of the current word within the sentence.
+
+    Returns
+    -------
+    str
+        ``'b'`` (beginning) for ``word_count == 1``, ``'m'`` (middle)
+        for ``word_count == 2``, otherwise ``'e'`` (end).
+    """
     # Determine the word position based on the word count
     if word_count == 1:
         return 'b'  # Beginning of the sentence
@@ -62,6 +117,34 @@ def get_word_position(word_count):
         return 'e'  # End of the sentence
 
 def process_txt_file(file_path):
+    """Parse one transcript ``.txt`` file into per-word annotation dicts.
+
+    Reads ``file_path``, takes the first line as the full transcript
+    (skipping the ``"Transcript: "`` prefix, hence ``[12:]``), looks up
+    the closest canonical sentence with :func:`find_target_sentence`,
+    then walks every line that starts with ``"Word"`` and parses out
+    the word, its ``start`` and ``end`` times, computes its
+    ``position`` via :func:`get_word_position`, and attaches the
+    target-sentence index.
+
+    Parameters
+    ----------
+    file_path : str
+        Path to a transcript ``.txt`` produced by the forced-alignment
+        stage. Expected line format::
+
+            Transcript: <full sentence>
+            Word: <w>, start: <float>, end: <float>
+            Word: <w>, start: <float>, end: <float>
+            ...
+
+    Returns
+    -------
+    list[dict]
+        One dict per recognised word with keys
+        ``'word'``, ``'start'``, ``'end'``, ``'position'`` and
+        ``'target sentence'``.
+    """
     # Add your code to process each TXT file here
     with open(file_path, 'r') as file:
         content = file.read()
@@ -89,6 +172,23 @@ def process_txt_file(file_path):
         return word_info_list
 
 def calculate_word_length(word):
+  """Total number of characters across whitespace-split tokens.
+
+  Splits ``word`` on spaces and sums the character lengths of the
+  resulting tokens, so that a multi-token expression (e.g.
+  ``"za to"``) is counted as ``len("za") + len("to") == 4`` rather
+  than as ``5`` (the length including the space).
+
+  Parameters
+  ----------
+  word : str
+      A single word or a whitespace-joined multi-word token.
+
+  Returns
+  -------
+  int
+      Sum of character lengths across the whitespace-split parts.
+  """
 
   words = word.split(' ')
   l = 0
@@ -98,9 +198,67 @@ def calculate_word_length(word):
   return l
 
 def get_gender(speaker):
+  """Look up the gender label for a speaker id.
+
+  Parameters
+  ----------
+  speaker : str
+      Speaker identifier (typically a 4-character numeric string such
+      as ``'1052'``) matching a value in
+      ``speaker_gender_df['speaker']``.
+
+  Returns
+  -------
+  str
+      The associated gender label, ``'m'`` or ``'f'``. Raises
+      ``IndexError`` (via ``.values[0]``) if the speaker is missing
+      from ``speaker_gender_df``.
+  """
   return speaker_gender_df.loc[speaker_gender_df['speaker'] == speaker, 'gender'].values[0]
 
 def process_directory(directory_path, output_path):
+    """Build a per-(speaker, emotion) feature CSV from one transcript folder.
+
+    Iterates over every ``.txt`` file inside ``directory_path``, calls
+    :func:`process_txt_file` to extract per-word annotations, enriches
+    each row with ``speaker``, ``speaker gender``, ``emotion``,
+    word ``length`` and word ``time`` (``end - start``), then writes
+    the assembled DataFrame as
+    ``<output_path>/<speaker>/<emotion>/<speaker>_<emotion>.csv``.
+
+    The ``speaker`` value is derived from the path of
+    ``directory_path``: the second-to-last folder name truncated to its
+    first four characters. The ``emotion`` value is the last folder
+    name of ``directory_path``.
+
+    Parameters
+    ----------
+    directory_path : str
+        Folder containing transcript ``.txt`` files for one
+        (speaker, emotion) pair, e.g.
+        ``../podaci/transcript_corrected/1052/0``.
+    output_path : str
+        Root output folder under which ``<speaker>/<emotion>/``
+        subfolders will be created if missing, e.g.
+        ``../podaci/data``.
+
+    Returns
+    -------
+    None
+
+    Side effects
+    ------------
+    - Creates the ``<output_path>/<speaker>/<emotion>/`` directory
+      if it does not yet exist.
+    - Writes one CSV file ``<speaker>_<emotion>.csv`` containing one
+      row per spoken word (columns include ``word``, ``speaker``,
+      ``speaker gender``, ``emotion``, ``length``, ``time``,
+      ``position`` and ``taget sentence``).
+    - Calls ``warnings.filterwarnings("ignore")`` at the start and
+      ``warnings.resetwarnings()`` at the end to silence pandas
+      ``FutureWarning`` / ``DeprecationWarning`` messages that
+      ``DataFrame.append`` would otherwise raise inside the loop.
+    """
 
     # Create an empty DataFrame with desired column names
     columns = ['word', 'speaker', 'emotion', 'time', 'position', 'taget sentence']

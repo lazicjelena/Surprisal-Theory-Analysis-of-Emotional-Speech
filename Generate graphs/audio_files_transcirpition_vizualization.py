@@ -6,6 +6,18 @@ lazic.jelenaa@gmail.com
 
 Skript vrsi vremenski prikaz jednog audio signala i njegove segmentacije i transkripcije
 na nivou rijeci.
+
+Pipeline role
+-------------
+Auxiliary visualisation script used to qualitatively inspect the
+forced-alignment output. For a chosen speaker / emotion folder under
+``../podaci/data_mono/<speaker>/<emotion>/`` it loads each WAV file,
+plots the raw waveform, and overlays the per-word ``start`` / ``end``
+markers (plus word labels) parsed from the matching
+``..._transcript.txt`` produced by
+``Forced alignment/novosadska_baza_podataka.py``. Not part of the
+automated processing chain; strictly a debugging / figure-generation
+helper.
 """
 
 import wave
@@ -24,6 +36,27 @@ latinica_to_cirilica = {
 
 # Funkcija za konverziju stringa
 def latinica_u_cirilicu(latinicni_string):
+    """Transliterate a Serbian Latin string into Serbian Cyrillic.
+
+    Walks ``latinicni_string`` character by character and replaces each
+    letter with its Cyrillic counterpart from the module-level
+    ``latinica_to_cirilica`` mapping. Characters that are not in the
+    mapping (digits, punctuation, whitespace, etc.) are passed through
+    unchanged. Lookup is case-insensitive: the lowercase form of the
+    character is used as the dictionary key, but the resulting Cyrillic
+    letter is taken from the mapping as-is.
+
+    Parameters
+    ----------
+    latinicni_string : str
+        Input string written in Serbian Latin script (with diacritics
+        ``č``, ``ć``, ``š``, ``ž`` supported).
+
+    Returns
+    -------
+    str
+        The same string transliterated to Serbian Cyrillic.
+    """
     cirilicni_string = ''
     for slovo in latinicni_string:
         # Ako je slovo u rječniku, zamijenite ga ćiriličnim ekvivalentom
@@ -34,7 +67,37 @@ def latinica_u_cirilicu(latinicni_string):
     return cirilicni_string
 
 def plot_single_transcript(audio_file_path, transcript_file_path):
-    
+    """Plot a WAV waveform with overlaid word-level transcript markers.
+
+    Opens ``audio_file_path`` with :mod:`wave`, decodes the samples as
+    8-bit unsigned or 16-bit signed PCM, draws the time-domain
+    waveform, and overlays one dashed red line at every word ``start``
+    time and one dashed green line at every word ``end`` time, with
+    the word label placed at the midpoint above the signal. Word
+    annotations are read from the matching transcript file produced
+    by ``Forced alignment/novosadska_baza_podataka.py``.
+
+    Parameters
+    ----------
+    audio_file_path : str
+        Path to a single WAV recording.
+    transcript_file_path : str
+        Path to the matching ``..._transcript.txt`` file. Expected
+        format: line 1 is ``"Transcript: <full sentence>"`` (skipped
+        when overlaying markers); subsequent lines look like
+        ``"Word: <w>, start: <float>, end: <float>"``.
+
+    Returns
+    -------
+    None
+
+    Side effects
+    ------------
+    Calls ``matplotlib.pyplot.show`` to display the figure. Raises
+    ``ValueError`` if the WAV file uses a sample width other than 1
+    or 2 bytes per sample.
+    """
+
     # Open the WAV file
     with wave.open(audio_file_path, 'rb') as wav_file:
         # Get basic information about the WAV file

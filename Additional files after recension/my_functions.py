@@ -79,13 +79,13 @@ def akaike_for_column(data, prominence, model_name, baseline_model = 'baseline')
     return difference, std_difference
 
 
-def calculate_delta_ll(data, surprisal, k, emotion_data, std_data, prominence = 'time', function = 'power'):
+def calculate_delta_ll_emotion_prominence(data, surprisal, k, emotion_data, std_data, prominence = 'time', function = 'power'):
 
-        
+
     model_name = surprisal + ' ' + str(k) + ' model'
     if function != 'power':
         model_name+= function
-        
+
     try:
       delta_ll, std_list = akaike_for_column(data, prominence,  model_name, 'baseline')
     except:
@@ -97,8 +97,8 @@ def calculate_delta_ll(data, surprisal, k, emotion_data, std_data, prominence = 
 
     return
 
-def calculate_delta_ll_old(data, surprisal_name, k, prominence = 'time', function = 'power'):
-    
+def calculate_delta_ll_prominence(data, surprisal_name, k, prominence = 'time', function = 'power'):
+
     model_name = surprisal_name + ' ' + str(k) + ' model'
     if function != 'power':
         model_name+= function
@@ -109,6 +109,26 @@ def calculate_delta_ll_old(data, surprisal_name, k, prominence = 'time', functio
     except:
       print(f"Error accured while processing {surprisal_name} at k = {k}")
       return 0, 0
+
+
+def calculate_delta_ll(mode, **kwargs):
+    """Dispatcher za calculate_delta_ll varijante u ovom fajlu (P-009).
+
+    Dostupni mode-ovi u Additional files after recension/my_functions.py:
+      - "emotion_prominence"  → calculate_delta_ll_emotion_prominence(data, surprisal, k, emotion_data, std_data, prominence='time', function='power')
+      - "prominence"          → calculate_delta_ll_prominence(data, surprisal_name, k, prominence='time', function='power')
+    """
+    mapping = {
+        "emotion_prominence": calculate_delta_ll_emotion_prominence,
+        "prominence": calculate_delta_ll_prominence,
+    }
+    if mode not in mapping:
+        raise ValueError(f"Unknown mode: {mode}")
+    try:
+        return mapping[mode](**kwargs)
+    except TypeError as e:
+        raise TypeError(f"Invalid arguments for mode '{mode}': {e}")
+
 
 def lookup_features(data, freq_df, column_name):
     log_prob_list = []

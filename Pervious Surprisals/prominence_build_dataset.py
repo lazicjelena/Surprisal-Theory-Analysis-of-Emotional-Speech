@@ -3,6 +3,27 @@
 Created on Mon Aug 26 05:59:56 2024
 
 @author: Jelena
+
+Pipeline role
+-------------
+Parses the per-recording prosodic-prominence files
+(``.prom`` produced externally by the prosody-analysis pipeline)
+into per-word DataFrames. The script is run twice -- once with
+``prosody_folder_path = ../podaci/prosody 1 0 0`` for F0
+prominence, and once with ``../podaci/prosody`` for energy
+prominence -- and each run writes
+``../podaci/correlation data/{f0,energy}_prominence_data.csv``.
+For every ``.prom`` file it extracts speaker, emotion and per-word
+``{word, prominence, boundary, duration}``, matches the joined
+sentence to the canonical target-sentence index in
+``../podaci/target_sentences.csv``, and uses :func:`find_subword`
+to split conjoint-spelling tokens (e.g. ``"učim"`` -> ``"učim"``
+or ``"u" + "čim"``) into vocabulary-aligned subwords.
+After both runs the script merges the F0 and energy CSVs on
+``(speaker, emotion, target sentence, word, boundary)``, joins
+gender from ``../podaci/gender_data.csv``, and writes the final
+``../podaci/correlation data/prominence_data.csv``, which is the
+input to ``conjoint_data.py``.
 """
 
 
@@ -82,7 +103,29 @@ data = pd.DataFrame({
 
 # Split conjoint words
 def find_subword(word, unique_words):
-    
+    """Find the longest suffix of ``word`` that is a known vocabulary token.
+
+    Walks suffix lengths from 1 up to ``len(word)`` and remembers the
+    longest one that is present in ``unique_words``. The returned
+    ``subword`` is the longest such suffix, or ``""`` if none of the
+    suffixes is known. Used to split agglutinated / mistakenly-joined
+    tokens in ``.prom`` files into vocabulary-aligned subwords by
+    repeatedly peeling off the longest known suffix.
+
+    Parameters
+    ----------
+    word : str
+        Token whose suffixes are tested.
+    unique_words : set of str
+        Lower-case vocabulary -- typically all whitespace-split
+        words from the canonical target-sentence corpus.
+
+    Returns
+    -------
+    str
+        Longest suffix of ``word`` present in ``unique_words``;
+        ``""`` if no suffix matches.
+    """
     subword = ''
     for i in range(1,len(word)+1):
         if word[-i:] in unique_words:

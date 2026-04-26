@@ -9,6 +9,18 @@ Koristeno je prvih 300$ koji se dobiju kada se prvi put ulogujes na drive.
 Na kraju se dobijaju transkripri snimaka u formi .txt fajlova sacuvani u
 transcript_corrected folderu.
 
+Pipeline role
+-------------
+First step of the speech pipeline: forced alignment of the corpus audio.
+The script lists all WAV files in a Google Cloud Storage bucket
+organised as ``<speaker>/<emotion>/<file>.wav``, sends each one to the
+Google Cloud Speech-to-Text API (Serbian Latin, word-level timestamps
+enabled) and writes a per-recording ``.txt`` transcript with both the
+full sentence and per-word ``start``/``end`` times into
+``../podaci/transcript_corrected/<speaker>/<emotion>/``. These transcripts
+are the input to the next stage (``Transcript - correct/`` and
+``Fetures extraction/text_features_extraction.py``).
+
 """
 
 import os
@@ -59,6 +71,36 @@ config = speech.RecognitionConfig(
 )
 
 def process_transcript(audio_path, response):
+    """Write a Google Speech-to-Text response to a per-recording ``.txt``.
+
+    Derives the output filename from ``audio_path`` (strips the trailing
+    ``.wav``) and writes one ``<basename>_transcript.txt`` file under
+    ``../podaci/transcript_corrected/``. The first line is the full
+    transcript; subsequent lines list each word with its ``start`` and
+    ``end`` time (in seconds, computed from ``seconds`` + ``microseconds``).
+
+    Parameters
+    ----------
+    audio_path : str
+        GCS object path of the source WAV (e.g. ``"1052/0/file.wav"``).
+        Used both to derive the output filename and as a logical handle.
+    response : google.cloud.speech_v1p1beta1.RecognizeResponse
+        Response returned by ``client.recognize`` with
+        ``enable_word_time_offsets=True`` so that each alternative
+        contains a populated ``words`` list.
+
+    Returns
+    -------
+    None
+
+    Side effects
+    ------------
+    Creates / overwrites ``<audio_path-without-.wav>_transcript.txt``
+    inside ``../podaci/transcript_corrected/``. Each result in
+    ``response.results`` causes the file to be (re)opened: the transcript
+    is written with mode ``"w"`` and per-word lines are appended with
+    mode ``"a"``.
+    """
 
     text_path = audio_path[:-4]
     output_file_name = os.path.join('..','podaci', 'transcript_corrected', f"{text_path}_transcript.txt")

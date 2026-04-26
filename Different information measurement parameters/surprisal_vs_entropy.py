@@ -43,7 +43,7 @@ for gender in ['f', 'm']:
     for emotion in [0,1,2,3,4]:
         emotion_data = gender_data[gender_data['emotion'] == emotion]
             
-        delta_element, std_element = calculate_delta_ll(emotion_data,  f"None + {surprisal} model")
+        delta_element, std_element = calculate_delta_ll(mode="flexible", data=emotion_data, model_name=f"None + {surprisal} model")
         gender_list.append(gender)
         results_list.append(delta_element)
         std_list.append(std_element)
@@ -64,14 +64,14 @@ for parameter in parameters:
         for emotion in [0,1,2,3,4]:
             emotion_data = gender_data[gender_data['emotion'] == emotion]
             
-            delta_element, std_element = calculate_delta_ll(emotion_data,  f"None + {parameter} model")
+            delta_element, std_element = calculate_delta_ll(mode="flexible", data=emotion_data, model_name=f"None + {parameter} model")
             gender_list.append(gender)
             results_list.append(delta_element)
             std_list.append(std_element)
             emotion_list.append(emotion)
             parameter_list.append(parameter)
             
-            delta_element, std_element = calculate_delta_ll(emotion_data,  f"{surprisal} + {parameter} model")
+            delta_element, std_element = calculate_delta_ll(mode="flexible", data=emotion_data, model_name=f"{surprisal} + {parameter} model")
             gender_list.append(gender)
             results_list.append(delta_element)
             std_list.append(std_element)

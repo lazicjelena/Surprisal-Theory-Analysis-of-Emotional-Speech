@@ -3,6 +3,21 @@
 Created on Tue Nov 19 11:49:49 2024
 
 @author: Jelena
+
+Pipeline role
+-------------
+Driver script that estimates the embedding-based contextual /
+non-contextual information values per word for a slice of target
+sentences using a pre-trained GPT-2 model. For each selected
+sentence (currently indices 46..49) it calls
+:func:`information_and_distance_functions.calculate_word_information_values`
+with the canonical vocabulary
+``../podaci/wordlist_classlawiki_sr_cleaned.csv`` and writes the
+running results -- 12 ``CE_j`` and 12 ``NCE_j`` columns plus
+``Sentence`` / ``Word`` -- to
+``../podaci/information measurements parameters/embedding_information_value1.csv``.
+The output feeds the alternative information-measure analyses in
+``Different information measurement parameters/``.
 """
 
 #pip install transformers

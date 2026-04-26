@@ -10,6 +10,19 @@ Prolazi se kroz nekoliko skupova podataka, rezultat su .csv fajlovi koji sadrze
 recenice i lematizaciju rijeci iz recenica. Na ove skupove podataka primjenjuje
 ngram model.
 
+Pipeline role
+-------------
+Lemmatisation step of the n-gram-language-model training pipeline.
+Reads a Serbian-language text corpus
+``../podaci/ngram datasets/nq_open.csv`` plus an incremental
+checkpoint ``lemmas.csv`` (so the script can be resumed after an
+interruption), runs every sentence through a CLASSLA Serbian
+``tokenize, lemma, pos`` pipeline, and writes the per-token lemma
+sequence back into the original CSV under a new ``lemma`` column.
+A periodic checkpoint to ``lemmas.csv`` is written every 1000
+sentences. The lemmatised corpus produced here, combined with
+output from other ``ngram datasets/*.csv`` files, is the training
+data for ``surprisal_estimation_n_gram_model.py``.
 """
 
 

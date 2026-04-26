@@ -6,7 +6,7 @@ Created on Thu Mar  6 09:36:22 2025
 """
 
 
-from my_functions import inf_k_model, calculate_delta_ll_old
+from my_functions import inf_k_model, calculate_delta_ll
 import matplotlib.pyplot as plt
 import warnings
 import numpy as np
@@ -73,7 +73,7 @@ for gender in ['f', 'm']:
             
             for function in functions:
                 
-                delta_element,_ = calculate_delta_ll_old(emotion_data, surprisal, k, function = function)
+                delta_element,_ = calculate_delta_ll(mode="prominence", data=emotion_data, surprisal_name=surprisal, k=k, function=function)
                 y_axis.append(delta_element)
             
             c = surprisal_colour[surprisal]

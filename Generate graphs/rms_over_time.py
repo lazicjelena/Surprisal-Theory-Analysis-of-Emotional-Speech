@@ -3,6 +3,20 @@
 Created on Tue Aug 20 08:18:29 2024
 
 @author: Jelena
+
+Pipeline role
+-------------
+Acoustic feature extractor for the RMS-energy-trajectory plots,
+the energy-domain analogue of ``frequency_over_time.py``. Walks
+every WAV file under ``../podaci/data_mono/<speaker>/<emotion>/``,
+loads it at 44.1 kHz with :func:`librosa.load`, computes a
+frame-level RMS envelope with :func:`librosa.feature.rms`
+(``frame_length=1024``), pads the per-file envelopes to a common
+length via :func:`generate_graphs_utils.padding_sequence`,
+averages frame-wise across files for that ``(speaker, emotion)``
+cell, and accumulates one row per ``(speaker, emotion)`` into
+``../podaci/rms.csv``. That CSV is the input to
+``rms_over_time_plots.py``.
 """
 
 #import parselmouth

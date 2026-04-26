@@ -33,7 +33,7 @@ def akaike_for_column(data, model_name, baseline_model = 'baseline'):
 
     return difference, std_ll_2
 
-def calculate_delta_ll(data, surprisal_name, k):
+def calculate_delta_ll_lag(data, surprisal_name, k):
 
     try:
       delta_ll, std_element = akaike_for_column(data, f"{surprisal_name} -{k} model", f"baseline -{k}")
@@ -41,6 +41,23 @@ def calculate_delta_ll(data, surprisal_name, k):
     except:
       print(f"Error accured while processing {surprisal} at k = {k}")
       return 0, 0
+
+
+def calculate_delta_ll(mode, **kwargs):
+    """Dispatcher za calculate_delta_ll varijante u ovom fajlu (P-009).
+
+    Dostupni mode-ovi u Split-over effect/surprisal_results.py:
+      - "lag"  → calculate_delta_ll_lag(data, surprisal_name, k)
+    """
+    mapping = {
+        "lag": calculate_delta_ll_lag,
+    }
+    if mode not in mapping:
+        raise ValueError(f"Unknown mode: {mode}")
+    try:
+        return mapping[mode](**kwargs)
+    except TypeError as e:
+        raise TypeError(f"Invalid arguments for mode '{mode}': {e}")
     
 
 def add_column_with_surprisal(df, surprisal, k=0):
@@ -161,7 +178,7 @@ for surprisal in surprisal_column_name:
             for emotion in [0,1,2,3,4]:   
                 emotion_data = gender_data[gender_data['emotion'] == emotion]
             
-                delta_element, std_element = calculate_delta_ll(emotion_data, surprisal, k)
+                delta_element, std_element = calculate_delta_ll(mode="lag", data=emotion_data, surprisal_name=surprisal, k=k)
                 
                 gender_list.append(gender)
                 results_list.append(delta_element)

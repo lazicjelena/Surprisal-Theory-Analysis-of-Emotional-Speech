@@ -79,7 +79,7 @@ df = data.dropna()
 for emotion in [0,1,2,3,4]:
     emotion_data = df[df['emotion'] == emotion]
             
-    delta_element, _ = calculate_delta_ll(emotion_data, "fonetic model")
+    delta_element, _ = calculate_delta_ll(mode="flexible", data=emotion_data, model_name="fonetic model")
     std_element = paired_permutation_test(emotion_data, 'baseline -3', 'fonetic model')
     results_list.append(delta_element)
     std_list.append(std_element)

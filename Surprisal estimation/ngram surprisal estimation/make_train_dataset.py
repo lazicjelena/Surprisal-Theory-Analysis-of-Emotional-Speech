@@ -8,6 +8,17 @@ Skripta objedinjuje sve skupove podataka na kojima se odredjuje ngram model u
 jedan .csv fajl. Prije toga podaci su izdvojeni, formirane su recenice i izvrsena
 je lematizacija.
 
+Pipeline role
+-------------
+Concatenates every per-source lemmatised CSV from
+``../../podaci/ngram datasets/`` (one row per sentence with a
+``lemma`` column produced by ``lematization.py``) into a single
+combined corpus, removes exact duplicate rows with
+:meth:`pandas.DataFrame.drop_duplicates`, and writes the result to
+``../../podaci/ngram_train_data.csv``. That combined CSV is the
+training corpus consumed by both
+``surprisal_estimation_n_gram_model.py`` (to count n-grams) and
+``word_frequency.py`` (to compute the unigram histogram).
 """
 
 import pandas as pd

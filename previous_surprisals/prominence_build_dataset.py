@@ -29,6 +29,7 @@ input to ``conjoint_data.py``.
 
 import os
 import pandas as pd
+from utils.text_utils import find_subword
 
 prosody_folder_path = os.path.join('..','podaci','prosody 1 0 0') # frequency
 prosody_folder_path = os.path.join('..','podaci','prosody') # energy
@@ -102,36 +103,6 @@ data = pd.DataFrame({
 
 
 # Split conjoint words
-def find_subword(word, unique_words):
-    """Find the longest suffix of ``word`` that is a known vocabulary token.
-
-    Walks suffix lengths from 1 up to ``len(word)`` and remembers the
-    longest one that is present in ``unique_words``. The returned
-    ``subword`` is the longest such suffix, or ``""`` if none of the
-    suffixes is known. Used to split agglutinated / mistakenly-joined
-    tokens in ``.prom`` files into vocabulary-aligned subwords by
-    repeatedly peeling off the longest known suffix.
-
-    Parameters
-    ----------
-    word : str
-        Token whose suffixes are tested.
-    unique_words : set of str
-        Lower-case vocabulary -- typically all whitespace-split
-        words from the canonical target-sentence corpus.
-
-    Returns
-    -------
-    str
-        Longest suffix of ``word`` present in ``unique_words``;
-        ``""`` if no suffix matches.
-    """
-    subword = ''
-    for i in range(1,len(word)+1):
-        if word[-i:] in unique_words:
-            subword = word[-i:]
-            
-    return subword
 
 unique_words = ' '.join(target_sentence_df['Text']).split()  
 unique_words = set(word.lower() for word in unique_words)  

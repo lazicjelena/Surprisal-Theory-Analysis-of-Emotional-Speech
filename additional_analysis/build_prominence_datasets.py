@@ -25,6 +25,7 @@ and fold ids (``folds.csv``) before being written to
 from additional_analysis.my_functions import lookup_features, most_similar_sentence_index
 import pandas as pd
 import os
+from utils.text_utils import find_subword
 
 
 prosody_folder_path = os.path.join('..','podaci','prosody 1 0 0')
@@ -91,36 +92,6 @@ data = pd.DataFrame({
 
 
 # Split conjoint words
-def find_subword(word, unique_words):
-    """Find the longest known suffix of ``word`` in ``unique_words``.
-
-    Scans suffix lengths ``i = 1..len(word)`` and remembers the
-    largest ``i`` for which ``word[-i:]`` is present in
-    ``unique_words``. Used by ``build_prominence_datasets.py``
-    to greedily split conjoint-word entries (where the ``.prom``
-    file glued multiple canonical-vocabulary words together)
-    into their individual subwords.
-
-    Parameters
-    ----------
-    word : str
-        Conjoint-word token from a ``.prom`` line.
-    unique_words : set of str
-        Lower-cased canonical vocabulary.
-
-    Returns
-    -------
-    str
-        The longest matching suffix, or the empty string when
-        no suffix is in ``unique_words``.
-    """
-    
-    subword = ''
-    for i in range(1,len(word)+1):
-        if word[-i:] in unique_words:
-            subword = word[-i:]
-            
-    return subword
 
 unique_words = ' '.join(target_sentence_df['Text']).split()  
 unique_words = set(word.lower() for word in unique_words)  

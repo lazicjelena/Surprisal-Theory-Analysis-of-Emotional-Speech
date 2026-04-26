@@ -1,23 +1,22 @@
 # -*- coding: utf-8 -*-
-"""text_utils.py
-Lexical/tekst pomocne funkcije izdvojene iz:
-  - Prominence/librosa_estimated_parameters.py
-  - Prominence/prominence_build_dataset.py
+"""utils.text_utils
 
-P-008 (Faza 2-B): zajednicke IDENTICNO funkcije unutar foldera
-'Prominence/'. Tijelo funkcija NIJE mijenjano.
+Centralizovani leksicki/tekstualni helperi koje koriste vise foldera projekta.
 
-Napomena: find_subword postoji i u:
-  - Additional files after recension/build_prominence_datasets.py
-  - Pervious Surprisals/prominence_build_dataset.py
-Cross-folder konsolidacija nije dio P-008 - ostaje za P-009.
+P-012 (Faza 2-C): cross-folder konsolidacija. Funkcija ``find_subword`` je
+prethodno postojala kao byte-identicna kopija u 3 fajla
+(additional_analysis/build_prominence_datasets, previous_surprisals/
+prominence_build_dataset, prominence/text_utils). Tijelo funkcije NIJE
+mijenjano - samo premjesteno na jedno centralno mjesto (zero-change).
 
 Pipeline role
 -------------
-Shared lexical helper module for the ``Prominence/`` chain.
-Hosts :func:`find_subword`, the longest-suffix match used by both
-``librosa_estimated_parameters.py`` and
-``prominence_build_dataset.py`` to re-split conjoint
+Project-wide shared lexical helper module imported under the package path
+``utils.text_utils``. Hosts :func:`find_subword`, the longest-suffix match
+used by ``librosa_estimated_parameters.py``,
+``prominence_build_dataset.py`` (in both the ``prominence/`` and
+``previous_surprisals/`` chains) and
+``additional_analysis/build_prominence_datasets.py`` to re-split conjoint
 wavelet-GUI tokens against the canonical word list of
 ``../podaci/target_sentences.csv``.
 """

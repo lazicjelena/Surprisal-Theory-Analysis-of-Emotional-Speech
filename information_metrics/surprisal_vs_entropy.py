@@ -19,7 +19,7 @@ surprisal-only baseline; the summarised table is the canonical
 input for ``plot_results.py``.
 """
 
-from my_functions import add_column_with_surprisal, calculate_delta_ll
+from information_metrics.my_functions import add_column_with_surprisal, calculate_delta_ll
 import pandas as pd
 import os
 

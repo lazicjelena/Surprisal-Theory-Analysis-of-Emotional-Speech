@@ -18,7 +18,7 @@ residuals. The figure is purely diagnostic and supports the
 elsewhere in this folder.
 """
 
-from my_functions import add_column_with_surprisal, akaike_for_column
+from information_metrics.my_functions import add_column_with_surprisal, akaike_for_column
 #import warnings
 import matplotlib.pyplot as plt
 import numpy as np

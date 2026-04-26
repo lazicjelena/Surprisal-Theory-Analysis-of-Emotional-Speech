@@ -23,7 +23,7 @@ the canonical input for ``baseline_model.py``,
 ``individual_speaker_graphs.py``.
 """
 
-from my_functions import lookup_features, add_word_type
+from additional_analysis.my_functions import lookup_features, add_word_type
 import pandas as pd
 import os
 

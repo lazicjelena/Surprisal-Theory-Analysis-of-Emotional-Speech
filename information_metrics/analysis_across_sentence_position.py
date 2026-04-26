@@ -18,7 +18,7 @@ improvement over the surprisal-free baseline. The resulting
 per-position table shows where in the sentence the chosen
 surprisal contributes most to duration prediction.
 """
-from my_functions import add_column_with_surprisal, calculate_delta_ll
+from information_metrics.my_functions import add_column_with_surprisal, calculate_delta_ll
 import pandas as pd
 import os
 

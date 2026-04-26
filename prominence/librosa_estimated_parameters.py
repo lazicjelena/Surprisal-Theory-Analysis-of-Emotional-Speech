@@ -29,7 +29,7 @@ import librosa
 import pandas as pd
 import os
 
-from text_utils import find_subword
+from prominence.text_utils import find_subword
 
 word_list = []
 user_list = []

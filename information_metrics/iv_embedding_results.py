@@ -22,7 +22,7 @@ generated in both English and Serbian variants and plotted
 without any CSV output.
 """
 
-from my_functions import add_column_with_surprisal, paired_permutation_test, calculate_delta_ll
+from information_metrics.my_functions import add_column_with_surprisal, paired_permutation_test, calculate_delta_ll
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 import pandas as pd

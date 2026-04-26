@@ -21,7 +21,7 @@ used as references by ``surprisal_vs_entropy.py``,
 ``iv_embedding_results.py`` and the per-model variants.
 """
 
-from my_functions import add_column
+from information_metrics.my_functions import add_column
 import pandas as pd
 import numpy as np
 import os

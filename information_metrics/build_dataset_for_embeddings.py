@@ -21,7 +21,7 @@ The two output tables (``context_embedding_data*.csv`` and
 """
 import os
 import pandas as pd
-from my_functions import lookup_features
+from information_metrics.my_functions import lookup_features
 
 inform_value = False
 

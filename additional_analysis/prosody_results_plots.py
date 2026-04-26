@@ -21,7 +21,7 @@ visual; no CSVs are written.
 """
 
 
-from my_functions import inf_k_model, calculate_delta_ll
+from additional_analysis.my_functions import inf_k_model, calculate_delta_ll
 import matplotlib.pyplot as plt
 import warnings
 import numpy as np

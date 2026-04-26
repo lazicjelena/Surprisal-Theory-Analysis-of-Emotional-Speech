@@ -22,10 +22,10 @@ Serbian confusion matrix is then rendered via
 English plotting block is left commented out for paper export.
 """
 
-from audiodataset import create_dataloader
+from emotion_recognition.audiodataset import create_dataloader
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 import matplotlib.pyplot as plt
-from mymodel import MyModel
+from emotion_recognition.mymodel import MyModel
 import pandas as pd
 import numpy as np
 import torch

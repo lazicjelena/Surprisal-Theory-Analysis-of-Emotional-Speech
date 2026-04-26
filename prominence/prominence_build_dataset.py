@@ -30,7 +30,7 @@ in this folder).
 import os
 import pandas as pd
 
-from text_utils import find_subword
+from prominence.text_utils import find_subword
 
 prosody_folder_path = os.path.join('..','podaci','prosody 1 0 0')
 

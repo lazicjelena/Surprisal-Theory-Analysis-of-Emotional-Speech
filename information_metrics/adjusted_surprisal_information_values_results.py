@@ -22,7 +22,7 @@ and consumed by ``plot_results.py``.
 """
 
 
-from my_functions import add_column_with_surprisal, paired_permutation_test, calculate_delta_ll
+from information_metrics.my_functions import add_column_with_surprisal, paired_permutation_test, calculate_delta_ll
 import pandas as pd
 import os
 

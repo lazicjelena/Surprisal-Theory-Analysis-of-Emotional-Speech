@@ -22,8 +22,8 @@ epoch to a Google Drive path
 ``/content/drive/MyDrive/PhD/Emotion Recognition/model/model_epoch_<epoch>.pth``.
 """
 
-from mymodel import MyModel
-from audiodataset import create_dataloader
+from emotion_recognition.mymodel import MyModel
+from emotion_recognition.audiodataset import create_dataloader
 import torch.optim as optim
 import torch.nn as nn
 import pandas as pd

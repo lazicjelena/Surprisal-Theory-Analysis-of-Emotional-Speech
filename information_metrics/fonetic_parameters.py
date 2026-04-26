@@ -22,7 +22,7 @@ quantifying how much the phonetic features contribute on top
 of the surprisal-augmented baseline.
 """
 
-from my_functions import add_column, fonetic_model, paired_permutation_test, calculate_delta_ll
+from information_metrics.my_functions import add_column, fonetic_model, paired_permutation_test, calculate_delta_ll
 import matplotlib.pyplot as plt
 import pandas as pd
 import warnings

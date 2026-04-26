@@ -32,7 +32,7 @@ import os
 import math
 import warnings
 
-from stats_utils import calculate_log_Likelihood, calculate_aic
+from linear_regression.stats_utils import calculate_log_Likelihood, calculate_aic
 
 def inf_k_model(df, k, surprisal):
     """Fit ``log2(time) ~ length + log_prob + surprisal**k`` per fold.

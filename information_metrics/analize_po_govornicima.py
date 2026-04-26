@@ -18,7 +18,7 @@ quantifies how much the chosen surprisal contributes to spoken
 word duration prediction for each individual speaker.
 """
 
-from my_functions import add_column_with_surprisal, akaike_for_column
+from information_metrics.my_functions import add_column_with_surprisal, akaike_for_column
 #import warnings
 import numpy as np
 import pandas as pd

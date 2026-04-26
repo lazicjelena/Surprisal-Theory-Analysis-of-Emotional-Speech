@@ -22,7 +22,7 @@ and fold ids (``folds.csv``) before being written to
 ``../podaci/<prosody>_data.csv``.
 """
 
-from my_functions import lookup_features, most_similar_sentence_index
+from additional_analysis.my_functions import lookup_features, most_similar_sentence_index
 import pandas as pd
 import os
 

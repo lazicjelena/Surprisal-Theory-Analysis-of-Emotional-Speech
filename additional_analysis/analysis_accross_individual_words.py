@@ -19,7 +19,7 @@ words and which positions in the sentence gain the most
 predictive value from surprisal.
 """
 
-from my_functions import inf_k_model, akaike_for_column
+from additional_analysis.my_functions import inf_k_model, akaike_for_column
 import numpy as np
 import pandas as pd
 import os

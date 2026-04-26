@@ -18,7 +18,7 @@ shows which words gain the most prediction quality from the
 chosen surprisal model.
 """
  
-from my_functions import add_column_with_surprisal, calculate_delta_ll
+from information_metrics.my_functions import add_column_with_surprisal, calculate_delta_ll
 import pandas as pd
 import os
 

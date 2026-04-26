@@ -26,7 +26,7 @@ regression per surprisal source.
 
 import os
 import pandas as pd
-from my_functions import lookup_features
+from information_metrics.my_functions import lookup_features
 
 model = 'roberta'
 surprisal_df_name = 'surprisal RoBERTa uni'
@@ -88,7 +88,7 @@ data.to_csv(output_con_path, index=False)
 
 
 ''' Add baseline model results '''
-from my_functions import add_column, add_column_with_surprisal
+from information_metrics.my_functions import add_column, add_column_with_surprisal
 import numpy as np
 import warnings
 

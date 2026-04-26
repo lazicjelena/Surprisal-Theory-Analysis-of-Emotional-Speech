@@ -17,7 +17,7 @@ the per-emotion delta log-likelihood improvement over the
 baseline. The output is purely visual; no CSVs are written.
 """
 
-from my_functions import add_column_with_surprisal, calculate_delta_ll
+from information_metrics.my_functions import add_column_with_surprisal, calculate_delta_ll
 import matplotlib.pyplot as plt
 #import warnings
 import numpy as np

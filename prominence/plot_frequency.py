@@ -23,7 +23,7 @@ and ``plot speech time.py``.)
 import pandas as pd
 import os
 
-from analysis_utils import extraxt_parameter_over_emotion
+from prominence.analysis_utils import extraxt_parameter_over_emotion
 
 data_path = os.path.join('..','podaci', 'prominence_data.csv')
 data = pd.read_csv(data_path)

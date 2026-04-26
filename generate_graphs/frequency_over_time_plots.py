@@ -26,7 +26,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import os
 
-from generate_graphs_utils import padding_sequence
+from generate_graphs.generate_graphs_utils import padding_sequence
 
 file_path =  os.path.join('..','podaci', 'f0.csv')
 df = pd.read_csv(file_path) 

@@ -20,8 +20,8 @@ each batch to ``cuda`` when available. Reads
 loaded by ``testing.py`` and ``loss_function.py``.
 """
 
-from mymodel import MyModel
-from audiodataset import create_dataloader
+from emotion_recognition.mymodel import MyModel
+from emotion_recognition.audiodataset import create_dataloader
 import torch.optim as optim
 import torch.nn as nn
 import pandas as pd

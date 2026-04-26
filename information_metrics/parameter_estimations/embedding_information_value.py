@@ -22,7 +22,7 @@ The output feeds the alternative information-measure analyses in
 
 #pip install transformers
 
-from information_and_distance_functions import  calculate_word_information_values
+from information_metrics.information_and_distance_functions import  calculate_word_information_values
 import pandas as pd
 import os
 

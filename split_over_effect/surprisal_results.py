@@ -34,56 +34,9 @@ import numpy as np
 import pandas as pd
 import os
 import math 
-
-def calculate_log_Likelihood(data):
-    """Per-element normal log-pdf using the empirical mean / std of ``data``.
-
-    Local copy of the helper from
-    ``Linear regression/stats_utils.py``. Estimates
-    ``mu = mean(data)``, ``sigma = std(data)`` and returns
-    ``norm.logpdf(data, loc=mu, scale=sigma)``.
-
-    Parameters
-    ----------
-    data : array_like of float
-        Input vector (typically a residual array).
-
-    Returns
-    -------
-    numpy.ndarray
-        Per-element log-density values; ``shape == data.shape``.
-    """
-    mean = np.mean(data)
-    std_dev = np.std(data)
-    return norm.logpdf(data, loc=mean, scale=std_dev)
+from utils.stats_utils import calculate_log_Likelihood, calculate_aic
 
 # Calculate AIC for models with different numbers of parameters
-def calculate_aic(real_values, results, k):
-    """AIC plus mean / std log-likelihood for one model column.
-
-    Local copy of the helper from
-    ``Linear regression/stats_utils.py``. Computes the residual
-    array, scores it under a Gaussian noise model with
-    :func:`calculate_log_Likelihood`, and forms the per-row AIC.
-
-    Parameters
-    ----------
-    real_values : array_like of float
-        Observed durations.
-    results : array_like of float
-        Model predictions, same shape as ``real_values``.
-    k : int
-        Number of effective parameters of the model.
-
-    Returns
-    -------
-    tuple of (numpy.ndarray, float, float)
-        ``(aic_per_row, mean_log_likelihood, std_log_likelihood)``.
-    """
-    residuals = np.array(real_values) - np.array(results)
-    log_likelihood = calculate_log_Likelihood(residuals)
-    aic = 2 * k - 2 * log_likelihood
-    return aic, np.mean(log_likelihood), np.std(log_likelihood)
 
 def akaike_for_column(data, model_name, baseline_model = 'baseline'):
     """Compute the per-column ``\Delta\log\mathcal{L}`` baseline vs. model.

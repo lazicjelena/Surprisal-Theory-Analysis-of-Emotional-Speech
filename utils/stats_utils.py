@@ -1,29 +1,26 @@
 # -*- coding: utf-8 -*-
-"""stats_utils.py
-Pomocne statisticke funkcije izdvojene iz:
-  - Linear regression/final_graphs.py
-  - Linear regression/results.py
+"""utils.stats_utils
 
-P-008 (Faza 2-B): zajednicke IDENTICNO funkcije se centralizuju unutar
-foldera 'Linear regression/'. Tijelo funkcija NIJE mijenjano - samo
-premjesteno (zero-change).
+Centralizovani statisticki helperi koje koriste vise foldera projekta.
 
-Napomena: calculate_log_Likelihood, calculate_aic postoje i u drugim
-folderima (Additional files after recension, Different information
-measurement parameters, Duration Prediction based on Surprisals,
-Split-over effect). Cross-folder konsolidacija nije dio P-008 -
-ostaje za P-009.
+P-012 (Faza 2-C): cross-folder konsolidacija. Funkcije
+``calculate_log_Likelihood`` i ``calculate_aic`` su prethodno postojale
+kao byte-identicne kopije u 5 fajlova (additional_analysis/my_functions,
+duration_prediction/surprisal_results, information_metrics/my_functions,
+linear_regression/stats_utils, split_over_effect/surprisal_results).
+Tijela funkcija NISU mijenjana - samo premjestena na jedno centralno mjesto
+(zero-change).
 
 Pipeline role
 -------------
-Folder-local helper module imported by ``final_graphs.py`` and
-``results.py`` inside ``Linear regression/``. Holds the two
-identical statistical utilities -- :func:`calculate_log_Likelihood`
-(per-residual normal log-pdf) and :func:`calculate_aic`
-(Akaike information criterion plus mean / std log-likelihood
-summaries) -- that previously lived as duplicate copies in both
-plotting scripts. Bodies were not modified during the P-008
-consolidation; only their location.
+Project-wide shared utility module imported under the package path
+``utils.stats_utils``. Holds the two identical statistical utilities --
+:func:`calculate_log_Likelihood` (per-residual normal log-pdf) and
+:func:`calculate_aic` (Akaike information criterion plus mean / std
+log-likelihood summaries) -- that previously lived as duplicate copies
+in regression / surprisal-results plotting scripts. Bodies were not
+modified during the P-012 cross-folder consolidation; only their
+location.
 """
 
 import numpy as np

@@ -31,7 +31,7 @@ from sklearn.linear_model import LinearRegression
 import os
 import math
 
-from linear_regression.stats_utils import calculate_log_Likelihood, calculate_aic
+from utils.stats_utils import calculate_log_Likelihood, calculate_aic
 
 def inf_k_model(df, k, surprisal):
     """Fit ``log2(time) ~ length + log_prob + surprisal**k`` per fold.

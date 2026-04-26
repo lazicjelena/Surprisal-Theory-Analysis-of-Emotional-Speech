@@ -31,6 +31,7 @@ from sklearn.metrics import mean_squared_error
 import numpy as np
 import math 
 import pandas as pd
+from utils.stats_utils import calculate_log_Likelihood, calculate_aic
 
 def lookup_features(data, freq_df, column_name):
     """Build a per-row summed surprisal value keyed by ``(target sentence, word)``.
@@ -100,61 +101,7 @@ def lookup_features(data, freq_df, column_name):
 
     return log_prob_list
 
-def calculate_log_Likelihood(data):
-    """Pointwise Gaussian log-likelihood of ``data`` under its own MLE.
-
-    The maximum-likelihood Gaussian fit (mean and standard
-    deviation taken from ``data``) is evaluated at every input
-    point; no aggregation is performed.
-
-    Parameters
-    ----------
-    data : array-like
-        One-dimensional sample of residuals.
-
-    Returns
-    -------
-    numpy.ndarray
-        Per-element log-density values.
-    """
-    mean = np.mean(data)
-    std_dev = np.std(data)
-    return norm.logpdf(data, loc=mean, scale=std_dev)
-
 # Calculate AIC for models with different numbers of parameters
-def calculate_aic(real_values, results, k):
-    """Compute the Akaike Information Criterion plus log-likelihood summaries.
-
-    The residuals ``real_values - results`` are scored via
-    :func:`calculate_log_Likelihood`; the per-point AIC is
-    returned together with the mean and standard deviation of
-    the log-likelihood across all samples. Only the mean and
-    standard deviation are used downstream by
-    :func:`akaike_for_column`.
-
-    Parameters
-    ----------
-    real_values : array-like
-        Observed values (typically ``log2(time)``).
-    results : array-like
-        Model predictions, aligned with ``real_values``.
-    k : int
-        Number of free parameters in the model (used for the
-        ``2 * k`` AIC penalty term).
-
-    Returns
-    -------
-    aic : numpy.ndarray
-        Per-point AIC values.
-    mean_log_likelihood : float
-        Mean of the per-point log-likelihoods.
-    std_log_likelihood : float
-        Standard deviation of the per-point log-likelihoods.
-    """
-    residuals = np.array(real_values) - np.array(results)
-    log_likelihood = calculate_log_Likelihood(residuals)
-    aic = 2 * k - 2 * log_likelihood
-    return aic, np.mean(log_likelihood), np.std(log_likelihood)
 
 def akaike_for_column(data, model_name, baseline_model = 'baseline'):
     """Return ``mean_ll(baseline) - mean_ll(model)`` plus the model's std.

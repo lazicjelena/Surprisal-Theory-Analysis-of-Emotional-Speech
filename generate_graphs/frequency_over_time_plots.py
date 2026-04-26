@@ -1,0 +1,159 @@
+# -*- coding: utf-8 -*-
+"""frequency_over_time_plots.py
+Jelenina skripta
+lazic.jelenaa@gmail.com
+
+U ovoj skripti plotuje se grafik promjene frekvencije tokom vremena,
+za svakog govornika i za svako emocionalno stanje.
+
+Pipeline role
+-------------
+Plotting companion to ``frequency_over_time.py``. Reads the
+per-(speaker, emotion) average F0 trajectories from
+``../podaci/f0.csv``, drops speaker ``1052`` (the one outlier with
+a different recording sampling rate), pads all sequences to a
+common length via :func:`generate_graphs_utils.padding_sequence`,
+joins gender from ``../podaci/gender_data.csv``, and renders a 2x5
+subplot grid (rows = gender, columns = emotion neutral/happy/sad/
+scared/angry) of mean F0 with one-standard-deviation bands, twice:
+once with Cyrillic Serbian labels and once with English labels.
+Also prints the per-cell mean (std) of average F0.
+"""
+
+
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+import os
+
+from generate_graphs_utils import padding_sequence
+
+file_path =  os.path.join('..','podaci', 'f0.csv')
+df = pd.read_csv(file_path) 
+df = df[df['user'] != '1052']
+f0_array = [[]]
+
+sr = 44100 # sampling rate
+
+for i in range(0,len(df)):
+    array_of_strings = [j for j in df['f0'][i].split()[1:][:-1]]
+    array_of_floats = [float(val) if val.replace('.', '', 1).isdigit() else np.nan for val in array_of_strings]
+    f0_array.append(array_of_floats)
+    
+padded_list = padding_sequence(f0_array[1:]) 
+df['f0 values'] = padded_list
+
+# speaker gender 
+gender_file_path =  os.path.join('..','podaci', 'gender_data.csv')
+gender_df = pd.read_csv(gender_file_path) 
+df = pd.merge(df, gender_df, left_on='user', right_on='Speaker')
+
+
+# make plots
+emotions = ["неутрално", "срећно", "тужно", "уплашено", "љуто"]
+fig = plt.figure(figsize=(12,8))
+fig.suptitle('Промјена основне учестаности говора', fontsize=30)
+
+
+for gender in ['m', 'f']:
+    for emotion in [0,1,2,3,4]:
+        if gender == 'f':
+            plt.subplot(2,5, emotion + 1)
+        else:
+            plt.subplot(2,5, emotion + 6)
+        gender_data = df[df['Gender'] == gender]
+        emotion_data = gender_data[gender_data['emotion'] == emotion]
+        # Calculate the average of 'f0 values'
+        data = [i for i in emotion_data['f0 values']]
+        average_f0 = np.nanmean(data, axis = 0)
+        std_f0 = np.nanstd(data, axis=0)
+        
+        # Create x-axis values (indices of the elements in the average_f0 list)
+        x_values = np.arange(len(average_f0))
+    
+        # Plot the average_f0 values
+        if gender == 'f':
+            plt.plot(x_values, average_f0,color = 'red')
+            plt.fill_between(x_values, average_f0 - std_f0, average_f0 + std_f0, color='red', alpha=0.3, label='Standard deviation')
+        else:
+            plt.plot(x_values, average_f0,color = 'blue')
+            plt.fill_between(x_values, average_f0 - std_f0, average_f0 + std_f0, color='blue', alpha=0.3, label='Standard deviation')
+        
+        plt.title(emotions[emotion], fontsize=25)
+        plt.tick_params(axis='both', which='major', labelsize=15)
+        if gender == 'f':
+            plt.ylim([170,250])
+        else:
+            plt.ylim([80,160])
+        plt.xlim([50,400])
+        
+        
+# Add a common x-axis label
+fig.text(0.5, 0.001, 'временски прозори [/]', ha='center', va='center', fontsize=25)
+# Add a common y-axis label
+fig.text(0.0001, 0.5, 'f0 [Hz]', ha='center', va='center', rotation='vertical', fontsize=25)
+# Adjust layout for better spacing
+plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+plt.show()
+
+# make plots english
+emotions = ["neutral", "happy", "sad", "scared", "angry"]
+
+fig, ax = plt.subplots(2,5, figsize=(12,8))
+fig.suptitle('Fundamental Frequency over Different Emotiononal States', fontsize=30)
+
+
+for gender in ['m', 'f']:
+    for emotion in [0,1,2,3,4]:
+        if gender == 'f':
+            plt.subplot(2,5, emotion + 1)
+        else:
+            plt.subplot(2,5, emotion + 6)
+        gender_data = df[df['Gender'] == gender]
+        emotion_data = gender_data[gender_data['emotion'] == emotion]
+        # Calculate the average of 'f0 values'
+        data = [i for i in emotion_data['f0 values']]
+        average_f0 = np.nanmean(data, axis = 0)
+        std_f0 = np.nanstd(data, axis=0)
+        
+        # Create x-axis values (indices of the elements in the average_f0 list)
+        x_values = np.arange(len(average_f0))
+    
+        # Plot the average_f0 values
+        if gender == 'f':
+            plt.plot(x_values, average_f0,color = 'red')
+            plt.fill_between(x_values, average_f0 - std_f0, average_f0 + std_f0, color='red', alpha=0.3, label='Standard deviation')
+        else:
+            plt.plot(x_values, average_f0,color = 'blue')
+            plt.fill_between(x_values, average_f0 - std_f0, average_f0 + std_f0, color='blue', alpha=0.3, label='Standard deviation')
+    
+    
+        plt.title(emotions[emotion], fontsize=25)
+        plt.tick_params(axis='both', which='major', labelsize=15)
+        if gender == 'f':
+            plt.ylim([170,250])
+        else:
+            plt.ylim([80,160])
+        plt.xlim([50,400])
+
+
+
+# Add a common x-axis label
+fig.text(0.5, 0.001, 'time frames [/]', ha='center', va='center', fontsize=25)
+# Add a common y-axis label
+fig.text(0.0001, 0.5, 'f0 [Hz]', ha='center', va='center', rotation='vertical', fontsize=25)
+# Adjust layout for better spacing
+plt.tight_layout(rect=[0, 0.03, 1, 0.95])
+plt.show()
+
+
+for gender in ['m', 'f']:
+    print(f"Gender: {gender}")
+    for emotion in [0,1,2,3,4]:
+        gender_data = df[df['Gender'] == gender]
+        emotion_data = gender_data[gender_data['emotion'] == emotion]
+        # Calculate the average of 'f0 values'
+        data = [i for i in emotion_data['f0 values']]
+        average_f0 = np.nanmean(data, axis = 0)
+        std_f0 = np.nanstd(data, axis=0)
+        print(f"{np.nanmean(average_f0, axis=0):.2f} ({np.nanstd(average_f0, axis=0):.2f})")

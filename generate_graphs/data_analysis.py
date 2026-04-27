@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 """data_analysis.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-Skripta graficki predstavlja sve statisticke podatke prikazane u raud u poglavlju
-analiza podataka.
 
 Pipeline role
 -------------
@@ -19,6 +15,7 @@ target-sentence frequencies. As a side effect it also draws ``k``
 target-sentence folds at random and writes the assignment to
 ``../podaci/folds.csv`` -- this CSV is later consumed by every
 cross-validation script in ``Linear regression/`` and downstream.
+
 """
 
 import matplotlib.pyplot as plt

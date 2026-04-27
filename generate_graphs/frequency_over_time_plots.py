@@ -3,9 +3,6 @@
 Jelenina skripta
 lazic.jelenaa@gmail.com
 
-U ovoj skripti plotuje se grafik promjene frekvencije tokom vremena,
-za svakog govornika i za svako emocionalno stanje.
-
 Pipeline role
 -------------
 Plotting companion to ``frequency_over_time.py``. Reads the
@@ -18,6 +15,7 @@ subplot grid (rows = gender, columns = emotion neutral/happy/sad/
 scared/angry) of mean F0 with one-standard-deviation bands, twice:
 once with Cyrillic Serbian labels and once with English labels.
 Also prints the per-cell mean (std) of average F0.
+
 """
 
 

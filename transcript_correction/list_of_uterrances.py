@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """list_of_uterrances.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
 
@@ -10,7 +9,8 @@ Bootstraps the corrected-transcript workflow in
 ``Transcript - correct/``. Recursively walks the raw
 ``../podaci/transcript`` tree, reads the textual transcript
 prefix of every ``*.txt`` file (everything before the first
-``\nWord:`` segmentation marker, with the leading
+``
+Word:`` segmentation marker, with the leading
 ``Transcript:`` prefix stripped), tokenizes it into sentences
 with NLTK ``sent_tokenize`` and keeps the first sentence per
 file. The collected ``(File, First Sentence)`` table is written
@@ -19,6 +19,7 @@ of these sentences seeds ``../podaci/target_sentences.csv``
 (the canonical inventory used by ``transcription_alignment.py``
 and downstream scripts) and the unmatched residue seeds
 ``../podaci/wrong_transcription.csv``.
+
 """
 import os
 import pandas as pd

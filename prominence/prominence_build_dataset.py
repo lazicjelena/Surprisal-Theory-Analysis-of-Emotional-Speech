@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 """prominence_build_dataset.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-Ova skripta sluzi da se napravi .csv file u kome su potpuno organizovani podaci
-neophodni za racunanje korelacija i prikaz grafika koji se koriste u radu.
 
 Pipeline role
 -------------
@@ -24,6 +20,7 @@ GPT-2 / Yugo / BERT / BERTic / ngram-3 are joined via the local
 ``../podaci/prominence_data.csv`` (the input of all the
 ``plot *.py`` scripts and ``correlation_results_representation.py``
 in this folder).
+
 """
 
 

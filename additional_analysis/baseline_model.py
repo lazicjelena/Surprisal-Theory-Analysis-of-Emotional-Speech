@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """baseline_model.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
 
@@ -16,6 +15,7 @@ column and saved back to ``training_data.csv``; this column is
 the canonical reference for the additional models /
 additional functions / per-speaker / per-word analyses
 downstream.
+
 """
 
 

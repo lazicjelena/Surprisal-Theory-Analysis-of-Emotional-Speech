@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 """baseline_model.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-Ovdje se dobijaju rezultati za model koji ne uzima u obzir surprisale.
 
 Pipeline role
 -------------
@@ -18,6 +15,7 @@ side. Per-row out-of-fold predictions are written into a new
 column is the reference column subtracted in
 :math:`\Delta\log\mathcal{L}` calculations done by
 ``final_graphs.py`` and ``results.py``.
+
 """
 
 

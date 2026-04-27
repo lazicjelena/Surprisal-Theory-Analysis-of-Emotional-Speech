@@ -1,13 +1,7 @@
 # -*- coding: utf-8 -*-
 """move_data_to_final_folder.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-Kada se racuna prosody parametar koristi se wavelet_gui.py koji automatski obradjuje
-sve fajlove koji se nalaze u jednom folderu, zbog toga je prije upotrebe ovog programa
-bilo potrebno prebaciti sve fajlove na istu lokaciju, a podataka o tome odakle su prebaceni,
-odnosno ko je govornik i koja emocija je u pitanju, cuvan je u izmjenjenom nazivu fajla.
 
 Pipeline role
 -------------
@@ -19,6 +13,7 @@ then deletes the matching ``*.wav`` and ``*.lab`` source files
 from the working directory so it can be reused for the next
 batch. Run after the wavelet GUI has finished a batch and before
 ``correct_names.py``.
+
 """
 
 import os

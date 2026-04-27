@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 """build_dataset.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-Ova skripta sluzi za objedinjavanje podata svih govornika i njihovu raspodjelo u
-foldovima.
-Mora da se pokrece svaki put kad se doda novo obiljezje.
 
 Pipeline role
 -------------
@@ -23,6 +18,7 @@ fold-partitioned. The resulting CSV is consumed downstream by
 ``baseline_model.py`` (which adds the ``baseline`` column),
 ``residual_distribution.py``, ``final_graphs.py``, and
 ``results.py``.
+
 """
 
 import os

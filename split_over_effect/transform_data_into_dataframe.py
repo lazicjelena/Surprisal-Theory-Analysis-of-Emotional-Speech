@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """transform_data_into_dataframe.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
 
@@ -18,6 +17,7 @@ masked to NaN. The lagged table is saved to
 ``../podaci/split-over data/general_data.csv``, where
 ``Split-over effect/baseline_model.py`` consumes it to build the
 per-lag ``baseline -k`` reference columns.
+
 """
 
 import pandas as pd

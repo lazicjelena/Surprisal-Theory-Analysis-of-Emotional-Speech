@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 """baseline_model.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-Ovdje se dobijaju rezultati za model koji ne uzima u obzir surprisale.
 
 Pipeline role
 -------------
@@ -21,6 +18,7 @@ result is written to
 and serves as the reference column subtracted in
 :math:`\Delta\log\mathcal{L}` calculations performed by
 ``surprisal_results.py``.
+
 """
 
 

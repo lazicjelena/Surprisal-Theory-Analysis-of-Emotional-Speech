@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
-"""surprisal_estimation_ngram_model.py
-
+"""surprisal_estimation_n_gram_model.py
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-Racunanje surprisal rijeci na nivou ngrama, za racunanje n= 2,3,4,5 potrebno
-je promijeniti vrijednost promjenjive u kodu. Ovdje se moze mijenjati i parametar alpha.
 
 Pipeline role
 -------------
@@ -26,6 +22,7 @@ target sentence the script tokenises and pads with ``<s>`` /
 ``word_surprisal_ngram3_alpha4.csv`` with the defaults), which is
 the input to ``Pervious Surprisals/build_dataset.py`` (column
 ``Surprisal ngram-3``).
+
 """
 
 import pandas as pd

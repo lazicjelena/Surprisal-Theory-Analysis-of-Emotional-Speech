@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 """build_dataset.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-Skripta prirpema skup podataka za analizu veze surprisala i mel koeficijenata.
 
 Pipeline role
 -------------
@@ -26,6 +23,7 @@ pickled column) and ultimately ``model.py``. Pearson correlation
 between the flattened tokens and surprisals is printed for both
 tokenizers as a quick orthogonality check; ``vocabulary_size.txt``
 records the chosen tokenizer's vocabulary size.
+
 """
 
 import os

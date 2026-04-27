@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 """make_train_dataset.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-Skripta objedinjuje sve skupove podataka na kojima se odredjuje ngram model u 
-jedan .csv fajl. Prije toga podaci su izdvojeni, formirane su recenice i izvrsena
-je lematizacija.
 
 Pipeline role
 -------------
@@ -19,6 +14,7 @@ combined corpus, removes exact duplicate rows with
 training corpus consumed by both
 ``surprisal_estimation_n_gram_model.py`` (to count n-grams) and
 ``word_frequency.py`` (to compute the unigram histogram).
+
 """
 
 import pandas as pd

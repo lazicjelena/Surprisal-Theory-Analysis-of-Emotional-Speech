@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
-"""results.py
-
+"""regression_results_analysis.py
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-Ova skripta samo plotuje sve rezultate onako kako su prikazani u radu.
 
 Pipeline role
 -------------
@@ -22,6 +19,7 @@ through :func:`calculate_delta_ll_emotion`/:func:`akaike_for_column`
 rendered as the publication figures (BERT vs. BERTic, GPT-2 vs.
 GPT-Neo, GPT-2 vs. Yugo, n-gram alpha=4 / alpha=20, ...). Output
 is purely visual; no CSVs are written.
+
 """
 import matplotlib.pyplot as plt
 from scipy.stats import norm

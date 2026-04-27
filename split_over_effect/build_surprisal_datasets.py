@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """build_surprisal_datasets.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
 
@@ -16,6 +15,7 @@ lag columns ``-1 .. -5`` by repeatedly shifting the surprisal
 column. The lagged table is saved alongside as
 ``../podaci/split-over data/<surprisal>.csv``, where it is later
 joined with the lag-aware baseline by ``surprisal_results.py``.
+
 """
 
 import pandas as pd

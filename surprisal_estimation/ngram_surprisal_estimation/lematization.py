@@ -1,14 +1,7 @@
 # -*- coding: utf-8 -*-
 """lematization.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-Ovdje se vrsi lematizacija skupa podataka nad kojim ce se vrsiti estimacija 
-ngram modela.
-Prolazi se kroz nekoliko skupova podataka, rezultat su .csv fajlovi koji sadrze
-recenice i lematizaciju rijeci iz recenica. Na ove skupove podataka primjenjuje
-ngram model.
 
 Pipeline role
 -------------
@@ -23,6 +16,7 @@ A periodic checkpoint to ``lemmas.csv`` is written every 1000
 sentences. The lemmatised corpus produced here, combined with
 output from other ``ngram datasets/*.csv`` files, is the training
 data for ``surprisal_estimation_n_gram_model.py``.
+
 """
 
 

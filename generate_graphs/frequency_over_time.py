@@ -3,8 +3,6 @@
 Jelenina skripta
 lazic.jelenaa@gmail.com
 
-Ova skripta sluzi izdvajanju promjene frekvencije usrednjene po govorniku i emocijama.
-
 Pipeline role
 -------------
 Acoustic feature extractor for the F0-trajectory plots. Walks every
@@ -16,6 +14,7 @@ all per-file F0 sequences to a common length via
 across files for that ``(speaker, emotion)`` cell, and accumulates
 one row per ``(speaker, emotion)`` into ``../podaci/f0.csv``. That
 CSV is the input to ``frequency_over_time_plots.py``.
+
 """
 
 import numpy as np

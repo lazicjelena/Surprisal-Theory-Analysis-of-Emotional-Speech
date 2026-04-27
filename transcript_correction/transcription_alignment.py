@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """transcription_alignment.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
 
@@ -30,6 +29,7 @@ mirror tree ``../podaci/transcript_corrected`` (with errors
 appended to a Drive-anchored ``errors.txt``). The corrected
 transcripts are the canonical input for the prosody-, MFCC-,
 and Mel-spectrogram folders downstream.
+
 """
 from difflib import SequenceMatcher
 import pandas as pd

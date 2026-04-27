@@ -1,38 +1,7 @@
 # -*- coding: utf-8 -*-
-"""Yugo GPT-3 surprisal estimation.py
-
+"""yugo_gpt3_surprisal_estimation.py
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-Estimaicja vrijednosti surprisala rijeci target recenica upotrebom GPTYugo modela.
-
-
-
-import os
-from huggingface_hub import hf_hub_download
-
-HUGGING_FACE_API_KEY = os.environ.get("HUGGING_FACE_API_KEY")
-
-HUGGING_FACE_API_KEY = os.environ.get("HUGGING_FACE_API_KEY")
-
-
-
-filenames = [
-    '.gitattributes', 'config.json', 'generation_config.json', 'model-00001-of-00003.safetensors',
-    'model-00002-of-00003.safetensors', 'model-00003-of-00003.safetensors', 'model.safetensors.index.json',
-    'special_tokens_map.json', 'tokenizer.model', 'tokenizer_config.json'
-        ]
-
-model_id = 'gordicaleksa/YugoGPT'
-
-for filename in filenames:
-        downloaded_model_path = hf_hub_download(
-                    repo_id=model_id,
-                    filename=filename,
-                    token=HUGGING_FACE_API_KEY
-        )
-        print(downloaded_model_path)
-
 
 Pipeline role
 -------------
@@ -47,6 +16,7 @@ emits ``-log2(p)`` as the per-word surprisal. The result table
 ``../podaci/word_surprisals_yugo.csv``, which is the input to
 ``Pervious Surprisals/build_dataset.py`` and to all downstream
 analysis scripts that read ``Surprisal Yugo``.
+
 """
 import pandas as pd
 import os

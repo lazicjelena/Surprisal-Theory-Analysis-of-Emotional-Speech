@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
-"""lematization.py
-
+"""lematization_target_sentences.py
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-Ovdje se vrsi lematizacija target recenica za potrebe odredjivanja ngram modela
-pojedinacnih rijeci. Jer je i skup podataka na kome je vrsena procjena ngrama
-lematizovan.
 
 Pipeline role
 -------------
@@ -18,6 +13,7 @@ column. Lemmatising both training corpus and target sentences with
 the same pipeline keeps the n-gram counts and the test queries on
 a common lemma vocabulary, which is required by
 ``surprisal_estimation_n_gram_model.py``.
+
 """
 
 import pandas as pd

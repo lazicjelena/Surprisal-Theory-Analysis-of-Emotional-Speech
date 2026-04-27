@@ -3,9 +3,6 @@
 Jelenina skripta
 lazic.jelenaa@gmail.com
 
-Ova skripta predstavlja reziduale predikcije izgovora. Dobijaju se neznatni rezultati
-koji nisu koristeni u radu.
-
 Pipeline role
 -------------
 Diagnostic plotting script (off the production critical path).
@@ -19,6 +16,7 @@ residuals (model prediction minus true ``time``) against the
 baseline residuals via :func:`plot_residuals`. Used during
 exploratory analysis only; the resulting figures were not
 included in the thesis.
+
 """
 
 import matplotlib.pyplot as plt

@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 """build_dataset.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-Ova skripta sluzi za objedinjavanje podata svih govornika i njihovu raspodjelo u
-foldovima i surprisala od trenutne i prethodnih rijeci.
 
 Pipeline role
 -------------
@@ -22,6 +18,7 @@ and computes lagged surprisal columns ``"<Model> k=1"`` ... ``"<Model> k=10"``
 that capture the surprisal of the 1st through 10th preceding word in
 the same sentence. One CSV is written per model into
 ``../podaci/correlation data/former_<model>.csv``.
+
 """
 
 import os

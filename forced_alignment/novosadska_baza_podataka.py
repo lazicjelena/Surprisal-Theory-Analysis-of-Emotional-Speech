@@ -1,13 +1,7 @@
 # -*- coding: utf-8 -*-
 """novosadska_baza_podataka.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-U ovoj skripti vrsena je transkripcija koristenjem google speech sistema.
-Koristeno je prvih 300$ koji se dobiju kada se prvi put ulogujes na drive.
-Na kraju se dobijaju transkripri snimaka u formi .txt fajlova sacuvani u
-transcript_corrected folderu.
 
 Pipeline role
 -------------
@@ -20,6 +14,7 @@ full sentence and per-word ``start``/``end`` times into
 ``../podaci/transcript_corrected/<speaker>/<emotion>/``. These transcripts
 are the input to the next stage (``Transcript - correct/`` and
 ``Fetures extraction/text_features_extraction.py``).
+
 
 """
 

@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 """audio_files_transcirpition_vizualization.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-Skript vrsi vremenski prikaz jednog audio signala i njegove segmentacije i transkripcije
-na nivou rijeci.
 
 Pipeline role
 -------------
@@ -18,6 +14,7 @@ markers (plus word labels) parsed from the matching
 ``Forced alignment/novosadska_baza_podataka.py``. Not part of the
 automated processing chain; strictly a debugging / figure-generation
 helper.
+
 """
 
 import wave

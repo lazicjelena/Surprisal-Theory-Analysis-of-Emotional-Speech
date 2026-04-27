@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """baseline_model.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
 
@@ -19,6 +18,7 @@ table is saved to
 ``baseline -k`` columns are the reference columns used by
 ``surprisal_results.py`` to compute per-lag
 ``\Delta\log\mathcal{L}``.
+
 """
 
 from sklearn.linear_model import LinearRegression

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """build_surprisal_datasets.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
 
@@ -17,6 +16,7 @@ by ``(target sentence, word)`` with positional handling for
 repeated words inside the same sentence. Each variant is written
 to ``../podaci/training data/<Surprisal X>.csv`` so that
 ``surprisal_results.py`` can train one regression per surprisal.
+
 """
 
 import os

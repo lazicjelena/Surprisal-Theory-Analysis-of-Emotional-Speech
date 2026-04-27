@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """build_dataset.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
 
@@ -23,6 +22,7 @@ Each parameter is mapped onto the master table via
 canonical input for ``baseline_results.py``,
 ``surprisal_vs_entropy.py`` and the adjusted surprisal /
 information value sweep.
+
 """
 from my_function import lookup_features
 import pandas as pd

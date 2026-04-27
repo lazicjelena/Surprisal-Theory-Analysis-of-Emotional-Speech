@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 """text_features_extraction.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-Skripta prolazi kroz foldere i za svaki corrected transcript formira novi csv 
-file na lokaciji data u kome cuva sva izdvojena obiljezja koja ce biit koristena 
-u daljoj analizi i radu.
 
 Pipeline role
 -------------
@@ -22,6 +17,7 @@ columns: ``word``, ``speaker``, ``speaker gender``, ``emotion``,
 Speaker gender is read once from ``../podaci/speaker_gender.txt``.
 The CSVs produced here are the input to virtually every downstream
 ``build_dataset.py`` and analysis script.
+
 
 """
 

@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 """word_frequency.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-Prikaz grafika histograma rijeci, grafik je prikazan u radu.
 
 Pipeline role
 -------------
@@ -17,6 +14,7 @@ whitespace, accumulates token counts in a
 ``< 100`` (the long tail), and plots a histogram of the resulting
 counts. Used to illustrate the long-tailed distribution of word
 frequencies in the thesis; not on the production data path.
+
 """
 
 import pandas as pd

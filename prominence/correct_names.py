@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 """correct_names.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-Iz nekog razloga u finalnom folderu sa prosody podacima pojavili su se dajlovi
-ciji naziv odstupa od standardnog nacina formatiranja govornik_emocija_naziv.prom.
-U ovoj skripti izvrsena je popravka naziva ovakvih fajlova.
 
 Pipeline role
 -------------
@@ -20,6 +15,7 @@ restores the canonical form by cross-referencing the original
 hierarchy. Run once after
 ``move_data_to_final_folder.py`` has flattened the wavelet GUI
 output.
+
 """
 
 import os

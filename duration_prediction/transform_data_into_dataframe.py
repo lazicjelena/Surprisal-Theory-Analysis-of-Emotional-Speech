@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
 """transform_data_into_dataframe.py
-
 Jelenina skripta
 lazic.jelenaa@gmail.com
-
-Ova skripta sluzi za objedinjavanje podata svih govornika i njihovu raspodjelo u
-foldovima. 
 
 Pipeline role
 -------------
@@ -23,6 +19,7 @@ joins fold ids from ``../podaci/folds.csv`` and writes the result
 to ``../podaci/training data/general_data.csv``, which is the
 canonical input for ``baseline_model.py`` and
 ``build_surprisal_datasets.py``.
+
 """
 
 import os

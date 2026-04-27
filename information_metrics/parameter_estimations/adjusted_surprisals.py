@@ -39,6 +39,7 @@ import stanza
 import torch
 import torch.nn.functional as F
 from transformers import GPT2LMHeadModel, GPT2Tokenizer
+from information_metrics.parameter_estimations.text_similarity_utils import levenshtein_distance, orthographic_similarity, sequence_matcher
 
 # Paths (relative to project root).
 TARGET_SENTENCES_PATH = os.path.join('..', '..', 'podaci', 'target_sentences.csv')
@@ -133,87 +134,6 @@ def pos_tags_similarity(word1, word2, sentence, ind):
       return 1
     else:
       return 0
-
-
-def levenshtein_distance(str1, str2):
-    """Classical Levenshtein edit distance.
-
-    Parameters
-    ----------
-    str1, str2 : str
-        Input strings.
-
-    Returns
-    -------
-    int
-        Minimum number of single-character insertions, deletions or
-        substitutions required to transform ``str1`` into ``str2``.
-    """
-    # Create a distance matrix
-    dp = [[0] * (len(str2) + 1) for _ in range(len(str1) + 1)]
-
-    # Initialize the matrix
-    for i in range(len(str1) + 1):
-        dp[i][0] = i  # Deletion
-    for j in range(len(str2) + 1):
-        dp[0][j] = j  # Insertion
-
-    # Calculate distances
-    for i in range(1, len(str1) + 1):
-        for j in range(1, len(str2) + 1):
-            cost = 0 if str1[i - 1] == str2[j - 1] else 1
-            dp[i][j] = min(dp[i - 1][j] + 1,      # Deletion
-                           dp[i][j - 1] + 1,      # Insertion
-                           dp[i - 1][j - 1] + cost)  # Substitution
-
-    return dp[len(str1)][len(str2)]
-
-
-def orthographic_similarity(word1, word2):
-    """Length-normalised Levenshtein similarity in ``[0, 1]``.
-
-    Parameters
-    ----------
-    word1, word2 : str
-        Input strings (cast to ``str``).
-
-    Returns
-    -------
-    float
-        ``1 - lev / max(len(word1), len(word2))``.
-    """
-
-    word1 = str(word1)
-    word2 = str(word2)
-
-    # Calculate similarity ratio between the two words
-    d = levenshtein_distance(word1, word2)
-    similarity = 1 - d/ max(len(word1), len(word2))
-
-    return similarity
-
-
-def sequence_matcher(word1, word2):
-    """``difflib.SequenceMatcher`` ratio (defined but unused).
-
-    Parameters
-    ----------
-    word1, word2 : str
-        Input strings.
-
-    Returns
-    -------
-    float
-        ``SequenceMatcher.ratio()`` similarity.
-    """
-
-    word1 = str(word1)
-    word2 = str(word2)
-
-    # Calculate similarity ratio between the two words
-    d = SequenceMatcher(None, word1, word2).ratio()
-
-    return d
 
 
 def extract_words_and_embeddings(subwords, subword_embeddings):
